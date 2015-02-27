@@ -1,17 +1,19 @@
-Prog -> Lines
+Prog -> Lines $
 Lines -> Line Lines | EPSILON
 Line -> Stmt | Dcl | Print | ControlStructure
 Print -> write '(' PrintStmt ')' ';'
-PrintStmt -> STRINGLITERAL PrintStmt | id PrintStmt | Val PrintStmt| EPSILON
+PrintStmt -> STRINGLITERAL PrintStmt | Val PrintStmt| EPSILON
 Dcl -> new id assign Val Expr ;
-Stmt -> IncrAssign
-        | id assign Val Expr ;
-        
-ControlStructure -> repeat '('(INTLITERAL |id ')' '{' Lines '}'
+Stmt -> id  typeofAssign
+
+ControlStructure -> repeat '('({INTLITERAL |id} ')' '{' Lines '}'
                  | if '(' BooleanExpr ')' '{' Lines'}' [else 
-        
-IncrAssign -> id Operator assign Val;
+                 
+typeofAssign -> IncrAssign | NormAssign
+IncrAssign -> Operator assign Val;
+NormAssign -> assign Val Expr ;
 
 Expr -> Operator Val Expr |EPSILON
 Val -> id | INTLITERAL | FLOATLITERAL
 Operator -> plus | minus | multiply | divide
+BoolOperators -> equal equal | 

@@ -6,14 +6,28 @@ PrintStmt -> STRINGLITERAL PrintStmt | Val PrintStmt| EPSILON
 Dcl -> new id assign Val Expr ;
 Stmt -> id  typeofAssign
 
-ControlStructure -> repeat '('({INTLITERAL |id} ')' '{' Lines '}'
-                 | if '(' BooleanExpr ')' '{' Lines'}' [else 
+ControlStructure -> RepeatStructure | IfStructure
                  
+RepeatStructure -> repeat '('({INTLITERAL |id} ')' '{' Lines '}'
+IfStructure -> if '(' BooleanExpr ')' '{' Lines '}' [ else '{' Lines '}'] |
+               IfMatched | IfUnmatched
+
+IfMatched -> if ( BooleanExpr ) matched else matched | Lines
+IfUnmatched -> if ( BooleanExpr ) matched |
+               if ( BooleanExpr ) unmatched |
+               if ( BooleanExpr ) matched else unmatched
+
+
+
+
+
+
 typeofAssign -> IncrAssign | NormAssign
 IncrAssign -> Operator assign Val;
 NormAssign -> assign Val Expr ;
 
 Expr -> Operator Val Expr |EPSILON
+BooleanExpr -> val [ BoolOperators val ]
 Val -> id | INTLITERAL | FLOATLITERAL
 Operator -> plus | minus | multiply | divide
-BoolOperators -> equal equal | 
+BoolOperators -> equal equal | '&''&' | '|''|'| '!''='

@@ -5,29 +5,27 @@ Print -> write '(' PrintStmt ')' ';'
 PrintStmt -> STRINGLITERAL PrintStmt | Val PrintStmt| EPSILON
 Dcl -> new id assign Val Expr ;
 Stmt -> id  typeofAssign
-
 ControlStructure -> RepeatStructure | IfStructure
                  
-RepeatStructure -> repeat '('({INTLITERAL |id} ')' '{' Lines '}'
-IfStructure -> if '(' BooleanExpr ')' '{' Lines '}' [ else '{' Lines '}'] |
-               IfMatched | IfUnmatched
+RepeatStructure -> repeat (RepeatFor|RepeatWhileStructure)
+RepeatFor -> '('(INTLITERAL|id) ')' '{' Lines '}'
+RepeatWhileStructure -> while '(' BooleanExpr ')' '{' Lines '}'
+IfStructure -> if '(' BooleanExpr ')' '{' Lines '}' [ else (Ifstructure |'{' Lines '}') ]
 
-IfMatched -> if ( BooleanExpr ) matched else matched | Lines
+IfMatched ->   if ( BooleanExpr ) matched else matched | Lines
 IfUnmatched -> if ( BooleanExpr ) matched |
                if ( BooleanExpr ) unmatched |
                if ( BooleanExpr ) matched else unmatched
 
 
 
-
-
-
 typeofAssign -> IncrAssign | NormAssign
-IncrAssign -> Operator assign Val;
+IncrAssign -> Operator assign Val ;
 NormAssign -> assign Val Expr ;
 
 Expr -> Operator Val Expr |EPSILON
-BooleanExpr -> val [ BoolOperators val ]
-Val -> id | INTLITERAL | FLOATLITERAL
+BooleanExpr -> Val [ BoolOperators Val ]
+Val -> id | INTLITERAL | FLOATLITERAL | BOOLLITERAL | rnd
 Operator -> plus | minus | multiply | divide
-BoolOperators -> equal equal | '&''&' | '|''|'| '!''='
+BoolOperators -> isExactly | and | or | not
+rnd -> 'random' '(' (id|INTLITERAL) 'to' (id|INTLITERAL) ')'

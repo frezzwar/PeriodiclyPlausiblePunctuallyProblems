@@ -3,14 +3,19 @@ Lines -> Line Lines | EPSILON
 Line -> Stmt | Dcl | Print | ControlStructure
 Print -> write '(' PrintStmt ')' ';'
 PrintStmt -> STRINGLITERAL PrintStmt | Val PrintStmt| EPSILON
-Dcl -> new id assign Val Expr ;
+Dcl -> new id assign (Val Expr | List);
+List -> '[' Listvariables ']'
+Listvariables -> (id | Val ) Listvariables | EPSILON
 Stmt -> id  typeofAssign
-ControlStructure -> RepeatStructure | IfStructure
+ControlStructure -> RepeatStructure | IfStructure | SwitchStructure
                  
-RepeatStructure -> repeat (RepeatFor|RepeatWhileStructure)
+RepeatStructure -> repeat ( RepeatFor|RepeatWhileStructure|RepeatForEach )
 RepeatFor -> '('(INTLITERAL|id) ')' '{' Lines '}'
+RepeatForEach -> foreach ( id in id ) %first id is new variable, second id has to be a list
 RepeatWhileStructure -> while '(' BooleanExpr ')' '{' Lines '}'
 IfStructure -> if '(' BooleanExpr ')' '{' Lines '}' [ else (Ifstructure |'{' Lines '}') ]
+SwitchStructure -> switch  ( Val ) Cases
+Cases -> case ( (Val|INTLITERAL) to (Val|INTLITERAL) ) Cases | EPSILON
 
 IfMatched ->   if ( BooleanExpr ) matched else matched | Lines
 IfUnmatched -> if ( BooleanExpr ) matched |
@@ -20,7 +25,7 @@ IfUnmatched -> if ( BooleanExpr ) matched |
 
 
 typeofAssign -> IncrAssign | NormAssign
-IncrAssign -> Operator assign Val ;
+IncrAssign -> Operator assign Val Expr;
 NormAssign -> assign Val Expr ;
 
 Expr -> Operator Val Expr |EPSILON

@@ -1,0 +1,113 @@
+"Name"    = 'Texty Scratch' 
+"Version" = '2015'
+"Author"  = 'Os alle' 
+"About"   = 'Text programming for Scratch'         
+                                
+
+
+
+"Case Sensitive"    = True
+"Start Symbol"      = <Prog>
+                    
+{Id Head}        = {Letter} + [_]
+{Id Tail}        = {Id Head} + {Digit}
+{String Ch}      = {Printable} - ["]
+                 
+INTLITERAL       = {Digit}*
+FLOATLITERAL     = {Digit}*'.'{Digit}+
+                 
+StringLiteral  = '"'( {String Ch} | '\'{Printable} )* '"'
+                 
+! <BOOLLITERAL> 
+
+Id               = {Id Head}{Id Tail}*
+               
+
+<Prog>          ::= <Lines>
+                 
+<id>            ::= Id
+        
+<Lines>         ::= <Line> <Lines> 
+                  | 
+              
+<Line>          ::= <Stmt> 
+                  | <Dcl> 
+                  | <Print> 
+                  | <ControlStructure> 
+!                  | <Action> 
+!                  | <Event>
+              
+<Val>           ::= <id> 
+                  | INTLITERAL 
+                  | FLOATLITERAL
+                  !| <BOOLLITERAL> 
+                  !| <rnd>
+              
+<Print>         ::= write '(' <PrintStmt> ')'
+             
+<PrintStmt>     ::= STRINGLITERAL <PrintStmt> 
+                  | <Val> <PrintStmt>
+                  |
+              
+<Dcl>           ::= new <id> '=' <List>
+                  | new <id> '=' <Val> <Expr>
+
+<List>          ::= '[' <Listvariables> ']'
+                 
+<Listvariables> ::= <id> <Listvariables> 
+                  | <Val> <Listvariables> 
+                  |
+                  
+<Stmt>          ::= <id>  <typeofAssign>
+                 
+<ControlStructure>  ::= <RepeatStructure> 
+                      | <IfStructure>
+                 
+<RepeatStructure>   ::= repeat <RepeatFor>
+                      | repeat <RepeatWhileStructure>
+                      | repeat <RepeatForEach>
+                      
+
+
+<RepeatFor>             ::= '(' INTLITERAL ')' '{' <Lines> '}'
+                          | '(' <id> ')' '{' <Lines> '}'
+                      
+<RepeatForEach>         ::= foreach '(' <id> in <id> ')' '{' <Lines> '}'  !first id is new variable, second id has to be a list
+
+<RepeatWhileStructure>  ::= while '(' <BooleanExpr> ')' '{' <Lines> '}'
+                         
+<IfStructure>           ::= if '(' <BooleanExpr> ')' '{' <Lines> '}' 
+                          | if '(' <BooleanExpr> ')' '{' <Lines> '}' else <Ifstructure>
+                          | if '(' <BooleanExpr> ')' '{' <Lines> '}' else '{' <Lines> '}'
+
+!Event =
+!<Action> = <id> '.'(MoveAction| OtherActions)
+!MoveAction = set | change | goto | turnleft | turnright | walk | turnto | slide 
+
+
+
+<typeofAssign>          ::= <IncrAssign> 
+                          | <NormAssign>
+                          
+<IncrAssign>           ::= <Operator> '=' <Val> <Expr> 
+           
+<NormAssign>            ::= '=' <Val> <Expr>
+
+<Expr>                  ::= <Operator> <Val> <Expr> 
+                          |
+                          
+<BooleanExpr>           ::= <Val> <BoolOperators> <Val>
+                          | <Val>
+
+<Operator>              ::= '+'
+                          | '-'
+                          | '*'
+                          | '/'
+                          
+<BoolOperators>         ::= '=='
+                          | and
+                          | or
+                          | not
+                          
+!<rnd>                   ::= random '(' (id|INTLITERAL) 'to' (id|INTLITERAL) ')'
+

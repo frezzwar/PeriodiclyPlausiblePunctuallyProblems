@@ -11,15 +11,23 @@
 {Id Head}        = {Letter} + [_]
 {Id Tail}        = {Id Head} + {Digit}
 {String Ch}      = {Printable} - ["]
-                 
+  
 INTLITERAL       = {Digit}+
 FLOATLITERAL     = {Digit}*'.'{Digit}+
+StringLiteral    = '"'( {String Ch} | '\'{Printable} )* '"'
+!CharLiteral      = {Letter}
+InputKey         = {Letter} 
+                 | {Digit}
+                 | 'up'
+                 | 'down'
+                 | 'left'
+                 | 'right'
+                 | 'space'
                  
-StringLiteral  = '"'( {String Ch} | '\'{Printable} )* '"'
-CharLiteral     = [abc]
 
 Id               = {Id Head}{Id Tail}*
-               
+                 
+
 
 <Prog>          ::= <Lines>
         
@@ -27,17 +35,15 @@ Id               = {Id Head}{Id Tail}*
                   | 
               
 <Line>          ::= <Stmt> 
-                  | <Dcl> 
-                  | <Print> 
+                  | <Dcl>  
                   | <ControlStructure> 
                   | <Event>
              
 <EventLines>    ::=  <EventLine> <EventLines> 
-                    |
+                  |
                     
 <EventLine>     ::= <Stmt> 
                   | <Dcl> 
-                  | <Print> 
                   | <ControlStructure> 
                   | <Action> 
                   | <Event>
@@ -48,64 +54,73 @@ Id               = {Id Head}{Id Tail}*
                   | bool
                   | <rnd>
                   | STRINGLITERAL
-              
-<Print>         ::= write '(' <PrintStmt> ')'
 
 <PrintStmt>     ::= <Val> <PrintStmt>
                   |
               
-<Dcl>           ::= new Id '=' <Val> <Expr>
-                  | new Id '=' <List>
-                 
+<Dcl>           ::= 'new' Id '=' <Val> <Expr>';'
+                  | 'new' Id '=' <List>';'
+                  | 'new' Id '=' 'create' '('STRINGLITERAL')' '{''x:' <Val> ',' 'y:' <Val> ',' 'size:' <Val> '%' '};' !STRINGLITERAL er navnet på filen hvori billedet til figuren er.
+                  | 'new' Id '=' 'create' '('STRINGLITERAL')' '{''x:' <Val> ',' 'y:' <Val> '};'
+
 <List>          ::= '[' <Listvariables> ']'
                  
 <Listvariables> ::= <Val> ',' <Listvariables> 
                   | <Val>
                   |  
 
-<Stmt>              ::= Id <typeofAssign>
                  
 <ControlStructure>  ::= <RepeatStructure> 
                       | <IfStructure>
                  
-<RepeatStructure>   ::= repeat <RepeatFor>
-                      | repeat <RepeatWhileStructure>
-                      | repeat <RepeatForEach>
-
+<RepeatStructure>   ::= 'repeat' <RepeatFor>
+                      | 'repeat' <RepeatWhileStructure>
+                      | 'repeat' <RepeatForEach>
 
 <RepeatFor>             ::= '(' Id ')' '{' <Lines> '}'
                           | '(' INTLITERAL ')' '{' <Lines> '}'
                           
                       
-<RepeatForEach>         ::= foreach '(' Id in Id ')' '{' <Lines> '}'  !first id is new variable, second id has to be a list
+<RepeatForEach>         ::= 'foreach' '(' Id 'in' Id ')' '{' <Lines> '}'  !first id is new variable, second id has to be a list
 
-<RepeatWhileStructure>  ::= while '(' <BooleanExpr> ')' '{' <Lines> '}'
+<RepeatWhileStructure>  ::= 'while' '(' <BooleanExpr> ')' '{' <Lines> '}'
                          
-<IfStructure>           ::= if '(' <BooleanExpr> ')' '{' <Lines> '}' 
-                          | if '(' <BooleanExpr> ')' '{' <Lines> '}' else <Ifstructure>
-                          | if '(' <BooleanExpr> ')' '{' <Lines> '}' else '{' <Lines> '}'
+<IfStructure>           ::= 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 
+                          | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' <Ifstructure>
+                          | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' '{' <Lines> '}'
 
 
-<Event>                 ::= startup '(' fig':' Id ')' '{' <EventLines> '}' 
-                          | keyPress  '(' fig':' Id',' key':' CharLiteral ')' '{' <EventLines> '}'  !This only accepts a, b and c. You can't use the arrows. This is bad.
-                          | click '(' fig':' Id ')' '{' <EventLines> '}' 
+<Event>                 ::= 'startup' '(' 'fig:' Id ')' '{' <EventLines> '}' 
+                          | 'keyPress'  '(' 'fig:' Id',' 'key:' InputKey ')' '{' <EventLines> '}'  !This only accepts a, b and c. You can't use the arrows and other good stuff. This is bad.
+                          | 'click' '(' 'fig:' Id ')' '{' <EventLines> '}' 
 
-<Action>                ::= set '(' x':' <Val> ')'
-                          | set '(' y':' <Val> ')'
-                          | set '(' x':' <Val>',' y':' <Val> ')'
-                          | change '(' x':' <Val> ')'
-                          | change '(' y':' <Val> ')'
-                          | change '(' x':' <Val>',' y':' <Val> ')'
-                          | turnLeft '(' deg':' <Val> ')'
-                          | turnright '(' deg':' <Val> ')'
-                          | walk '(' steps':' <Val> ')'
-                          | turnto '(' fig':' Id ')'
-                          | slide '(' sec':' <Val>',' x':' <Val>',' y':' <Val> ')'
-                          | wait '(' sec':' <Val> ')'
-                          | waitUntil '(' <BooleanExpr> ')'
+<Action>                ::= 'set' '(' 'x:' <Val> ');'
+                          | 'set' '(' 'y:' <Val> ');'
+                          | 'set' '(' 'x:' <Val>',' 'y:' <Val> ');'
+                          | 'change' '(' 'x:' <Val> ');'
+                          | 'change' '(' 'y:' <Val> ');'
+                          | 'change' '(' 'x:' <Val>',' 'y:' <Val> ');'
+                          | 'turnLeft' '(' 'deg:' <Val> ');'
+                          | 'turnright' '(' 'deg:' <Val> ');'
+                          | 'walk' '(' 'steps:' <Val> ');'
+                          | 'turnto' '(' 'fig:' Id ');'
+                          | 'slide' '(' 'sec:' <Val>',' 'x:' <Val>',' 'y:' <Val> ');'
+                          | 'wait' '(' 'sec:' <Val> ');'
+                          | 'waitUntil' '(' <BooleanExpr> ');'
+                          | 'say' '(' <PrintStmt> ');'
+                          | 'think' '(' <PrintStmt> ');'
+                          | 'say' '(' <PrintStmt>',' 'sec:' <Val> ');'
+                          | 'think' '(' <PrintStmt> ',' 'sec:' <Val> ');'
+                          | 'hide'
+                          | 'show'
+                          | 'size' '(' <Val>'%' ');'
+                          | 'layer' '(' <Val> ');'
+                          | 'ask' '(' <PrintStmt> ');'
+                          
+<Condition>             ::= 'touch' '(' 'fig:' Id ')'
 
-
-
+<Stmt>                  ::= Id <typeofAssign>';'
+                     
 <typeofAssign>          ::= <IncrAssign> 
                           | <NormAssign>
                           
@@ -114,10 +129,12 @@ Id               = {Id Head}{Id Tail}*
 <NormAssign>            ::= '=' <Val> <Expr>
 
 <Expr>                  ::= <Operator> <Val> <Expr> 
+                          | 'dist' '(' 'fig:' <Val> ')' <Expr>
                           |
                           
 <BooleanExpr>           ::= <Val> <BoolOperators> <Val>
                           | <Val>
+                          | <Condition>
 
 <Operator>              ::= '+'
                           | '-'
@@ -125,10 +142,8 @@ Id               = {Id Head}{Id Tail}*
                           | '/'
                           
 <BoolOperators>         ::= '=='
-                          | and
-                          | or
-                          | not
+                          | 'and'
+                          | 'or'
+                          | 'not'
                           
-<rnd>                   ::= random '(' <Val> to <Val> ')' !Det her må kun være tal. Det skal fixes et andet sted :)
-
-!<Walk>                  ::= walk '(' fig: Id ',' <Val> ')'
+<rnd>                   ::= 'random' '(' <Val> 'to' <Val> ');' !Det her må kun være tal. 

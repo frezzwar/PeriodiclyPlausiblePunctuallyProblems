@@ -9,8 +9,7 @@ INTLITERAL       = {Digit}+
 FLOATLITERAL     = {Digit}*'.'{Digit}+
 StringLiteral    = '"'( {String Ch} | '\'{Printable} )* '"'
 !CharLiteral      = {Letter}
-InputKey         = {Letter} 
-                 | {Digit}
+InputKey         = '\'{Printable}
                  | 'up'
                  | 'down'
                  | 'left'
@@ -25,6 +24,7 @@ Id               = {Id Head}{Id Tail}*
 <Prog>          ::= <Dcls> <EventDecls>
       
 <EventDecls>    ::= <EventDecl> <EventDecls>
+                 |
 
 <EventDecl>     ::= <Event> <Lines>
   
@@ -34,6 +34,7 @@ Id               = {Id Head}{Id Tail}*
 <Line>          ::= <Stmt> 
                   | <Dcl>  
                   | <ControlStructure> 
+                  | <Action>
              
 <EventLines>    ::=  <EventLine> <EventLines> 
                   |
@@ -55,6 +56,7 @@ Id               = {Id Head}{Id Tail}*
                   |
                   
 <Dcls>          ::= <Dcl> <Dcls>
+                 |
               
 <Dcl>           ::= 'new' Id '=' <Val> <Expr>';'
                   | 'new' Id '=' <List>';'
@@ -71,12 +73,12 @@ Id               = {Id Head}{Id Tail}*
 <ControlStructure>  ::= <RepeatStructure> 
                       | <IfStructure>
                  
-<RepeatStructure>   ::= 'repeat' <RepeatFor>
-                      | 'repeat' <RepeatWhile>
-                      | 'repeat' <RepeatForEach>
+<RepeatStructure>   ::=  'repeat' <RepeatFor>
+                      |  'repeat' <RepeatWhile>
+                      |  'repeat' <RepeatForEach>
 
-<RepeatFor>             ::= '(' Id ')' '{' <Lines> '}'
-                          | '(' INTLITERAL ')' '{' <Lines> '}'
+<RepeatFor>             ::=  '(' Id ')' '{' <Lines> '}'
+                          |  '(' INTLITERAL ')' '{' <Lines> '}'
                           
 
 <RepeatWhile>  ::= 'while' '(' <BooleanExpr> ')' '{' <Lines> '}'
@@ -91,6 +93,7 @@ Id               = {Id Head}{Id Tail}*
 <Event>                 ::= 'startup' '(' 'fig:' Id ')' '{' <EventLines> '}' 
                           | 'keyPress'  '(' 'fig:' Id',' 'key:' InputKey ')' '{' <EventLines> '}'  !This only accepts a, b and c. You can't use the arrows and other good stuff. This is bad.
                           | 'click' '(' 'fig:' Id ')' '{' <EventLines> '}' 
+                          | 'testevent'
 
 <Action>                ::= 'set' '(' 'x:' <Val> ');'
                           | 'set' '(' 'y:' <Val> ');'
@@ -133,6 +136,7 @@ Id               = {Id Head}{Id Tail}*
                           
 <BooleanExpr>           ::= <Val> <BoolOperators> <Val>
                           | <Condition>
+                          | <Val> <BoolOperators> <Val> <BoolOperators> <BooleanExpr> 
 
 <Operator>              ::= '+'
                           | '-'
@@ -140,8 +144,12 @@ Id               = {Id Head}{Id Tail}*
                           | '/'
                           
 <BoolOperators>         ::= '=='            !fix consistensy
-                          | '&&'
-                          | '||'
-                          | '!='
+                         | '&&'
+                         | '||'
+                         | '!='
+                         | '<'
+                         | '>'
+                         | '<='
+                         | '>='
                           
-<rnd>                   ::= 'random' '(' <Val> 'to' <Val> ');' !Det her må kun være tal. 
+<rnd>                   ::= 'random' '(' <Val> 'to' <Val> ')' !Det her må kun være tal. 

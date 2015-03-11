@@ -70,12 +70,12 @@ Id               = {Id Head}{Id Tail}*
                   |  
 
                  
-<ControlStructure>  ::= <RepeatStructure> 
+<ControlStructure>  ::= 'repeat' <RepeatStructure> 
                       | <IfStructure>
                  
-<RepeatStructure>   ::=  'repeat' <RepeatFor>
-                      |  'repeat' <RepeatWhile>
-                      |  'repeat' <RepeatForEach>
+<RepeatStructure>   ::=  <RepeatFor>
+                      |  <RepeatWhile>
+                      |  <RepeatForEach>
 
 <RepeatFor>             ::=  '(' Id ')' '{' <Lines> '}'
                           |  '(' INTLITERAL ')' '{' <Lines> '}'

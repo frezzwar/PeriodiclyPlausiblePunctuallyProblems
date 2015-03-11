@@ -1,11 +1,4 @@
-﻿"Name"    = 'Texty Scratch' 
-"Version" = '2015'
-"Author"  = 'Oliver Købsted, Stefan Møller, Jacob Nielsen, Simon Pedersen, Lasse Petersen, Kenneth Stick'
-"About"   = 'Text programming for Scratch'
-
-
-
-"Case Sensitive"    = False
+﻿"Case Sensitive"    = False
 "Start Symbol"      = <Prog>
                     
 {Id Head}        = {Letter} + [_]
@@ -29,15 +22,18 @@ Id               = {Id Head}{Id Tail}*
                  
 
 
-<Prog>          ::= <Lines>
-        
+<Prog>          ::= <Dcls> <EventDecls>
+      
+<EventDecls>    ::= <EventDecl> <EventDecls>
+
+<EventDecl>     ::= <Event> <Lines>
+  
 <Lines>         ::= <Line> <Lines> 
                   | 
               
 <Line>          ::= <Stmt> 
                   | <Dcl>  
                   | <ControlStructure> 
-                  | <Event>
              
 <EventLines>    ::=  <EventLine> <EventLines> 
                   |
@@ -46,7 +42,6 @@ Id               = {Id Head}{Id Tail}*
                   | <Dcl> 
                   | <ControlStructure> 
                   | <Action> 
-                  | <Event>
               
 <Val>           ::= Id
                   | INTLITERAL 
@@ -55,8 +50,11 @@ Id               = {Id Head}{Id Tail}*
                   | <rnd>
                   | STRINGLITERAL
 
-<PrintStmt>     ::= <Val> <PrintStmt>
+<PrintStmt>     ::= <Val> '+' <PrintStmt>
+                  |  <Val>
                   |
+                  
+<Dcls>          ::= <Dcl> <Dcls>
               
 <Dcl>           ::= 'new' Id '=' <Val> <Expr>';'
                   | 'new' Id '=' <List>';'
@@ -74,20 +72,20 @@ Id               = {Id Head}{Id Tail}*
                       | <IfStructure>
                  
 <RepeatStructure>   ::= 'repeat' <RepeatFor>
-                      | 'repeat' <RepeatWhileStructure>
+                      | 'repeat' <RepeatWhile>
                       | 'repeat' <RepeatForEach>
 
 <RepeatFor>             ::= '(' Id ')' '{' <Lines> '}'
                           | '(' INTLITERAL ')' '{' <Lines> '}'
                           
+
+<RepeatWhile>  ::= 'while' '(' <BooleanExpr> ')' '{' <Lines> '}'
                       
 <RepeatForEach>         ::= 'foreach' '(' Id 'in' Id ')' '{' <Lines> '}'  !first id is new variable, second id has to be a list
-
-<RepeatWhileStructure>  ::= 'while' '(' <BooleanExpr> ')' '{' <Lines> '}'
                          
-<IfStructure>           ::= 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 
-                          | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' <Ifstructure>
-                          | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' '{' <Lines> '}'
+<IfStructure>           ::= 'if' '(' <BooleanExpr> ')' '{' <Lines> '}'                           
+                         | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' '{' <Lines> '}'
+                         | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' <Ifstructure>                          
 
 
 <Event>                 ::= 'startup' '(' 'fig:' Id ')' '{' <EventLines> '}' 
@@ -118,6 +116,7 @@ Id               = {Id Head}{Id Tail}*
                           | 'ask' '(' <PrintStmt> ');'
                           
 <Condition>             ::= 'touch' '(' 'fig:' Id ')'
+                          | 'touch' '(' 'edge' ')'
 
 <Stmt>                  ::= Id <typeofAssign>';'
                      
@@ -129,11 +128,10 @@ Id               = {Id Head}{Id Tail}*
 <NormAssign>            ::= '=' <Val> <Expr>
 
 <Expr>                  ::= <Operator> <Val> <Expr> 
-                          | 'dist' '(' 'fig:' <Val> ')' <Expr>
+!                          | 'dist' '(' 'fig:' <Val> ')' <Expr>
                           |
                           
 <BooleanExpr>           ::= <Val> <BoolOperators> <Val>
-                          | <Val>
                           | <Condition>
 
 <Operator>              ::= '+'
@@ -141,9 +139,9 @@ Id               = {Id Head}{Id Tail}*
                           | '*'
                           | '/'
                           
-<BoolOperators>         ::= '=='
-                          | 'and'
-                          | 'or'
-                          | 'not'
+<BoolOperators>         ::= '=='            !fix consistensy
+                          | '&&'
+                          | '||'
+                          | '!='
                           
 <rnd>                   ::= 'random' '(' <Val> 'to' <Val> ');' !Det her må kun være tal. 

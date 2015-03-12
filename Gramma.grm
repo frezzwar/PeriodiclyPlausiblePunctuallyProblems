@@ -86,8 +86,7 @@ Id               = {Id Head}{Id Tail}*
 <RepeatForEach>         ::= 'foreach' '(' Id 'in' List ')' '{' <Lines> '}'  !first id is new variable, second id has to be a list
                          
 <IfStructure>           ::= 'if' '(' <BooleanExpr> ')' '{' <Lines> '}'                           
-                         | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' '{' <Lines> '}'
-                         | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' <Ifstructure>                          
+                         | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' '{' <Lines> '}'                   
 
 
 <Event>                 ::= 'startup' '(' 'fig:' Id ')' '{' <Lines> '}' 

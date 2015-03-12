@@ -26,7 +26,7 @@ Id               = {Id Head}{Id Tail}*
 <EventDecls>    ::= <EventDecl> <EventDecls>
                  |
 
-<EventDecl>     ::= <Event> <Lines>
+<EventDecl>     ::= <Event> !<Lines>
   
 <Lines>         ::= <Line> <Lines> 
                   | 
@@ -36,13 +36,13 @@ Id               = {Id Head}{Id Tail}*
                   | <ControlStructure> 
                   | <Action>
              
-<EventLines>    ::=  <EventLine> <EventLines> 
-                  |
+!<EventLines>    ::=  <EventLine> <EventLines> 
+!                  |
                     
-<EventLine>     ::= <Stmt> 
-                  | <Dcl> 
-                  | <ControlStructure> 
-                  | <Action> 
+!<EventLine>     ::= <Stmt> 
+!                  | <Dcl> 
+!                  | <ControlStructure> 
+!                  | <Action> 
               
 <Val>           ::= Id
                   | INTLITERAL 
@@ -59,9 +59,9 @@ Id               = {Id Head}{Id Tail}*
                  |
               
 <Dcl>           ::= 'new' Id '=' <Val> <Expr>';'
-                  | 'new' Id '=' <List>';'
-                  | 'new' Id '=' 'create' '('STRINGLITERAL')' '{''x:' <Val> ',' 'y:' <Val> ',' 'size:' <Val> '%' '};' !STRINGLITERAL er navnet på filen hvori billedet til figuren er.
-                  | 'new' Id '=' 'create' '('STRINGLITERAL')' '{''x:' <Val> ',' 'y:' <Val> '};'
+                  | 'new' List '=' <List>';'
+                  | 'new' Id '=' 'create' '(' STRINGLITERAL ',' 'x:' <Val> ',' 'y:' <Val> ',' 'size:' <Val> '%' ')' ';' !STRINGLITERAL er navnet på filen hvori billedet til figuren er.
+                  | 'new' Id '=' 'create' '(' STRINGLITERAL ',' 'x:' <Val> ',' 'y:' <Val> ')' ';'
 
 <List>          ::= '[' <Listvariables> ']'
                  
@@ -83,45 +83,47 @@ Id               = {Id Head}{Id Tail}*
 
 <RepeatWhile>  ::= 'while' '(' <BooleanExpr> ')' '{' <Lines> '}'
                       
-<RepeatForEach>         ::= 'foreach' '(' Id 'in' Id ')' '{' <Lines> '}'  !first id is new variable, second id has to be a list
+<RepeatForEach>         ::= 'foreach' '(' Id 'in' List ')' '{' <Lines> '}'  !first id is new variable, second id has to be a list
                          
 <IfStructure>           ::= 'if' '(' <BooleanExpr> ')' '{' <Lines> '}'                           
                          | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' '{' <Lines> '}'
                          | 'if' '(' <BooleanExpr> ')' '{' <Lines> '}' 'else' <Ifstructure>                          
 
 
-<Event>                 ::= 'startup' '(' 'fig:' Id ')' '{' <EventLines> '}' 
-                          | 'keyPress'  '(' 'fig:' Id',' 'key:' InputKey ')' '{' <EventLines> '}'  !This only accepts a, b and c. You can't use the arrows and other good stuff. This is bad.
-                          | 'click' '(' 'fig:' Id ')' '{' <EventLines> '}' 
-                          | 'testevent'
+<Event>                 ::= 'startup' '(' 'fig:' Id ')' '{' <Lines> '}' 
+                          | 'keyPress'  '(' 'fig:' Id',' 'key:' InputKey ')' '{' <Lines> '}' 
+                          | 'click' '(' 'fig:' Id ')' '{' <Lines> '}' 
+                          | 'testevent' '{' <Lines> '}'
 
-<Action>                ::= 'set' '(' 'x:' <Val> ');'
-                          | 'set' '(' 'y:' <Val> ');'
-                          | 'set' '(' 'x:' <Val>',' 'y:' <Val> ');'
-                          | 'change' '(' 'x:' <Val> ');'
-                          | 'change' '(' 'y:' <Val> ');'
-                          | 'change' '(' 'x:' <Val>',' 'y:' <Val> ');'
-                          | 'turnLeft' '(' 'deg:' <Val> ');'
-                          | 'turnright' '(' 'deg:' <Val> ');'
-                          | 'walk' '(' 'steps:' <Val> ');'
-                          | 'turnto' '(' 'fig:' Id ');'
-                          | 'slide' '(' 'sec:' <Val>',' 'x:' <Val>',' 'y:' <Val> ');'
-                          | 'wait' '(' 'sec:' <Val> ');'
-                          | 'waitUntil' '(' <BooleanExpr> ');'
-                          | 'say' '(' <PrintStmt> ');'
-                          | 'think' '(' <PrintStmt> ');'
-                          | 'say' '(' <PrintStmt>',' 'sec:' <Val> ');'
-                          | 'think' '(' <PrintStmt> ',' 'sec:' <Val> ');'
-                          | 'hide'
-                          | 'show'
-                          | 'size' '(' <Val>'%' ');'
-                          | 'layer' '(' <Val> ');'
-                          | 'ask' '(' <PrintStmt> ');'
+<Action>                ::= 'set' '(' 'x:' <Val> ')' ';'
+                          | 'set' '(' 'y:' <Val> ')' ';'
+                          | 'set' '(' 'x:' <Val>',' 'y:' <Val> ')' ';'
+                          | 'change' '(' 'x:' <Val> ')' ';'
+                          | 'change' '(' 'y:' <Val> ')' ';'
+                          | 'change' '(' 'x:' <Val>',' 'y:' <Val> ')' ';'
+                          | 'turnLeft' '(' 'deg:' <Val> ')' ';'
+                          | 'turnright' '(' 'deg:' <Val> ')' ';'
+                          | 'walk' '(' 'steps:' <Val> ')' ';'
+                          | 'turnto' '(' 'fig:' Id ')' ';'
+                          | 'turnto' '(' 'deg:' <Val> ')' ';'
+                          | 'slide' '(' 'sec:' <Val>',' 'x:' <Val>',' 'y:' <Val> ')' ';'
+                          | 'wait' '(' 'sec:' <Val> ')' ';'
+                          | 'waitUntil' '(' <BooleanExpr> ')' ';'
+                          | 'say' '(' <PrintStmt> ')' ';'
+                          | 'think' '(' <PrintStmt> ')' ';'
+                          | 'say' '(' <PrintStmt>',' 'sec:' <Val> ')' ';'
+                          | 'think' '(' <PrintStmt> ',' 'sec:' <Val> ')' ';'
+                          | 'hide' ';'
+                          | 'show' ';'
+                          | 'size' '(' <Val>'%' ')' ';'
+                          | 'layer' '(' <Val> ')' ';'
+                          | 'ask' '(' <PrintStmt> ')' ';'
                           
 <Condition>             ::= 'touch' '(' 'fig:' Id ')'
                           | 'touch' '(' 'edge' ')'
 
 <Stmt>                  ::= Id <typeofAssign>';'
+                         | List '.' 'add' '(' <Val> ')' ';'
                      
 <typeofAssign>          ::= <IncrAssign> 
                           | <NormAssign>
@@ -143,7 +145,7 @@ Id               = {Id Head}{Id Tail}*
                           | '*'
                           | '/'
                           
-<BoolOperators>         ::= '=='            !fix consistensy
+<BoolOperators>         ::= '=='            
                          | '&&'
                          | '||'
                          | '!='

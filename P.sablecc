@@ -1,0 +1,101 @@
+﻿/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * This file is part of MiniBasic.                                 *
+ * See the file "MiniBasic-LICENSE" for Copyright information and  *
+ * the terms and conditions for copying, distribution and          *
+ * modification of MiniBasic.                                      *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+Package sablecc.minibasic;
+
+Helpers
+  letter = ['A'..'Z'];
+  digit = ['0'..'9'];
+  cr = 13;
+  lf = 10;
+  not_cr_lf = [[32..127] - [cr + lf]];
+
+Tokens
+  if = 'IF';
+  then = 'THEN';
+  else = 'ELSE';
+  endif = 'ENDIF';
+
+  for = 'FOR';
+  to = 'TO';
+  next = 'NEXT';
+
+  read = 'READ';
+  print = 'PRINT';
+  println = 'PRINTLN';
+
+  assign = ':=';
+
+  less_than = '<';
+  greater_than = '>';
+  equal = '=';
+
+  plus = '+';
+  minus = '-';
+  mult = '*';
+  div = '/';
+  mod = 'MOD';
+
+  l_par = '(';
+  r_par = ')';
+
+  identifier = letter (letter | digit)*;
+  number = digit+;
+  string = '"' [not_cr_lf - '"']* '"';
+
+  new_line = cr | lf | cr lf;
+
+  blank = ' '*;
+
+Ignored Tokens
+  blank;
+
+Productions
+  statements = 
+    {list}  statement statements | 
+    {empty} ;
+
+  statement = 
+    {if}         if condition then [nl1]:new_line
+                   statements
+                   optional_else
+                 endif [nl2]:new_line |
+
+    {for}        for identifier assign [from_exp]:expression to [to_exp]:expression [nl1]:new_line
+                   statements
+                 next [nl2]:new_line |
+
+    {read}       read identifier new_line |
+
+    {print_exp}  print expression new_line |
+    {print_str}  print string new_line |
+    {println}    println new_line |
+
+    {assignment} identifier assign expression new_line;
+
+  optional_else = 
+    {else}  else new_line
+              statements |
+    {empty} ;
+  
+  condition =
+    {less_than}    [left]:expression less_than    [right]:expression |
+    {greater_than} [left]:expression greater_than [right]:expression |
+    {equal}        [left]:expression equal        [right]:expression;
+
+  expression =
+    {value} value |
+    {plus}  [left]:value plus  [right]:value |
+    {minus} [left]:value minus [right]:value |
+    {mult}  [left]:value mult  [right]:value |
+    {div}   [left]:value div   [right]:value |
+    {mod}   [left]:value mod   [right]:value;
+
+  value =
+    {constant}   number |
+    {identifier} identifier |
+    {expression} l_par expression r_par;

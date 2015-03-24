@@ -1,0 +1,24 @@
+var a = prompt("Enter a string or a number")
+
+if (isNaN(a) == true)
+{   
+    if (a.toLowerCase() == "true")
+    {
+        console.log("The input is a boolean (true)")
+        var tmpa = true;
+    }
+    else if (a.toLowerCase() == "false")
+    {
+        console.log("The input is a boolean (false)")
+        var tmpa = false;
+    }
+    else
+    {
+        console.log("The input is a string")
+    }
+    
+}
+else
+{
+    console.log("The input is a number")
+}

@@ -1,0 +1,9 @@
+new attacks = 5;
+new hits = 0;
+new critical = 0;
+new damage = 0;
+new dragonHealth = 100;
+new emptyList = [];
+new integerList = [10, abc, 30];
+new mixedList = [True, 10, 20.10];
+new funList = [, True]; /* Do we allow this */

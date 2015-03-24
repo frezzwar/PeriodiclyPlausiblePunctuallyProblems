@@ -1,0 +1,177 @@
+Package     simpleAdder;
+
+Helpers
+	tab             = 9;
+    lf              = 10;
+    cr              = 13;
+    letter 			= [['a' .. 'z'] + ['A' .. 'Z']];
+    digit           = ['0' .. '9'];
+    nonzero_digit   = ['1' .. '9'];
+    normal			= [[digit + '_'] + letter];   
+	dot             = '.'; 
+	all 			= [0 .. 0xFFFF];  
+	not_cr_lf 		= [all - [cr + lf]];
+
+Tokens
+    plus            = '+';
+    minus           = '-';
+    mult            = '*';
+    div             = '/';
+    equals          = '=';
+    par_l           = '(';
+    par_r           = ')';
+    curly_l         = '{';
+    curly_r         = '}';
+    brack_l         = '[';
+    brack_r         = ']';
+    quote           = '"';
+    comma           = ',';
+    semi_c          = ';';
+    blank           = (' ' | tab | lf | cr)*;
+    true            = 'true';
+    false           = 'false';
+    dot             = '.';
+    equal           = '==';
+    less_equal      = '<=';
+    greater_equal   = '>=';
+    negate          = '!=';
+    and             = '&&';
+    or              = '||';
+    less			= '<';
+    greater			= '>';
+    increment		= '+=';
+    decrement		= '-=';
+    
+    new             = 'new';
+    add             = 'add';
+    startup			= 'startup';
+    fig				= 'fig';
+    colon			= ':';
+    repeat			= 'repeat';
+    while			= 'while';
+    random			= 'random';
+    to				= 'to';
+    if				= 'if';
+    else			= 'else';
+    say				= 'say';
+    sec				= 'sec';
+    foreach			= 'foreach';
+    in				= 'in';
+    think			= 'think';
+    switch			= 'switch';
+    case			= 'case';
+
+	string_literal 	= '"' not_cr_lf+ '"';
+	identifier 		= letter (normal)* ;	
+	double_literal  = digit* dot digit+;  
+    integer_literal = digit+;  
+    
+    multiline_comment = '/' '*' [[0 .. 0xffff] - ['*' + '/']]* '*' '/' ;
+    
+Ignored Tokens
+    blank,
+    multiline_comment;
+
+Productions
+    decls               = {decls} decl decls
+                        | ;
+                        
+    decl                = {vardecl} vardecl
+						| {event} event
+    					| {stmt} stmt
+    					| {controlstructure} controlstructure
+    					| {action} action;
+    					
+    controlstructure    = {repeatstructure} repeat repeatstructure
+    					| {ifstructure} if par_l expr par_r curly_l decls curly_r elsestructure?
+    					| {switchstructure} switch par_l expr par_r curly_l switchcase curly_r;
+    
+    switchcase			= case par_l [left]:expr to? [right]:expr? par_r curly_l decls curly_r switchcase?;
+    
+    elsestructure       = {elsestructure} else if par_l expr par_r curly_l decls curly_r;
+    
+    repeatstructure     = {repeatwhile} while par_l expr par_r curly_l decls curly_r
+    					| {id} par_l expr? comma? value  par_r curly_l decls curly_r
+    					| foreach par_l [left]:identifier in [right]:identifier par_r curly_l decls curly_r;
+                        
+    event				= {startup} startup par_l fig colon identifier par_r curly_l decls curly_r;
+                        
+    vardecl				= {single_var_decls} new value equals expr semi_c
+    					| {list} new identifier equals brack_l value? listvariables brack_r semi_c;
+
+
+	action              = {say} actionsay
+						| {think} actionthink;
+
+	
+	actionsay           = {option1} say par_l printstmt par_r semi_c
+	                    | {option2} say par_l printstmt comma sec colon value par_r semi_c;
+
+	actionthink			= {option1} think par_l printstmt par_r semi_c
+                        | {option2} think par_l printstmt comma sec colon value par_r semi_c;
+
+	printstmt           = {plus} value plus printstmt
+                        | {val} value;
+
+    listvariables       = {listvariables} comma value listvariables
+                        | ;
+
+    stmt                = {list} [left]:value dot add par_l [right]:value par_r semi_c
+						| {add} expr semi_c;
+	
+	expr				= {expr} expr comma opassign
+						| {opassign} opassign;
+						
+	opassign			= {opassign1} opor equals opassign
+						| {opassign2} opor increment opassign
+						| {opassign3} opor decrement opassign
+						| {opor} opor;
+						
+	opor				= {opor} opor or opand
+						| {opand} opand;
+	
+	opand				= {opand} opand and opcompare
+						| {opcompare} opcompare;
+						
+	opcompare			= {opcompare1} opcompare less value
+               			| {opcompare2} opcompare greater  value
+               			| {opcompare3} opcompare less_equal value
+               			| {opcompare4} opcompare greater_equal value
+               			| {value} value;
+	
+	value				= {identifier} identifier
+    					| {literal} literal
+    					| {rnd} rnd;
+    
+    compare_token		= {less_equal} less_equal
+    					| {less} less 
+    					| {greater_equal} greater_equal
+    					| {greater} greater;			 
+
+    operator            = {minus} minus value
+                        | {plus} plus value
+                        | {mult} mult value
+                        | {div} div value;
+
+    bool_operator       = {equal} equal
+                        | {less_equal} less_equal
+                        | {greater_equal} greater_equal
+                        | {negate} negate
+                        | {and} and
+                        | {or} or
+                        | {less} less
+                        | {greater} greater;
+    
+    rnd                 = random par_l [left]:value to [right]:value par_r;
+    
+    literal 			= {boolean_literal} boolean_literal
+    					| {integer_literal} integer_literal
+    					| {double_literal} double_literal
+    					| {string_literal} string_literal;
+    
+    boolean_literal 	= {true} true 
+                    	| {false} false;
+
+    
+
+    

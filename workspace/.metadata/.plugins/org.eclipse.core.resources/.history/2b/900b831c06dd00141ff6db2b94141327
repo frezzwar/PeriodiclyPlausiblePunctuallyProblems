@@ -6,7 +6,7 @@ import compiler.analysis.* ;
 
 import java.lang.System;
 
-public class Interpreter extends DepthFirstAdapter {
+public class Interpreter extends ReversedDepthFirstAdapter {
  
 	
 	public void defaultOut(@SuppressWarnings("unused") Node node)

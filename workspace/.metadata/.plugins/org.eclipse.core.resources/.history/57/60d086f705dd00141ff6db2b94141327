@@ -12,7 +12,7 @@ public class Interpreter extends DepthFirstAdapter {
 	public void defaultOut(@SuppressWarnings("unused") Node node)
     {
         // Do nothing
-		System.out.println(node.getClass() + " : " + node);
+		//System.out.println(node.getClass() + " : " + node);
     }
    /*
         // Print tokens and ignores bland and EOF tokens

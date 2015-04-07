@@ -7,6 +7,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="Main"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="P4\TestPrograms\Test.sa"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="P4\TestPrograms\Test2.sa"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="P4"/>
 </launchConfiguration>

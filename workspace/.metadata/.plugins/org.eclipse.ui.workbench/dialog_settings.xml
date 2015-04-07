@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="790" key="dialogHeight"/>
-		<item value="1440" key="dialogWidth"/>
+		<item value="655" key="dialogHeight"/>
+		<item value="1200" key="dialogWidth"/>
 		<list key="textEntries">
 		</list>
 		<list key="orderedElements">
@@ -23,5 +23,7 @@
 		<list key="WizardZipFileResourceImportPage1.STORE_SOURCE_NAMES_ID">
 			<item value="E:\Dropbox\Uni\P4\Project\ST\P4Grammar.zip"/>
 		</list>
+	</section>
+	<section name="FileSystemImportWizard">
 	</section>
 </section>

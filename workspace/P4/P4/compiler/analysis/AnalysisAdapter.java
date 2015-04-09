@@ -219,7 +219,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAEqualsExpr(AEqualsExpr node)
+    public void caseAAssignExpr(AAssignExpr node)
     {
         defaultCase(node);
     }
@@ -561,7 +561,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTEquals(TEquals node)
+    public void caseTAssign(TAssign node)
     {
         defaultCase(node);
     }

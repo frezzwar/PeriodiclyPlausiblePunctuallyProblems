@@ -19,7 +19,7 @@ Tokens
     minus           = '-';
     mult            = '*';
     div             = '/';
-    equals          = '=';
+    assign          = '=';
     par_l           = '(';
     par_r           = ')';
     curly_l         = '{';
@@ -80,10 +80,10 @@ Productions
     						| {control_statements} control_statments
     						| {assign} expr semi_c;
     					
-    variable_declaration	= new identifier equals variable_types variable_tail* semi_c;
+    variable_declaration	= new identifier assign variable_types variable_tail* semi_c;
     variable_types			= {single} expr
     						| {list} brack_l expr list_var_tail* brack_r;
-    variable_tail			= comma new identifier equals variable_types;    											
+    variable_tail			= comma new identifier assign variable_types;    											
     list_var_tail 			= comma expr;		
 	
 	call_params				= expr call_params_tail*;
@@ -106,7 +106,7 @@ Productions
     
     body					= curly_l decl* curly_r;
 						
-	expr					= {equals} opor equals expr
+	expr					= {assign} opor assign expr
 							| {increment} opor increment expr
 							| {decrement} opor decrement expr
 							| {or} opor;

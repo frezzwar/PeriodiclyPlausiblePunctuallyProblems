@@ -232,9 +232,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getVariableTypes().apply(this);
         }
-        if(node.getEquals() != null)
+        if(node.getAssign() != null)
         {
-            node.getEquals().apply(this);
+            node.getAssign().apply(this);
         }
         if(node.getIdentifier() != null)
         {
@@ -323,9 +323,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getVariableTypes().apply(this);
         }
-        if(node.getEquals() != null)
+        if(node.getAssign() != null)
         {
-            node.getEquals().apply(this);
+            node.getAssign().apply(this);
         }
         if(node.getIdentifier() != null)
         {
@@ -796,33 +796,33 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outABody(node);
     }
 
-    public void inAEqualsExpr(AEqualsExpr node)
+    public void inAAssignExpr(AAssignExpr node)
     {
         defaultIn(node);
     }
 
-    public void outAEqualsExpr(AEqualsExpr node)
+    public void outAAssignExpr(AAssignExpr node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAEqualsExpr(AEqualsExpr node)
+    public void caseAAssignExpr(AAssignExpr node)
     {
-        inAEqualsExpr(node);
+        inAAssignExpr(node);
         if(node.getExpr() != null)
         {
             node.getExpr().apply(this);
         }
-        if(node.getEquals() != null)
+        if(node.getAssign() != null)
         {
-            node.getEquals().apply(this);
+            node.getAssign().apply(this);
         }
         if(node.getOpor() != null)
         {
             node.getOpor().apply(this);
         }
-        outAEqualsExpr(node);
+        outAAssignExpr(node);
     }
 
     public void inAIncrementExpr(AIncrementExpr node)

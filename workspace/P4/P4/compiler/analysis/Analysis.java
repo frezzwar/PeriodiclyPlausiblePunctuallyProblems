@@ -36,7 +36,7 @@ public interface Analysis extends Switch
     void caseAElseElsestructure(AElseElsestructure node);
     void caseAIfelseElsestructure(AIfelseElsestructure node);
     void caseABody(ABody node);
-    void caseAEqualsExpr(AEqualsExpr node);
+    void caseAAssignExpr(AAssignExpr node);
     void caseAIncrementExpr(AIncrementExpr node);
     void caseADecrementExpr(ADecrementExpr node);
     void caseAOrExpr(AOrExpr node);
@@ -94,7 +94,7 @@ public interface Analysis extends Switch
     void caseTMinus(TMinus node);
     void caseTMult(TMult node);
     void caseTDiv(TDiv node);
-    void caseTEquals(TEquals node);
+    void caseTAssign(TAssign node);
     void caseTParL(TParL node);
     void caseTParR(TParR node);
     void caseTCurlyL(TCurlyL node);

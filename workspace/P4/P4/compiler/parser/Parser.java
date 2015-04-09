@@ -426,7 +426,7 @@ public class Parser
                 push(goTo(15), list, false);
             }
             break;
-            case 38: /* reduce AEqualsExpr */
+            case 38: /* reduce AAssignExpr */
             {
                 ArrayList<Object> list = new38();
                 push(goTo(16), list, false);
@@ -1337,20 +1337,20 @@ public class Parser
             // Block
         TNew tnewNode2;
         TIdentifier tidentifierNode3;
-        TEquals tequalsNode4;
+        TAssign tassignNode4;
         PVariableTypes pvariabletypesNode5;
         LinkedList<Object> listNode6 = new LinkedList<Object>();
         TSemiC tsemicNode7;
         tnewNode2 = (TNew)nodeArrayList1.get(0);
         tidentifierNode3 = (TIdentifier)nodeArrayList2.get(0);
-        tequalsNode4 = (TEquals)nodeArrayList3.get(0);
+        tassignNode4 = (TAssign)nodeArrayList3.get(0);
         pvariabletypesNode5 = (PVariableTypes)nodeArrayList4.get(0);
         {
             // Block
         }
         tsemicNode7 = (TSemiC)nodeArrayList5.get(0);
 
-        pvariabledeclarationNode1 = new AVariableDeclaration(tnewNode2, tidentifierNode3, tequalsNode4, pvariabletypesNode5, listNode6, tsemicNode7);
+        pvariabledeclarationNode1 = new AVariableDeclaration(tnewNode2, tidentifierNode3, tassignNode4, pvariabletypesNode5, listNode6, tsemicNode7);
         }
 	nodeList.add(pvariabledeclarationNode1);
         return nodeList;
@@ -1374,13 +1374,13 @@ public class Parser
             // Block
         TNew tnewNode2;
         TIdentifier tidentifierNode3;
-        TEquals tequalsNode4;
+        TAssign tassignNode4;
         PVariableTypes pvariabletypesNode5;
         LinkedList<Object> listNode7 = new LinkedList<Object>();
         TSemiC tsemicNode8;
         tnewNode2 = (TNew)nodeArrayList1.get(0);
         tidentifierNode3 = (TIdentifier)nodeArrayList2.get(0);
-        tequalsNode4 = (TEquals)nodeArrayList3.get(0);
+        tassignNode4 = (TAssign)nodeArrayList3.get(0);
         pvariabletypesNode5 = (PVariableTypes)nodeArrayList4.get(0);
         {
             // Block
@@ -1393,7 +1393,7 @@ public class Parser
         }
         tsemicNode8 = (TSemiC)nodeArrayList6.get(0);
 
-        pvariabledeclarationNode1 = new AVariableDeclaration(tnewNode2, tidentifierNode3, tequalsNode4, pvariabletypesNode5, listNode7, tsemicNode8);
+        pvariabledeclarationNode1 = new AVariableDeclaration(tnewNode2, tidentifierNode3, tassignNode4, pvariabletypesNode5, listNode7, tsemicNode8);
         }
 	nodeList.add(pvariabledeclarationNode1);
         return nodeList;
@@ -1504,15 +1504,15 @@ public class Parser
         TComma tcommaNode2;
         TNew tnewNode3;
         TIdentifier tidentifierNode4;
-        TEquals tequalsNode5;
+        TAssign tassignNode5;
         PVariableTypes pvariabletypesNode6;
         tcommaNode2 = (TComma)nodeArrayList1.get(0);
         tnewNode3 = (TNew)nodeArrayList2.get(0);
         tidentifierNode4 = (TIdentifier)nodeArrayList3.get(0);
-        tequalsNode5 = (TEquals)nodeArrayList4.get(0);
+        tassignNode5 = (TAssign)nodeArrayList4.get(0);
         pvariabletypesNode6 = (PVariableTypes)nodeArrayList5.get(0);
 
-        pvariabletailNode1 = new AVariableTail(tcommaNode2, tnewNode3, tidentifierNode4, tequalsNode5, pvariabletypesNode6);
+        pvariabletailNode1 = new AVariableTail(tcommaNode2, tnewNode3, tidentifierNode4, tassignNode5, pvariabletypesNode6);
         }
 	nodeList.add(pvariabletailNode1);
         return nodeList;
@@ -2080,7 +2080,7 @@ public class Parser
 
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    ArrayList<Object> new38() /* reduce AEqualsExpr */
+    ArrayList<Object> new38() /* reduce AAssignExpr */
     {
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
@@ -2091,13 +2091,13 @@ public class Parser
         {
             // Block
         POpor poporNode2;
-        TEquals tequalsNode3;
+        TAssign tassignNode3;
         PExpr pexprNode4;
         poporNode2 = (POpor)nodeArrayList1.get(0);
-        tequalsNode3 = (TEquals)nodeArrayList2.get(0);
+        tassignNode3 = (TAssign)nodeArrayList2.get(0);
         pexprNode4 = (PExpr)nodeArrayList3.get(0);
 
-        pexprNode1 = new AEqualsExpr(poporNode2, tequalsNode3, pexprNode4);
+        pexprNode1 = new AAssignExpr(poporNode2, tassignNode3, pexprNode4);
         }
 	nodeList.add(pexprNode1);
         return nodeList;

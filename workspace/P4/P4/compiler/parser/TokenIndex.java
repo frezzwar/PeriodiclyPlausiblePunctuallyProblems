@@ -34,7 +34,7 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTEquals(@SuppressWarnings("unused") TEquals node)
+    public void caseTAssign(@SuppressWarnings("unused") TAssign node)
     {
         this.index = 4;
     }

@@ -10,7 +10,7 @@ public final class AVariableTail extends PVariableTail
     private TComma _comma_;
     private TNew _new_;
     private TIdentifier _identifier_;
-    private TEquals _equals_;
+    private TAssign _assign_;
     private PVariableTypes _variableTypes_;
 
     public AVariableTail()
@@ -22,7 +22,7 @@ public final class AVariableTail extends PVariableTail
         @SuppressWarnings("hiding") TComma _comma_,
         @SuppressWarnings("hiding") TNew _new_,
         @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") TEquals _equals_,
+        @SuppressWarnings("hiding") TAssign _assign_,
         @SuppressWarnings("hiding") PVariableTypes _variableTypes_)
     {
         // Constructor
@@ -32,7 +32,7 @@ public final class AVariableTail extends PVariableTail
 
         setIdentifier(_identifier_);
 
-        setEquals(_equals_);
+        setAssign(_assign_);
 
         setVariableTypes(_variableTypes_);
 
@@ -45,7 +45,7 @@ public final class AVariableTail extends PVariableTail
             cloneNode(this._comma_),
             cloneNode(this._new_),
             cloneNode(this._identifier_),
-            cloneNode(this._equals_),
+            cloneNode(this._assign_),
             cloneNode(this._variableTypes_));
     }
 
@@ -130,16 +130,16 @@ public final class AVariableTail extends PVariableTail
         this._identifier_ = node;
     }
 
-    public TEquals getEquals()
+    public TAssign getAssign()
     {
-        return this._equals_;
+        return this._assign_;
     }
 
-    public void setEquals(TEquals node)
+    public void setAssign(TAssign node)
     {
-        if(this._equals_ != null)
+        if(this._assign_ != null)
         {
-            this._equals_.parent(null);
+            this._assign_.parent(null);
         }
 
         if(node != null)
@@ -152,7 +152,7 @@ public final class AVariableTail extends PVariableTail
             node.parent(this);
         }
 
-        this._equals_ = node;
+        this._assign_ = node;
     }
 
     public PVariableTypes getVariableTypes()
@@ -187,7 +187,7 @@ public final class AVariableTail extends PVariableTail
             + toString(this._comma_)
             + toString(this._new_)
             + toString(this._identifier_)
-            + toString(this._equals_)
+            + toString(this._assign_)
             + toString(this._variableTypes_);
     }
 
@@ -213,9 +213,9 @@ public final class AVariableTail extends PVariableTail
             return;
         }
 
-        if(this._equals_ == child)
+        if(this._assign_ == child)
         {
-            this._equals_ = null;
+            this._assign_ = null;
             return;
         }
 
@@ -250,9 +250,9 @@ public final class AVariableTail extends PVariableTail
             return;
         }
 
-        if(this._equals_ == oldChild)
+        if(this._assign_ == oldChild)
         {
-            setEquals((TEquals) newChild);
+            setAssign((TAssign) newChild);
             return;
         }
 

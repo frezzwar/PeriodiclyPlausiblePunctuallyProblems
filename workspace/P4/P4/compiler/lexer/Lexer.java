@@ -21,7 +21,7 @@ public class Lexer
     @SuppressWarnings("unused")
     protected void filter() throws LexerException, IOException
     {
-        // Do nothing Jacob was here. Oliver was never here
+        // Do nothing
     }
 
     public Lexer(@SuppressWarnings("hiding") final PushbackReader in)

@@ -35,9 +35,6 @@ public interface Analysis extends Switch
     void caseAIfstructureControlStatments(AIfstructureControlStatments node);
     void caseAElseElsestructure(AElseElsestructure node);
     void caseAIfelseElsestructure(AIfelseElsestructure node);
-    void caseAAssignLeftParam(AAssignLeftParam node);
-    void caseAVariableLeftParam(AVariableLeftParam node);
-    void caseARightParam(ARightParam node);
     void caseABody(ABody node);
     void caseAEqualsExpr(AEqualsExpr node);
     void caseAIncrementExpr(AIncrementExpr node);

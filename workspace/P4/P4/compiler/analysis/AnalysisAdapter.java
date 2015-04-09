@@ -213,24 +213,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAAssignLeftParam(AAssignLeftParam node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAVariableLeftParam(AVariableLeftParam node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseARightParam(ARightParam node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseABody(ABody node)
     {
         defaultCase(node);

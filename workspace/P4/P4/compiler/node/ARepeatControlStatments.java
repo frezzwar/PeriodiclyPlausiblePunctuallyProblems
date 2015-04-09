@@ -8,9 +8,7 @@ import compiler.analysis.*;
 public final class ARepeatControlStatments extends PControlStatments
 {
     private TRepeat _repeat_;
-    private TParL _parL_;
-    private PLeftParam _leftParam_;
-    private PRightParam _rightParam_;
+    private POpadd _opadd_;
     private TParR _parR_;
     private PBody _body_;
 
@@ -21,20 +19,14 @@ public final class ARepeatControlStatments extends PControlStatments
 
     public ARepeatControlStatments(
         @SuppressWarnings("hiding") TRepeat _repeat_,
-        @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PLeftParam _leftParam_,
-        @SuppressWarnings("hiding") PRightParam _rightParam_,
+        @SuppressWarnings("hiding") POpadd _opadd_,
         @SuppressWarnings("hiding") TParR _parR_,
         @SuppressWarnings("hiding") PBody _body_)
     {
         // Constructor
         setRepeat(_repeat_);
 
-        setParL(_parL_);
-
-        setLeftParam(_leftParam_);
-
-        setRightParam(_rightParam_);
+        setOpadd(_opadd_);
 
         setParR(_parR_);
 
@@ -47,9 +39,7 @@ public final class ARepeatControlStatments extends PControlStatments
     {
         return new ARepeatControlStatments(
             cloneNode(this._repeat_),
-            cloneNode(this._parL_),
-            cloneNode(this._leftParam_),
-            cloneNode(this._rightParam_),
+            cloneNode(this._opadd_),
             cloneNode(this._parR_),
             cloneNode(this._body_));
     }
@@ -85,16 +75,16 @@ public final class ARepeatControlStatments extends PControlStatments
         this._repeat_ = node;
     }
 
-    public TParL getParL()
+    public POpadd getOpadd()
     {
-        return this._parL_;
+        return this._opadd_;
     }
 
-    public void setParL(TParL node)
+    public void setOpadd(POpadd node)
     {
-        if(this._parL_ != null)
+        if(this._opadd_ != null)
         {
-            this._parL_.parent(null);
+            this._opadd_.parent(null);
         }
 
         if(node != null)
@@ -107,57 +97,7 @@ public final class ARepeatControlStatments extends PControlStatments
             node.parent(this);
         }
 
-        this._parL_ = node;
-    }
-
-    public PLeftParam getLeftParam()
-    {
-        return this._leftParam_;
-    }
-
-    public void setLeftParam(PLeftParam node)
-    {
-        if(this._leftParam_ != null)
-        {
-            this._leftParam_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._leftParam_ = node;
-    }
-
-    public PRightParam getRightParam()
-    {
-        return this._rightParam_;
-    }
-
-    public void setRightParam(PRightParam node)
-    {
-        if(this._rightParam_ != null)
-        {
-            this._rightParam_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rightParam_ = node;
+        this._opadd_ = node;
     }
 
     public TParR getParR()
@@ -215,9 +155,7 @@ public final class ARepeatControlStatments extends PControlStatments
     {
         return ""
             + toString(this._repeat_)
-            + toString(this._parL_)
-            + toString(this._leftParam_)
-            + toString(this._rightParam_)
+            + toString(this._opadd_)
             + toString(this._parR_)
             + toString(this._body_);
     }
@@ -232,21 +170,9 @@ public final class ARepeatControlStatments extends PControlStatments
             return;
         }
 
-        if(this._parL_ == child)
+        if(this._opadd_ == child)
         {
-            this._parL_ = null;
-            return;
-        }
-
-        if(this._leftParam_ == child)
-        {
-            this._leftParam_ = null;
-            return;
-        }
-
-        if(this._rightParam_ == child)
-        {
-            this._rightParam_ = null;
+            this._opadd_ = null;
             return;
         }
 
@@ -275,21 +201,9 @@ public final class ARepeatControlStatments extends PControlStatments
             return;
         }
 
-        if(this._parL_ == oldChild)
+        if(this._opadd_ == oldChild)
         {
-            setParL((TParL) newChild);
-            return;
-        }
-
-        if(this._leftParam_ == oldChild)
-        {
-            setLeftParam((PLeftParam) newChild);
-            return;
-        }
-
-        if(this._rightParam_ == oldChild)
-        {
-            setRightParam((PRightParam) newChild);
+            setOpadd((POpadd) newChild);
             return;
         }
 

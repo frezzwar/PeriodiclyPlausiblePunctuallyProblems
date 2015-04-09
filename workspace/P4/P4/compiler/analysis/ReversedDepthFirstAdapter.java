@@ -592,17 +592,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getParR().apply(this);
         }
-        if(node.getRightParam() != null)
+        if(node.getOpadd() != null)
         {
-            node.getRightParam().apply(this);
-        }
-        if(node.getLeftParam() != null)
-        {
-            node.getLeftParam().apply(this);
-        }
-        if(node.getParL() != null)
-        {
-            node.getParL().apply(this);
+            node.getOpadd().apply(this);
         }
         if(node.getRepeat() != null)
         {
@@ -769,85 +761,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             node.getElse().apply(this);
         }
         outAIfelseElsestructure(node);
-    }
-
-    public void inAAssignLeftParam(AAssignLeftParam node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAAssignLeftParam(AAssignLeftParam node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAAssignLeftParam(AAssignLeftParam node)
-    {
-        inAAssignLeftParam(node);
-        if(node.getOpadd() != null)
-        {
-            node.getOpadd().apply(this);
-        }
-        outAAssignLeftParam(node);
-    }
-
-    public void inAVariableLeftParam(AVariableLeftParam node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAVariableLeftParam(AVariableLeftParam node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAVariableLeftParam(AVariableLeftParam node)
-    {
-        inAVariableLeftParam(node);
-        if(node.getOpadd() != null)
-        {
-            node.getOpadd().apply(this);
-        }
-        if(node.getEquals() != null)
-        {
-            node.getEquals().apply(this);
-        }
-        if(node.getIdentifier() != null)
-        {
-            node.getIdentifier().apply(this);
-        }
-        if(node.getNew() != null)
-        {
-            node.getNew().apply(this);
-        }
-        outAVariableLeftParam(node);
-    }
-
-    public void inARightParam(ARightParam node)
-    {
-        defaultIn(node);
-    }
-
-    public void outARightParam(ARightParam node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseARightParam(ARightParam node)
-    {
-        inARightParam(node);
-        if(node.getOpadd() != null)
-        {
-            node.getOpadd().apply(this);
-        }
-        if(node.getComma() != null)
-        {
-            node.getComma().apply(this);
-        }
-        outARightParam(node);
     }
 
     public void inABody(ABody node)

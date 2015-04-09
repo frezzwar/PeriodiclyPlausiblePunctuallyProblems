@@ -97,17 +97,12 @@ Productions
     params_tail				= comma identifier;
 			
     control_statments   	= {while} repeat while par_l expr par_r body
-    						| {repeat} repeat par_l left_param right_param? par_r body
+    						| {repeat} repeat opadd par_r body
     						| {foreach} repeat foreach par_l identifier in varname par_r body
     						| {ifstructure} if par_l expr par_r body elsestructure?;
     												  
     elsestructure       	= {else} else body
     						| {ifelse} else if par_l expr par_r body elsestructure?;
-    
-    left_param				= {assign} opadd
-    						| {variable} new identifier equals opadd;
-    						
-    right_param				= comma opadd;
     
     body					= curly_l decl* curly_r;
 						

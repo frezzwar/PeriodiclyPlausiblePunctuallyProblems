@@ -1,0 +1,16 @@
+package compiler.interpret;
+import compiler.node.*;
+
+import compiler.analysis.*;
+
+import java.util.*;
+
+public class SemanticAnalyzer extends DepthFirstAdapter {
+	
+	Hashtable symble_table = new Hashtable();
+	
+	public void outAVariableDeclaration(AVariableDeclaration node)
+	{
+		T
+	}
+}

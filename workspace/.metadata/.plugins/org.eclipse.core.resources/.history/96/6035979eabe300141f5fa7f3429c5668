@@ -1,0 +1,17 @@
+package compiler.interpret;
+
+import compiler.analysis.DepthFirstAdapter;
+import compiler.node.*;
+
+public class ClassGenerator extends DepthFirstAdapter
+{
+	String code = "";
+	
+	public void inAVariableDeclaration(AVariableDeclaration node)
+	{
+		//System.out.println(node.getIdentifier());
+		
+		code += "var " + node.getIdentifier() + ";\n";
+		System.out.println(code);
+	}
+}

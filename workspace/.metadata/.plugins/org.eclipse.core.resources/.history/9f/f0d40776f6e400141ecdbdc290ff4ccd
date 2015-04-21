@@ -1,0 +1,41 @@
+package compiler.interpret;
+
+
+
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
+
+import compiler.analysis.DepthFirstAdapter;
+import compiler.node.*;
+
+public class ClassGenerator extends DepthFirstAdapter
+{	
+	public void write(String output)
+	{
+		try{
+			PrintWriter out
+			   = new PrintWriter(new BufferedWriter(new FileWriter("foo.out")));
+			out.write(output);
+		}catch(Exception e)
+		{
+			
+		}
+	}
+	String code = "";
+	
+	public void inAVariableDeclaration(AVariableDeclaration node)
+	{
+		code += "var " + node.getIdentifier() + node.getAssign() + node.getVariableTypes() + ";\n";
+		System.out.println(code);
+	}
+	
+	public void inAAssignExpr(AAssignExpr node)
+	{
+		code += node.getOpor().toString() + node.getAssign() + node.getExpr() + ";\n";
+		System.out.println(code);
+	}
+	
+}

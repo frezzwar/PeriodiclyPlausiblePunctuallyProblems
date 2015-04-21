@@ -2,4 +2,15 @@ main()
 {
     // Create grid
     new grid1 = grid(10, 10);
+    
+    new number1 = 5;
+    
+    new number2 = number1 + 5;
+    
+    number2 = 9;
+    
+    if(number2 <= number1)
+    {
+    	number1 = 10;
+    }
 }

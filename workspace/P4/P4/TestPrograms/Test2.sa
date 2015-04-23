@@ -13,4 +13,18 @@ main()
     {
     	number1 = 10;
     }
+    //number2 = func(number1);
+}
+
+func(new number)
+{
+	new temp = number * number;
+	if(temp < 11)
+	{
+		return temp;
+	}
+	else
+	{
+		return 2*temp;
+	}
 }

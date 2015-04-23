@@ -9,3 +9,9 @@ number2 = 9 ;
 if (number2 <= number1 )
 { number1 = 10 ; } 
 
+var temp = number * number ;
+
+if (temp < 11 )
+{ return temp ; } 
+
+else { return 2 * temp ; } 

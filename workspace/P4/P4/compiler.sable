@@ -54,6 +54,7 @@ Tokens
     foreach			= 'foreach';
     in				= 'in';
     return			= 'return';
+    main			= 'main';
 
 	identifier 		= letter (normal)* ;
 	
@@ -71,33 +72,36 @@ Ignored Tokens
     oneline_comment;
 
 Productions
-	program					= decls+;
-
-    decls               	= identifier par_l params? par_r curly_l decl* return_value? curly_r;
-                        
+	program					= main par_l par_r curly_l decl+ curly_r func_decl*;    
+	           
     decl                	= {variable_declaration} variable_declaration
-    						| {function_declaration} function_declaration
     						| {control_statements} control_statments
-    						| {assign} expr semi_c;
+    						| {assign} expr semi_c
+    						| {return} return_value;
+    						
+    func_decl				= identifier par_l params? par_r curly_l decl* curly_r;
     					
-    variable_declaration	= new identifier assign variable_types variable_tail* semi_c;
-    variable_types			= {single} expr
-    						| {list} brack_l expr list_var_tail* brack_r;
-    variable_tail			= comma new identifier assign variable_types;    											
-    list_var_tail 			= comma expr;		
+    variable_declaration	= new identifier assign variables variable_tail* semi_c;
+    
+    variables				= {expr} expr
+    						| {list} brack_l value list_var_tail* brack_r;
+    						
+    variable_tail			= comma new identifier assign variables;  
+      											
+    list_var_tail 			= comma value;		
 	
 	call_params				= expr call_params_tail*;
-	call_params_tail		= comma expr;
-    
-    function_declaration	= new decls;  
+	
+	call_params_tail		= comma value;
     
     return_value			= return expr semi_c;		 
     
-    params					= identifier params_tail*;
-    params_tail				= comma identifier;
+    params					= new identifier params_tail*;
+    
+    params_tail				= comma new identifier;
 			
-    control_statments   	= {while} repeat while par_l expr par_r body
-    						| {repeat} repeat opadd par_r body
+    control_statments   	= {while} repeat while par_l expr par_r body 
+    						| {repeat} repeat par_l value par_r body
     						| {foreach} repeat foreach par_l identifier in varname par_r body
     						| {ifstructure} if par_l expr par_r body elsestructure?;
     												  
@@ -106,57 +110,27 @@ Productions
     
     body					= curly_l decl* curly_r;
 						
-	expr					= {assign} opor assign expr
-							| {increment} opor increment expr
-							| {decrement} opor decrement expr
-							| {or} opor;
-						
-	opor					= {or} opor or opand
-							| {and} opand;
-	
-	opand					= {and} opand and opequate
-							| {equate} opequate;
-	
-	opequate				= {equal} opequate equal opcompare
-							| {negate} opequate negate opcompare
-							| {compare} opcompare;
-						
-	opcompare				= {less} opcompare less value
-               				| {greater} opcompare greater  value
-               				| {less_equal} opcompare less_equal value
-               				| {greater_equal} opcompare greater_equal value
-               				| {add} opadd;
-               				
-    opadd					= {plus} opadd plus opmult
-    						| {minus} opadd minus opmult
-    						| {mult} opmult;
-    
-    opmult					= {mult} opmult mult opunary
-    						| {div} opmult div opunary
-    						| {unary} opunary;
-    
-    opunary					= {minusvalue} minus opunary
+	expr					= {assign} value assign expr
+							| {increment} value increment expr
+							| {decrement} value decrement expr
+							| {boolean} value bool_operator expr
+							| {numeric} value operator expr
+    						| {minusvalue} minus expr
     						| {value} value;
 	
 	value					= {varname} varname function_call?
-    						| {literal} literal
-    						| {rnd} rnd ;
+    						| {literal} literal;
     
     function_call			= par_l call_params? par_r body?;
     
     varname					= identifier idlist*;
     						
-    idlist					= dot identifier;	
-    
-    compare_token			= {less_equal} less_equal
-    						| {less} less 
-    						| {greater_equal} greater_equal
-    						| {greater} greater;			 
+    idlist					= dot identifier;		 
 
-    operator            	= {minus} minus value
-                        	| {plus} plus value
-                        	| {mult} mult value
-                        	| {div} div value;
+    operator            	= {minus} minus
+                        	| {plus} plus
+                        	| {mult} mult
+                        	| {div} div;
 
     bool_operator       	= {equal} equal
                         	| {less_equal} less_equal
@@ -166,13 +140,11 @@ Productions
                         	| {or} or
                         	| {less} less
                         	| {greater} greater;
-                        	
-    rnd                 	= random par_l [left]:value to [right]:value par_r;
     
-    literal 				= {boolean_literal} boolean_literal
-    						| {integer_literal} integer_literal
-    						| {double_literal} double_literal
-    						| {string_literal} string_literal;
+    literal 				= {boolean} boolean_literal
+    						| {integer} integer_literal
+    						| {double} double_literal
+    						| {string} string_literal;
     
     boolean_literal 		= {true} true 
                     		| {false} false;

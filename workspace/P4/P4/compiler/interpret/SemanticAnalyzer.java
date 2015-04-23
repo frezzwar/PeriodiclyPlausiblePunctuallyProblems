@@ -8,7 +8,26 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	
 	Hashtable symble_table = new Hashtable();
 	
+	
 	public void outAVariableDeclaration(AVariableDeclaration node)
+	{
+		TIdentifier ident = node.getIdentifier();
+		
+		String key = ident.toString().toUpperCase();
+		//System.out.println(node.getVariables());
+		
+		if(symble_table.containsKey(key))
+		{
+			System.out.println("Identifier already defined");
+			System.exit(0);
+		}
+		else
+		{
+			symble_table.put(key,key);
+		}
+	}
+	
+	public void outAParams(AParams node)
 	{
 		TIdentifier ident = node.getIdentifier();
 		
@@ -40,8 +59,5 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		}
 	}
 	
-	public void outALessEqualOpcompare(ALessEqualOpcompare node)
-	{
-		System.out.println(node.getValue());
-	}
+
 }

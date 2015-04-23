@@ -30,8 +30,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	
 	public void inAVariableDeclaration(AVariableDeclaration node)
 	{
-		code = "var " + node.getIdentifier() + node.getAssign() + node.getVariableTypes() + ";\n";
-		//System.out.println(code);
+		code = "var " + node.getIdentifier() + node.getAssign() + node.getVariables() + ";\n";
 		write(code);
 	}
 	
@@ -39,8 +38,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	{
 		if(!node.parent().parent().getClass().toString().equals("class compiler.node.ABody"))
 		{
-			code = node.getOpor().toString() + node.getAssign() + node.getExpr() + ";\n";
-			//System.out.println(code);
+			code = node.getValue().toString() + node.getAssign() + node.getExpr() + ";\n";
 			write(code);
 		}
 		

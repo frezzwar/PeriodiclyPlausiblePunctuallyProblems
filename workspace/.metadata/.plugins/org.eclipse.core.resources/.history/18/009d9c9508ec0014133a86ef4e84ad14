@@ -1,0 +1,15 @@
+package compiler.interpret;
+
+import java.util.ArrayList;
+import java.util.List;
+import compiler.interpret.Type;
+
+
+public class TypeExpression
+{		
+	List<Type> input = new ArrayList<Type>();
+	List<Type> output = new ArrayList<Type>();	
+}
+	
+	
+

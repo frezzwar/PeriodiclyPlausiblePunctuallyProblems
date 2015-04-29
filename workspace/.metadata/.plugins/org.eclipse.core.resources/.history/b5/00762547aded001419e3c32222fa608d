@@ -1,0 +1,150 @@
+Package     compiler;
+
+Helpers
+	all 			= [0 .. 0xFFFF];
+	tab             = 9;
+    lf              = 10;
+    cr              = 13;
+    letter 			= [['a' .. 'z'] + ['A' .. 'Z']];
+    digit           = ['0' .. '9'];
+    nonzero_digit   = ['1' .. '9'];
+    normal			= [[digit + '_'] + letter];   
+	dot             = '.';  
+	not_cr_lf 		= [all - [cr + lf]];
+	eol 			= cr | lf | cr lf;
+
+Tokens
+
+    plus            = '+';
+    minus           = '-';
+    mult            = '*';
+    div             = '/';
+    assign          = '=';
+    par_l           = '(';
+    par_r           = ')';
+    curly_l         = '{';
+    curly_r         = '}';
+    brack_l         = '[';
+    brack_r         = ']';
+    quote           = '"';
+    comma           = ',';
+    semi_c          = ';';
+    blank           = (' ' | tab | lf | cr)*;
+
+    dot             = '.';
+    equal           = '==';
+    less_equal      = '<=';
+    greater_equal   = '>=';
+    negate          = '!=';
+    and             = '&&';
+    or              = '||';
+    less			= '<';
+    greater			= '>';
+    increment		= '+=';
+    decrement		= '-=';
+    true            = 'true';
+    false           = 'false';
+    new             = 'new';
+    to				= 'to';
+    repeat			= 'repeat';
+    while			= 'while';
+    random			= 'random';
+    if				= 'if';
+    else			= 'else';
+    foreach			= 'foreach';
+    in				= 'in';
+    return			= 'return';
+    main			= 'main';
+
+	identifier 		= letter (normal)* ;
+	
+	string_literal 	= '"' not_cr_lf+ '"';	
+	double_literal  = digit* dot digit+;  
+    integer_literal = digit+;  
+    
+    
+    multiline_comment 	= '/' '*' [all - ['*' + '/']]* '*' '/' ;
+    oneline_comment		= '//' [all - [cr + lf]]* eol?;
+    
+Ignored Tokens
+    blank,
+    multiline_comment,
+    oneline_comment;
+
+Productions
+	program					= main par_l par_r curly_l decl+ curly_r func_decl*;    
+	           
+    decl                	= {variable_declaration} variable_declaration
+    						| {control_statements} control_statments
+    						| {assign} expr semi_c
+    						| {return} return_value;
+    						
+    func_decl				= identifier par_l params? par_r curly_l decl* curly_r;
+    					
+    variable_declaration	= new identifier assign variables variable_tail* semi_c;
+    
+    variables				= {expr} expr
+    						| {list} brack_l value list_var_tail* brack_r;
+    						
+    variable_tail			= comma new identifier assign variables;  
+      											
+    list_var_tail 			= comma value;		
+	
+	call_params				= expr call_params_tail*;
+	
+	call_params_tail		= comma value;
+    
+    return_value			= return expr semi_c;		 
+    
+    params					= new identifier params_tail*;
+    
+    params_tail				= comma new identifier;
+			
+    control_statments   	= {while} repeat while par_l expr par_r body 
+    						| {repeat} repeat par_l value par_r body
+    						| {foreach} repeat foreach par_l identifier in varname par_r body
+    						| {ifstructure} if par_l expr par_r body elsestructure?;
+    												  
+    elsestructure       	= {else} else body
+    						| {ifelse} else if par_l expr par_r body elsestructure?;
+    
+    body					= curly_l decl* curly_r;
+						
+	expr					= {assign} value assign expr
+							| {increment} value increment expr
+							| {decrement} value decrement expr
+							| {boolean} value bool_operator expr
+							| {numeric} value operator expr
+    						| {minusvalue} minus expr
+    						| {value} value;
+	
+	value					= {varname} varname function_call?
+    						| {literal} literal;
+    
+    function_call			= par_l call_params? par_r body?;
+    
+    varname					= identifier idlist*;
+    						
+    idlist					= dot identifier;		 
+
+    operator            	= {minus} minus
+                        	| {plus} plus
+                        	| {mult} mult
+                        	| {div} div;
+
+    bool_operator       	= {equal} equal
+                        	| {less_equal} less_equal
+                        	| {greater_equal} greater_equal
+                        	| {negate} negate
+                        	| {and} and
+                        	| {or} or
+                        	| {less} less
+                        	| {greater} greater;
+    
+    literal 				= {boolean} boolean_literal
+    						| {integer} integer_literal
+    						| {double} double_literal
+    						| {string} string_literal;
+    
+    boolean_literal 		= {true} true 
+                    		| {false} false;

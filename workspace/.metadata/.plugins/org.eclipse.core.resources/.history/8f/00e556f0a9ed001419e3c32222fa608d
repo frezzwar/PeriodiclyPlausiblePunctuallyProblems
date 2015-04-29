@@ -1,0 +1,32 @@
+main()
+{
+    // Create grid
+    new grid1 = grid(10, 10);
+    
+    new number1 = 5;
+    
+    new number2 = number1 + 5 * 4;
+    
+    new number3 = number2 + "hej";
+    
+    number2 = 9;
+    
+    if(number2 <= number1)
+    {
+    	number1 = 10;
+    }
+    //number2 = func(number1);
+}
+
+func(new number)
+{
+	new temp = number * number;
+	if(temp < 11)
+	{
+		return temp;
+	}
+	else
+	{
+		return 2*temp;
+	}
+}

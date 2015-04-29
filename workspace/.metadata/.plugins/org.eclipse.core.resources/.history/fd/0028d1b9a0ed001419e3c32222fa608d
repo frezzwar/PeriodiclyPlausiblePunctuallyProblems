@@ -1,0 +1,75 @@
+package compiler.interpret;
+import compiler.node.*;
+import compiler.analysis.*;
+import compiler.interpret.Typecheck;
+
+import java.util.*;
+
+public class SemanticAnalyzer extends DepthFirstAdapter {
+	
+	Hashtable symble_table = new Hashtable();
+	
+	
+	public void outAVariableDeclaration(AVariableDeclaration node)
+	{
+		TIdentifier ident = node.getIdentifier();
+		
+		String key = ident.toString().toUpperCase();
+		List<TypeExpression> Type = Typecheck.TypeExpressions(node.getVariables(), node.getVariableTail());
+		
+		if(symble_table.containsKey(key))
+		{
+			System.out.println("Identifier already defined");
+			System.exit(0);
+		}
+		else
+		{
+			symble_table.put(key,Type);
+		}
+	}
+	
+	public void outAParams(AParams node)
+	{
+		TIdentifier ident = node.getIdentifier();
+		
+		String key = ident.toString().toUpperCase();
+		
+		if(symble_table.containsKey(key))
+		{
+			System.out.println("Identifier already defined");
+			System.exit(0);
+		}
+		else
+		{
+			symble_table.put(key,Type.variable);
+		}
+	}
+	
+	public void outAVarname(AVarname node)
+	{
+		TIdentifier ident = node.getIdentifier();
+		
+		String key = ident.toString().toUpperCase();
+		if(!key.equals("GRID "))
+		{
+			if(!symble_table.containsKey(key))
+			{
+				System.out.println("Identifier not defined: " + node.getIdentifier());
+				System.exit(0);
+			}
+		}
+	}
+	
+	public void outAProgram(AProgram node)
+	{
+		Iterator it = symble_table.entrySet().iterator();
+		while(it.hasNext())
+		{
+			System.out.println(it.next());
+			Map.Entry pair = (Map.Entry)it.next();
+			symble_table.put(pair.getKey(), Typecheck.typeChecker((List<TypeExpression>)pair.getValue()));
+		}
+	}
+	
+
+}

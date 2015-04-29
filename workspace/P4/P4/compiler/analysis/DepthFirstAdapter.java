@@ -189,6 +189,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAFuncDecl(AFuncDecl node)
     {
         inAFuncDecl(node);
+        if(node.getNew() != null)
+        {
+            node.getNew().apply(this);
+        }
         if(node.getIdentifier() != null)
         {
             node.getIdentifier().apply(this);
@@ -482,10 +486,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAParams(AParams node)
     {
         inAParams(node);
-        if(node.getNew() != null)
-        {
-            node.getNew().apply(this);
-        }
         if(node.getIdentifier() != null)
         {
             node.getIdentifier().apply(this);

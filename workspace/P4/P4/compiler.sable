@@ -79,7 +79,7 @@ Productions
     						| {assign} expr semi_c
     						| {return} return_value;
     						
-    func_decl				= identifier par_l params? par_r curly_l decl* curly_r;
+    func_decl				= new identifier par_l params? par_r curly_l decl* curly_r;
     					
     variable_declaration	= new identifier assign variables variable_tail* semi_c;
     
@@ -96,7 +96,7 @@ Productions
     
     return_value			= return expr semi_c;		 
     
-    params					= new identifier params_tail*;
+    params					= identifier params_tail*;
     
     params_tail				= comma new identifier;
 			

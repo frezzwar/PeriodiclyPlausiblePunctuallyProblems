@@ -1,0 +1,21 @@
+package compiler.interpret;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Types {
+	public class TypeExpression
+	{		
+		List<Type> input = new ArrayList<Type>();
+		List<Type> output = new ArrayList<Type>();
+		TypeExpression()
+		{
+			
+		}
+	}
+	
+	public enum Type
+	{
+		number, string, bool, grid, figur, list
+	}
+}

@@ -8,6 +8,7 @@ import compiler.analysis.*;
 @SuppressWarnings("nls")
 public final class AFuncDecl extends PFuncDecl
 {
+    private TNew _new_;
     private TIdentifier _identifier_;
     private TParL _parL_;
     private PParams _params_;
@@ -22,6 +23,7 @@ public final class AFuncDecl extends PFuncDecl
     }
 
     public AFuncDecl(
+        @SuppressWarnings("hiding") TNew _new_,
         @SuppressWarnings("hiding") TIdentifier _identifier_,
         @SuppressWarnings("hiding") TParL _parL_,
         @SuppressWarnings("hiding") PParams _params_,
@@ -31,6 +33,8 @@ public final class AFuncDecl extends PFuncDecl
         @SuppressWarnings("hiding") TCurlyR _curlyR_)
     {
         // Constructor
+        setNew(_new_);
+
         setIdentifier(_identifier_);
 
         setParL(_parL_);
@@ -51,6 +55,7 @@ public final class AFuncDecl extends PFuncDecl
     public Object clone()
     {
         return new AFuncDecl(
+            cloneNode(this._new_),
             cloneNode(this._identifier_),
             cloneNode(this._parL_),
             cloneNode(this._params_),
@@ -64,6 +69,31 @@ public final class AFuncDecl extends PFuncDecl
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAFuncDecl(this);
+    }
+
+    public TNew getNew()
+    {
+        return this._new_;
+    }
+
+    public void setNew(TNew node)
+    {
+        if(this._new_ != null)
+        {
+            this._new_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._new_ = node;
     }
 
     public TIdentifier getIdentifier()
@@ -246,6 +276,7 @@ public final class AFuncDecl extends PFuncDecl
     public String toString()
     {
         return ""
+            + toString(this._new_)
             + toString(this._identifier_)
             + toString(this._parL_)
             + toString(this._params_)
@@ -259,6 +290,12 @@ public final class AFuncDecl extends PFuncDecl
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._new_ == child)
+        {
+            this._new_ = null;
+            return;
+        }
+
         if(this._identifier_ == child)
         {
             this._identifier_ = null;
@@ -307,6 +344,12 @@ public final class AFuncDecl extends PFuncDecl
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._new_ == oldChild)
+        {
+            setNew((TNew) newChild);
+            return;
+        }
+
         if(this._identifier_ == oldChild)
         {
             setIdentifier((TIdentifier) newChild);

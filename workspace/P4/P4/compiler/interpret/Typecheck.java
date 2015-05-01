@@ -117,29 +117,32 @@ public class Typecheck{
 			{
 				String[] variables = Variables.toString().split(" ");
 				//lave tjek om inputet er tilladt
-				//hvorfor hopper den i her selvom at i+2 er mindre eller ligmed size
-				for(int i = 0; i+2 <= variables.length; i += 2)
+				for(int i = 0; i < variables.length; i += 2)
 				{
-					System.out.println(variables.length);
 					String key = variables[i].toUpperCase().trim();
 					//System.out.println(key);
-					if(variables[i].equals("grid") && Expression.getInput().get(i) == Type.grid)
+					if(variables[i].equals("grid") && Expression.getInput().get(i/2) == Type.grid)
 					{
 						typesafe = true;
 					}
-					else if(isNumeric(variables[i]) && Expression.getInput().get(i) == Type.number)
+					else if(isNumeric(variables[i]) && Expression.getInput().get(i/2) == Type.number)
 					{
 						typesafe = true;
 					}
-					else if((variables[i].startsWith("\"") && variables[i].endsWith("\"")) && Expression.getInput().get(i) == Type.string)
+					else if((variables[i].startsWith("\"") && variables[i].endsWith("\"")) && Expression.getInput().get(i/2) == Type.string)
 					{
 						typesafe = true;
 					}
 					else if(Table.get(key) != null)
 					{
-						if(Table.get(key).equals(Expression.getInput().get(i)))
+						if(Table.get(key).equals(Expression.getInput().get(i/2)))
 						{
 							typesafe = true;
+						}
+						else
+						{
+							typesafe = false;
+							break;
 						}
 					}
 					else
@@ -148,13 +151,10 @@ public class Typecheck{
 						break;
 					}
 				}
-				
-				
-				
-			}
-			if(typesafe)
-			{
-				return Expression.getOutput();
+				if(typesafe)
+				{
+					return Expression.getOutput();
+				}	
 			}
 			return null;
 			

@@ -15,6 +15,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		TIdentifier ident = node.getIdentifier();
 		
 		String key = ident.toString().toUpperCase().trim();
+		
 		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables(), node.getVariableTail());
 		Type Type = Typecheck.typeChecker(TypeExpression, symble_table, node.getVariables());
 

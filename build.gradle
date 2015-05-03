@@ -1,8 +1,8 @@
 apply plugin: "java"
 
 sourceSets {
-    compiler.main.java.srcDir "src/main/java"
-    compiler.test.java.srcDir "src/test/java"
+    main.java.srcDir "compiler/src/main/java"
+    test.java.srcDir "compiler/src/test/java"
 }
 
 jar {

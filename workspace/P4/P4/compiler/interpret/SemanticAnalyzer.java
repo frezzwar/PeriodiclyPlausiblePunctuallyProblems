@@ -69,4 +69,17 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		//Printer symble tablet man kan se om det virker :D
 		System.out.println(symble_table);
 	}
+	
+	public void outAFuncDecl(AFuncDecl node){
+		TIdentifier ident = node.getIdentifier();
+		
+		String key = ident.toString().toUpperCase().trim();
+		
+		if (!symble_table.containsKey(key))
+		{
+			System.out.println("Identifier already defined");
+			System.exit(0);
+		}
+	}
+	
 }

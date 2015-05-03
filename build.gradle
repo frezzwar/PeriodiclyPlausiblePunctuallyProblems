@@ -1,0 +1,14 @@
+apply plugin: "java"
+
+sourceSets {
+    compiler.main.java.srcDir "src/main/java"
+    compiler.test.java.srcDir "src/test/java"
+}
+
+jar {
+    manifest.attributes "Main-Class": "Main"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}

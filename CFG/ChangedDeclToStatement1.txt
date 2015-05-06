@@ -55,7 +55,7 @@ Tokens
     foreach			= 'foreach';
     in				= 'in';
     return			= 'return';
-    main			= 'main';
+    main			= 'program';
 
 	identifier 		= letter (normal)* ;
 	
@@ -73,7 +73,7 @@ Ignored Tokens
     oneline_comment;
 
 Productions
-	program					= main par_l par_r body func_decl*;    
+	program					= variable_declaration* main body func_decl*;    
 	           
     statement               = {variable_declaration} variable_declaration
     						| {control_statements} control_statments
@@ -95,9 +95,9 @@ Productions
     
     return_value			= return expr semi_c;		 
     
-    params					= new identifier params_tail*;
+    params					= identifier params_tail*;
     
-    params_tail				= comma new identifier;
+    params_tail				= comma identifier;
 			
     control_statments   	= {while} repeat while par_l expr par_r body 
     						| {repeat} repeat par_l value par_r body

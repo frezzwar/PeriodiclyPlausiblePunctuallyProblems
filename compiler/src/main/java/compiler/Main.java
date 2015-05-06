@@ -1,20 +1,17 @@
 /* Create an AST, then invoke our interpreter. */
+package compiler;
 
-
-import interpret.ClassGenerator;
-import interpret.FileSetup;
-import interpret.Interpreter;
-import interpret.SemanticAnalyzer;
-import parser.* ;
-import lexer.* ;
-import node.* ;
+import compiler.interpret.*;
+import compiler.parser.* ;
+import compiler.lexer.* ;
+import compiler.node.* ;
 
 import java.io.* ;
  
 public class Main {
 
 	public static void main(String[] args) {
-      if (args.length > 0) {
+      if (args.length >= 0) {
          try {
             // Form our AST 
             Lexer lexer = new Lexer (new PushbackReader(
@@ -40,7 +37,7 @@ public class Main {
             System.out.println (e) ;
          }
       } else {
-         System.err.println("Missing indput file");
+         System.err.println("Missing input file");
          System.exit(1);
       }
    }

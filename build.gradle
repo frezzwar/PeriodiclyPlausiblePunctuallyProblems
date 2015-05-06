@@ -5,8 +5,12 @@ sourceSets {
     test.java.srcDir "compiler/src/test/java"
 }
 
+dependencies {
+    compile files("sablecc-3.7/lib")
+}
+
 jar {
-    manifest.attributes "Main-Class": "Main"
+    manifest.attributes "Main-Class": "compiler/Main"
 }
 
 task wrapper(type: Wrapper) {

@@ -1,2 +1,24 @@
-.metadata
-.recommenders
+### Java generated files
+.class
+build/
+bin/
+gen/
+
+### Eclipse files
+.project
+.classpath
+.metadata/
+.recommenders/
+.settings/
+
+### IntelliJ files
+.idea/
+*.iml
+
+### Gradle files
+.gradle/
+
+### Other files
+.DS_Store
+
+

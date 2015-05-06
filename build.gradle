@@ -7,6 +7,11 @@ sourceSets {
 
 dependencies {
     compile files("sablecc-3.7/lib")
+    compile files("compiler/src/main/java/compiler/lexer/lexer.dat")
+    compile files("compiler/src/main/java/compiler/parser/parser.dat")
+    runtime files("sablecc-3.7/lib")
+    runtime files("compiler/src/main/java/compiler/lexer/lexer.dat")
+    runtime files("compiler/src/main/java/compiler/parser/parser.dat")
 }
 
 jar {

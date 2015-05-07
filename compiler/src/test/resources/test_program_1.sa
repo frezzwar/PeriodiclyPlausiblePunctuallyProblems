@@ -1,0 +1,159 @@
+main()
+{
+    // Create grid
+    new grid1 = grid(10, 10);
+    
+    // Two options to change background
+    grid1.Background = Background(mountain);                 // sætter baggrunden til grid uden at bruge en variable.
+    
+    new Moutain = Background(mountain);                      // Create variable and assign it to mountain map. 
+    grid1.BackGround = Moutain();  	                     // Set the grids background to the variable named mapMoutain.
+    grid1.show;                             	 		 // Shows the grid and hides all other grids.
+    
+    new multiply(variable_1, variable_2){				//
+    	variable_1 = variable_2;						// New function
+    	return variable_1;   							//
+    }
+    
+    new cat = figur(cat1)
+    {
+        new hp = random(1 to 5);
+        new armor = 9000;
+        new int = 16;
+        new dex = multiply(12,15);
+        new cha = -3;
+        new damage = int * dex;
+        new type = "player";
+    };													// ;
+    
+    new roomDisplay = text(plainText)
+    {
+        new text = "du er i rum kage"; 					// new
+    };													// ;
+    
+    // Laver en sten, som kun er i vejen.
+    new rock = figur(rock1)                                   
+    {
+        new type = "obstacle";
+    };
+    
+    new door = figur(doorclosed)
+    {
+        new type = "opstacle";
+        // Funktion som kan kaldes fra objektet
+        new interact (interactee, interacter)                   
+        {
+            grid.remove(interactee.x, interactee.y);
+        }
+    };
+    
+    new orc = figur(orc3)
+    {
+        new hp = 50;
+        new armor = 9001;
+        new int = 2;
+        new str = 16;
+        new dex = 4;
+        new cha = -3;
+        new damage = str * dex;
+        new type = "enermy";
+    };
+    
+    new bigDragon = figur(dragon2)
+    {
+        new hp = 500;
+        new armor = 90010;
+        new int = 20;
+        new str = 160;
+        new dex = 40;
+        new cha = 120;
+        new damage = str * dex;
+        new type = "enermy";
+        
+        //En af disse 2 skal v�lges
+        //size.x = 2;
+        //size.y = 2;                                         
+        //size(2,2);
+    };
+    
+    cat.grid = grid1;
+    cat.x = 3;
+    cat.y = 3;
+    
+    grid1.addobj(rock, x ,y);                               // add copy of a rock to a specific posisition
+    grid1.addobj(rock, x ,y+1);
+    grid1.remove(x,y);                                      // remove everything in given object and set to empty
+    
+    repeat while(wait_for_input)
+    {
+        detectevents();
+    }
+}
+
+event(keypress)
+{
+    new positiony = 0;					//= 0
+    new positionx = 0;					//= 0
+    if(keypress == up)
+    {
+        positiony = cat.y+1;
+        positionx = cat.x;
+    }
+    else if (keypress == down)
+    {
+        positiony = cat.y-1;
+        positionx = cat.x;
+    }
+    else if (keypress == left)
+    {
+        positiony = cat.y;
+        positionx = cat.x-1;
+    }
+    else if (keypress == right)
+    {
+        positiony = cat.y;
+        positionx = cat.x+1;
+    }
+        
+    // return v�rdis hvis der ikke er noget??? (null eller noget andet)
+    new moveobjekt = grid.check(positionx, positiony);
+    
+    if (moveobjekt == empty)
+    {
+        cat.y += 1;
+    }
+    else if (moveobjekt.type == "enemy")
+    {
+        attack(moveobjekt, cat);
+    }
+    else if (moveobjekt.type == "obstacle")
+    {
+        moveobjekt.interact(moveobjekt, cat);
+    }
+}
+
+event(mouseclick)
+{
+    new tempx = mouse.x;
+    new tempy = mouse.y;
+    
+    if(mouseclick == left)
+    {
+        //do stuff
+    }
+    else
+    {
+        //blah
+    }
+}
+
+attack(target, attacker)
+{
+    if(target.type == "enermy")
+    {
+        target.hp -= attacker.damage;
+        attacker.figur = figur(cat1attack);
+        wait(0.2);
+        attack.figur = figur(cat1);
+    }
+}

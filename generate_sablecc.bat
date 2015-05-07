@@ -1,1 +1,0 @@
-java -jar sablecc-3.7/lib/sablecc.jar compiler/src/main/java/compiler.sable

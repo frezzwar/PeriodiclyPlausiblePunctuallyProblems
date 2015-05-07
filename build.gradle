@@ -2,16 +2,15 @@ apply plugin: "java"
 
 sourceSets {
     main.java.srcDir "compiler/src/main/java"
+    main.resources.srcDirs "compiler/src/main/java", "compiler/src/main/resources"
+    main.resources.include "**/*.dat"
+
     test.java.srcDir "compiler/src/test/java"
+    test.resources.srcDir "compiler/src/test/resources"
 }
 
 dependencies {
-    compile files("sablecc-3.7/lib")
-    compile files("compiler/src/main/java/compiler/lexer/lexer.dat")
-    compile files("compiler/src/main/java/compiler/parser/parser.dat")
-    runtime files("sablecc-3.7/lib")
-    runtime files("compiler/src/main/java/compiler/lexer/lexer.dat")
-    runtime files("compiler/src/main/java/compiler/parser/parser.dat")
+    compile files("sablecc-3.7/lib/sablecc.jar")
 }
 
 jar {

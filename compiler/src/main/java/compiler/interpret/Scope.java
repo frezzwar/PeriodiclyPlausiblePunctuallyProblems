@@ -17,4 +17,20 @@ public class Scope {
 		variables.put(str, literal);
 	}
 
+	public void AddVariables(HashMap<String, ALiteralValue> varCollection){
+		variables.putAll(varCollection);
+	}
+
+	public boolean VarPrevDeclared(String name){
+		return variables.containsKey(name);
+	}
+
+	public ALiteralValue GetVarValue(String name){
+		return variables.get(name);
+	}
+
+	public Scope ContainingScope(){
+		return containingScope;
+	}
+
 }

@@ -23,7 +23,7 @@ public class ClassGenerator extends DepthFirstAdapter
 			out.close();
 		}catch(Exception e)
 		{
-			
+			System.out.println("File write error");
 		}
 	}
 	String code = "";

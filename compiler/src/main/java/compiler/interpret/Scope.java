@@ -3,34 +3,54 @@ package compiler.interpret;
 import compiler.node.*;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 
 public class Scope {
-	private Scope containingScope;
-	private HashMap<String, ALiteralValue> variables = new HashMap<String, ALiteralValue>();
-		
-	public Scope(Scope containing){
-		this.containingScope = containing;
-	}
-	
-	public void AddVariable(String str, ALiteralValue literal){
-		variables.put(str, literal);
+	private Scope parent;
+	private HashMap<String, Type> variables = new HashMap<>();
+
+	public Scope(){
+		this.parent = null;
 	}
 
-	public void AddVariables(HashMap<String, ALiteralValue> varCollection){
+	public Scope(Scope containing){
+		this.parent = containing;
+	}
+	
+	public void AddVariable(String str, Type type){
+		variables.put(str, type);
+	}
+
+	public void AddVariables(HashMap<String, Type> varCollection){
 		variables.putAll(varCollection);
 	}
 
-	public boolean VarPrevDeclared(String name){
+	public boolean VarDeclaredInScope(String name){
 		return variables.containsKey(name);
 	}
 
-	public ALiteralValue GetVarValue(String name){
+	public boolean VarPrevDeclared(String name){
+		if (this.VarDeclaredInScope(name)){
+			return true;
+		}
+		else if (parent != null){
+			parent.VarPrevDeclared(name);
+		}
+		return false;
+	}
+
+	public Type GetVariable(String name){
 		return variables.get(name);
 	}
 
-	public Scope ContainingScope(){
-		return containingScope;
+	public HashMap<String, Type> GetAllVariables(){
+		return variables;
+	}
+
+	public Scope Parent(){
+		return parent;
 	}
 
 }

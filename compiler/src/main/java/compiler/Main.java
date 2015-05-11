@@ -28,7 +28,7 @@ public class Main {
             System.out.println("Ok");
             
             ast.apply(new SemanticAnalyzer());
-            
+            System.out.print("OKOKOKOKOKOKOKOKOKOK");
             FileSetup.Setup();
             //ast.apply(new ClassGenerator());
             

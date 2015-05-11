@@ -7,7 +7,8 @@ import java.util.*;
 
 public class SemanticAnalyzer extends DepthFirstAdapter {
 	
-	Hashtable symble_table = new Hashtable();
+	//Hashtable symble_table = new Hashtable(); //REPLACED
+	SymbolTable symbolTable = new SymbolTable();
 	
 	
 	public void outAVariableDeclaration(AVariableDeclaration node)
@@ -17,16 +18,16 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		String key = ident.toString().toUpperCase().trim();
 		
 		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables(), node.getVariableTail());
-		Type Type = Typecheck.typeChecker(TypeExpression, symble_table, node.getVariables());
+		Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables());
 
-		if(symble_table.containsKey(key))
+		if(symbolTable.VarDeclaredInCurrentScope(key))
 		{
 			System.out.println("Identifier already defined");
 			System.exit(0);
 		}
 		else
 		{
-			symble_table.put(key,Type);
+			symbolTable.AddVariable(key, type);
 		}
 	}
 	
@@ -36,15 +37,17 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		
 		String key = ident.toString().toUpperCase().trim();
 		
-		if(symble_table.containsKey(key))
+		if(symbolTable.VarDeclaredInCurrentScope(key))
 		{
 			System.out.println("Identifier already defined");
 			System.exit(0);
 		}
 		else
 		{
+			/*
 			List<TypeExpression> Type = new ArrayList<TypeExpression>();
-			symble_table.put(key, Type);
+			symbolTable.AddVariable(key, Type);
+			*/
 		}
 	}
 	
@@ -55,7 +58,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		String key = ident.toString().toUpperCase().trim();
 		if(!key.equals("GRID"))
 		{
-			if(!symble_table.containsKey(key))
+			if(!symbolTable.VarPrevDeclared(key))
 			{
 				System.out.println("Identifier not defined: " + node.getIdentifier());
 				System.exit(0);
@@ -66,8 +69,9 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	
 	public void outAProgram(AProgram node)
 	{
+		System.out.print("NU ER JEG HER!!!!!!!!!!!!!!!!!!!!!!!!!");
 		//Printer symble tablet man kan se om det virker :D
-		System.out.println(symble_table);
+		System.out.println(symbolTable.toString());
 	}
 	
 	public void outAFuncDecl(AFuncDecl node){
@@ -75,7 +79,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		
 		String key = ident.toString().toUpperCase().trim();
 		
-		if (!symble_table.containsKey(key))
+		if (!symbolTable.VarDeclaredInCurrentScope(key))
 		{
 			System.out.println("Identifier already defined");
 			System.exit(0);

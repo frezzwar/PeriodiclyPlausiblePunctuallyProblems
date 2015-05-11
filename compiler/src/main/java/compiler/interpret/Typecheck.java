@@ -94,14 +94,14 @@ public class Typecheck{
 	  return true;  
 	}
 	
-	public static Type typeChecker(List<TypeExpression> InputList, Hashtable Table, PVariables Variables)
+	public static Type typeChecker(List<TypeExpression> InputList, SymbolTable table, PVariables Variables)
 	{
 		Boolean typesafe = false;
 		//System.out.println("TypeCheck : " + InputList + " : " + Variables);
 		if(InputList.size() == 1)
 		{
 			TypeExpression Expression = InputList.get(0);
-			if (Expression.getInput().size() == 0) 
+			if (Expression.getInput().size() == 0)
 			{
 				if(Expression.getOutput() != Type.variable)
 				{
@@ -110,7 +110,7 @@ public class Typecheck{
 				else
 				{
 					//retunerer typen af variablen
-					return (Type) Table.get(Variables.toString().toUpperCase().trim());
+					return table.GetVariable(Variables.toString().toUpperCase().trim());
 				}
 			}
 			else
@@ -133,9 +133,9 @@ public class Typecheck{
 					{
 						typesafe = true;
 					}
-					else if(Table.get(key) != null)
+					else if(table.GetVariable(key) != null)
 					{
-						if(Table.get(key).equals(Expression.getInput().get(i/2)))
+						if(table.GetVariable(key).equals(Expression.getInput().get(i/2)))
 						{
 							typesafe = true;
 						}
@@ -167,7 +167,7 @@ public class Typecheck{
 			{
 				List<TypeExpression> Expression = new ArrayList<TypeExpression>();
 				Expression.add(InputList.get(i));
-				TypeList.add(typeChecker(Expression, Table, Variables));
+				TypeList.add(typeChecker(Expression, table, Variables));
 			}
 			System.out.println(TypeList);
 			TypeList.removeAll(Collections.singleton(null));

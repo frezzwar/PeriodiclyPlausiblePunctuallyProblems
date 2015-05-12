@@ -20,5 +20,6 @@ gen/
 
 ### Other files
 .DS_Store
-
+.js
+.html
 

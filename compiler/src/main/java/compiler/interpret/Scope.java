@@ -3,20 +3,21 @@ package compiler.interpret;
 import compiler.node.*;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 
 public class Scope {
+	private static int counter = 0;
+	private int scopeNumber;
 	private Scope parent;
 	private HashMap<String, Type> variables = new HashMap<>();
 
 	public Scope(){
-		this.parent = null;
+		this(null);
 	}
 
 	public Scope(Scope containing){
 		this.parent = containing;
+		this.scopeNumber = counter++;
 	}
 	
 	public void AddVariable(String str, Type type){
@@ -53,4 +54,17 @@ public class Scope {
 		return parent;
 	}
 
+	@Override
+	public String toString(){
+		String inf = "";
+		inf += "Scope " + this.scopeNumber;
+		if(parent != null){
+			inf += " (parent: " + parent.scopeNumber + ")";
+		}
+		else{
+			inf += " (no parent)";
+		}
+		return inf;
+	}
 }
+

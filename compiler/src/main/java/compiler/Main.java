@@ -26,15 +26,15 @@ public class Main {
             System.out.println();
             ast.apply(interp) ;
             System.out.println("Ok");
-            
+
             ast.apply(new SemanticAnalyzer());
-            System.out.print("OKOKOKOKOKOKOKOKOKOK");
+
             FileSetup.Setup();
-            //ast.apply(new ClassGenerator());
-            
+            ast.apply(new ClassGenerator());
+
          }
          catch (Exception e) {
-            System.out.println (e) ;
+            e.printStackTrace();
          }
       } else {
          System.err.println("Missing input file");

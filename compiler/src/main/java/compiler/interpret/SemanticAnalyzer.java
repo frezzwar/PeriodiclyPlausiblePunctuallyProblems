@@ -69,7 +69,6 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	
 	public void outAProgram(AProgram node)
 	{
-		System.out.print("NU ER JEG HER!!!!!!!!!!!!!!!!!!!!!!!!!");
 		//Printer symble tablet man kan se om det virker :D
 		System.out.println(symbolTable.toString());
 	}

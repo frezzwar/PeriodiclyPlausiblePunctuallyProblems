@@ -51,21 +51,24 @@ public class SymbolTable {
 		if (scope.GetVariable(name) != null){
 			return scope.GetVariable(name);
 		}
-		else getVariable(scope.Parent(), name);
+		else if (scope.Parent() != null){
+			getVariable(scope.Parent(), name);
+		}
 
 		return null;
 	}
 
 	@Override
 	public String toString(){
-		String st = "Symboltable:\n";
-		if (scopes != null){
+		String st = "\nSymboltable:\n";
+		if (!scopes.empty()){
 			for (Scope s : scopes){
-				st += "____________________\n" + s.GetAllVariables().toString();
+				st += s.toString() + "\n" + s.GetAllVariables().toString();
 			}
 		}
 		return st;
 	}
+
 	/* OBSOLETE
 	public void AddGlobalVar(String name, Type type){
 		globalVariables.put(name, type);

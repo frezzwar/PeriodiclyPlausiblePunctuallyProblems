@@ -1,12 +1,12 @@
 ### Java generated files
-.class
+*.class
 build/
 bin/
 gen/
 
 ### Eclipse files
-.project
-.classpath
+*.project
+*.classpath
 .metadata/
 .recommenders/
 .settings/
@@ -19,7 +19,7 @@ gen/
 .gradle/
 
 ### Other files
-.DS_Store
-.js
-.html
+*.DS_Store
+*.js
+*.html
 

@@ -9,7 +9,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 
 	SymbolTable symbolTable = new SymbolTable();
 	
-	
+	@Override
 	public void outAVariableDeclaration(AVariableDeclaration node)
 	{
 		TIdentifier ident = node.getIdentifier();
@@ -21,7 +21,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 
 		if(symbolTable.VarDeclaredInCurrentScope(key))
 		{
-			System.out.println("Identifier already defined");
+			System.out.println("Identifier already defined: " + ident);
 			System.exit(0);
 		}
 		else
@@ -29,16 +29,16 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			symbolTable.AddVariable(key, type);
 		}
 	}
-	
+
+	@Override
 	public void outAParams(AParams node)
 	{
 		TIdentifier ident = node.getIdentifier();
-		
 		String key = ident.toString().toUpperCase().trim();
 		
 		if(symbolTable.VarDeclaredInCurrentScope(key))
 		{
-			System.out.println("Identifier already defined");
+			System.out.println("Identifier already defined: " + ident);
 			System.exit(0);
 		}
 		else
@@ -48,8 +48,24 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			symbolTable.AddVariable(key, Type);
 			*/
 		}
+		// TODO correct type
+		symbolTable.AddVariable(key, Type.undefined);
 	}
-	
+
+	@Override
+	public void outAParamsTail(AParamsTail node){
+		TIdentifier ident = node.getIdentifier();
+		String key = ident.toString().toUpperCase().trim();
+
+		if (symbolTable.VarDeclaredInCurrentScope(key)){
+			System.out.println("Identifier already defined: " + ident);
+			System.exit(0);
+		}
+		// TODO correct type
+		symbolTable.AddVariable(key, Type.undefined);
+	}
+
+	@Override
 	public void outAVarname(AVarname node)
 	{
 		TIdentifier ident = node.getIdentifier();
@@ -59,16 +75,16 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		{
 			if(!symbolTable.VarPrevDeclared(key))
 			{
-				System.out.println("Identifier not defined: " + node.getIdentifier());
+				System.out.println("Identifier not defined: " + ident);
 				System.exit(0);
 			}
 		}
 	}
 
-	
+	@Override
 	public void outAProgram(AProgram node)
 	{
-		//Printer symble tablet man kan se om det virker :D
+		//Temp: Printer symboltable for at se om det virker
 		System.out.println(symbolTable.toString());
 	}
 
@@ -80,16 +96,13 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 
 		if (symbolTable.VarDeclaredInCurrentScope(key))
 		{
-			System.out.println("Identifier already defined: " + node.getIdentifier());
+			System.out.println("Identifier already defined: " + ident);
 			System.exit(0);
 		}
 
 		//TODO correct types
 		symbolTable.AddVariable(key, Type.undefined);
 		symbolTable.OpenScope();
-		PParams temp = node.getParams();
-		//temp.
-		//symbolTable.AddVariable();
 	}
 	
 }

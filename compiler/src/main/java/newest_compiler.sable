@@ -135,7 +135,7 @@ Productions
     function_call           = par_l call_params? par_r;
     
     varname                 = identifier idlist*
-                            | identifier par_l [integer1]:value comma [integer2]:value par_r; dot idlist;
+                            | identifier par_l [integer1]:value comma [integer2]:value par_r dot idlist;
                             
     idlist                  = dot identifier function_call?;        
 

@@ -30,7 +30,7 @@ public class Main {
             ast.apply(new SemanticAnalyzer());
 
             FileSetup.Setup();
-            ast.apply(new ClassGenerator());
+            //ast.apply(new ClassGenerator());
 
          }
          catch (Exception e) {

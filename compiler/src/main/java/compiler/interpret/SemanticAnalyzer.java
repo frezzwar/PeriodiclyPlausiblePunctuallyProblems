@@ -6,8 +6,7 @@ import compiler.interpret.Typecheck;
 import java.util.*;
 
 public class SemanticAnalyzer extends DepthFirstAdapter {
-	
-	//Hashtable symble_table = new Hashtable(); //REPLACED
+
 	SymbolTable symbolTable = new SymbolTable();
 	
 	

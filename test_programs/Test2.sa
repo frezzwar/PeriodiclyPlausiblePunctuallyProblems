@@ -21,3 +21,7 @@ main()
     }
     //number2 = func(number1);
 }
+
+new bongo(ding, new dong){
+    new pongo = 5;
+}

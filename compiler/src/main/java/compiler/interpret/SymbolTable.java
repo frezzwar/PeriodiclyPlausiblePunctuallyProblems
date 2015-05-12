@@ -63,7 +63,7 @@ public class SymbolTable {
 		String st = "\nSymboltable:\n";
 		if (!scopes.empty()){
 			for (Scope s : scopes){
-				st += s.toString() + "\n" + s.GetAllVariables().toString();
+				st += s.toString() + "\n" + s.GetAllVariables().toString() + "\n";
 			}
 		}
 		return st;

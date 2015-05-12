@@ -71,17 +71,25 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		//Printer symble tablet man kan se om det virker :D
 		System.out.println(symbolTable.toString());
 	}
-	
-	public void outAFuncDecl(AFuncDecl node){
+
+	@Override
+	public void inAFuncDecl(AFuncDecl node){
 		TIdentifier ident = node.getIdentifier();
-		
+
 		String key = ident.toString().toUpperCase().trim();
-		
-		if (!symbolTable.VarDeclaredInCurrentScope(key))
+
+		if (symbolTable.VarDeclaredInCurrentScope(key))
 		{
-			System.out.println("Identifier already defined");
+			System.out.println("Identifier already defined: " + node.getIdentifier());
 			System.exit(0);
 		}
+
+		//TODO correct types
+		symbolTable.AddVariable(key, Type.undefined);
+		symbolTable.OpenScope();
+		PParams temp = node.getParams();
+		//temp.
+		//symbolTable.AddVariable();
 	}
 	
 }

@@ -2,5 +2,6 @@ package compiler.interpret;
 
 public enum Type
 {
-	number, string, bool, grid, figure, list, variable
+	//TODO remove 'undefined' when Typechecker is finished
+	number, string, bool, grid, figure, list, variable, undefined
 }

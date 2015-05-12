@@ -75,20 +75,20 @@ Ignored Tokens
     oneline_comment;
 
 Productions
-    program                 =  global_decl* main body func_decl*;    
+    program                 =  global_decl* program body func_decl*;    
                
-    statement               = {variable_declaration} variable_declaration
+    statement               = {decls} global_decl
                             | {control_statements} control_statments
-                            | {assign} expr semi_c
-                            | {obj_decl} objekt_declaration;
+                            | {assign} expr semi_c;
+
 
     global_decl             = {var_decl} variable_declaration
                             | {obj_decl} objekt_declaration
                             | {grid_decl} grid_decl;
 
-    grid_decl               = new identifier assign grid par_l [integer1]:integer_literal comma [integer2]:integer_literal par_r semi_c;
+    grid_decl               = new identifier assign grid par_l [integer1]:value comma [integer2]:value par_r semi_c;
 
-    func_decl               = new identifier par_l params? par_r body;
+    func_decl               = new identifier assign par_l params? par_r body;
     
     variable_declaration    = new identifier assign variables semi_c;
 
@@ -126,16 +126,18 @@ Productions
                             | {boolean} value bool_operator expr
                             | {numeric} value operator expr
                             | {minusvalue} minus expr
-                            | {value} value;
+                            | {value} value
+                            | {empty} ;
     
     value                   = {varname} varname function_call?
                             | {literal} literal;
     
     function_call           = par_l call_params? par_r;
     
-    varname                 = identifier idlist*;
+    varname                 = identifier idlist*
+                            | identifier par_l [integer1]:value comma [integer2]:value par_r; dot idlist;
                             
-    idlist                  = dot identifier;        
+    idlist                  = dot identifier function_call?;        
 
     operator                = {minus} minus
                             | {plus} plus

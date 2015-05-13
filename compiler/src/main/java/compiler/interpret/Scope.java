@@ -10,6 +10,7 @@ public class Scope {
 	private int scopeNumber;
 	private Scope parent;
 	private HashMap<String, Type> variables = new HashMap<>();
+	private boolean opened;
 
 	public Scope(){
 		this(null);
@@ -18,6 +19,11 @@ public class Scope {
 	public Scope(Scope containing){
 		this.parent = containing;
 		this.scopeNumber = counter++;
+		this.opened = true;
+	}
+
+	public void CloseScope(){
+		this.opened = false;
 	}
 	
 	public void AddVariable(String str, Type type){
@@ -37,7 +43,7 @@ public class Scope {
 			return true;
 		}
 		else if (parent != null){
-			parent.VarPrevDeclared(name);
+			return parent.VarPrevDeclared(name);
 		}
 		return false;
 	}
@@ -57,7 +63,8 @@ public class Scope {
 	@Override
 	public String toString(){
 		String inf = "";
-		inf += "Scope " + this.scopeNumber;
+		String status = this.opened == true ? "open" : "closed";
+		inf += "Scope " + this.scopeNumber + " - " + status;
 		if(parent != null){
 			inf += " (parent: " + parent.scopeNumber + ")";
 		}

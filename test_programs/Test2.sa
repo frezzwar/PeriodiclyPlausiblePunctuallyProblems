@@ -14,9 +14,12 @@ main()
     new number4 = 4 * 5;
     
     number2 = 9;
+
+    new bool_test = 10 < 12;
     
     if(number2 <= number1)
     {
+        new tempoKempo = 11;
     	number1 = 10;
     }
     //number2 = func(number1);
@@ -24,4 +27,32 @@ main()
 
 new bongo(ding, new dong){
     new pongo = 5;
+    if(pongo == 5){
+      new qwert = 10;
+    }
+    else{
+      new pelseElse = 15;
+    }
+
+    new liste = [1, 2];
+    repeat foreach (thing in liste){
+        new inside_foreach_number = 10;
+    }
+    new testHest = 10;
+    new minHest = 15;
+    repeat while (testHest < minHest){
+        new a = testHest * 2;
+        testHest = a;
+        new b = testHest * 3;
+
+        repeat (10){
+            new pongo = true;
+
+            repeat (2){
+                pongo = 2;
+            }
+        }
+    }
+
+
 }

@@ -2,6 +2,7 @@ package compiler.interpret;
 import compiler.node.*;
 import compiler.analysis.*;
 import compiler.interpret.Typecheck;
+import org.sablecc.sablecc.node.TId;
 
 import java.util.*;
 
@@ -104,5 +105,72 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		symbolTable.AddVariable(key, Type.undefined);
 		symbolTable.OpenScope();
 	}
-	
+	/*
+	// MUCH SHORTER, BUT CREATES PROBLEMS WITH ADDING PARAMETERS TO THE CORRECT SCOPE
+	@Override
+	public void inABody(ABody node){
+		symbolTable.OpenScope();
+	}
+
+	@Override
+	public void outABody(ABody node){
+		symbolTable.CloseScope();
+	}
+	*/
+
+	@Override
+	public void inAIfstructureControlStatments(AIfstructureControlStatments node){
+		symbolTable.OpenScope();
+	}
+
+	@Override
+	public void outAIfstructureControlStatments(AIfstructureControlStatments node){
+		symbolTable.CloseScope();
+	}
+
+	@Override
+	public void inAElseElsestructure(AElseElsestructure node){
+		symbolTable.OpenScope();
+	}
+
+	@Override
+	public void outAElseElsestructure(AElseElsestructure node){
+		symbolTable.CloseScope();
+	}
+
+	//TODO Statments -> Statement
+	@Override
+	public void inAForeachControlStatments(AForeachControlStatments node){
+		TIdentifier ident = node.getIdentifier();
+		String key = ident.toString().toUpperCase().trim();
+
+		symbolTable.OpenScope();
+		symbolTable.AddVariable(key, Type.undefined);
+	}
+
+	@Override
+	public void outAForeachControlStatments(AForeachControlStatments node){
+		symbolTable.CloseScope();
+	}
+
+	@Override
+	public void inARepeatControlStatments(ARepeatControlStatments node){
+		symbolTable.OpenScope();
+	}
+
+	@Override
+	public void outARepeatControlStatments(ARepeatControlStatments node){
+		symbolTable.CloseScope();
+	}
+
+	@Override
+	public void inAWhileControlStatments(AWhileControlStatments node){
+		symbolTable.OpenScope();
+	}
+
+	@Override
+	public void outAWhileControlStatments(AWhileControlStatments node){
+		symbolTable.CloseScope();
+	}
+
 }

@@ -30,7 +30,8 @@ public class Main {
             ast.apply(new SemanticAnalyzer());
 
             FileSetup.Setup();
-            //ast.apply(new ClassGenerator());
+            ast.apply(new ClassGenerator());
+            System.out.println("FINISHED");
 
          }
          catch (Exception e) {

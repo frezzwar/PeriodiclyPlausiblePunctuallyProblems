@@ -7,20 +7,19 @@ import java.util.Stack;
 public class SymbolTable {
 	//private HashMap<String, Type> types = new HashMap<>(); // OBSOLETE
 	private Stack<Scope> scopes = new Stack<>();
+	private Scope currentScope = null;
 
 	public SymbolTable(){
-		scopes.push(new Scope());
+		this.OpenScope();
 	}
 
 	public Scope CurrentScope(){
-		if (scopes.isEmpty()){
-			return null;
-		}
-		return scopes.peek();
+		return currentScope;
 	}
 	
 	public void OpenScope(){
 		scopes.push(new Scope(CurrentScope()));
+		this.currentScope = scopes.peek();
 	}
 	
 	public void OpenScope(Scope containing){
@@ -28,7 +27,10 @@ public class SymbolTable {
 	}
 
 	public void CloseScope(){
-		scopes.pop();
+		//TODO		Keeping old scopes for overview, update later
+		currentScope.CloseScope();
+		currentScope = currentScope.Parent();
+		//scopes.pop();
 	}
 
 	public void AddVariable(String name, Type type){

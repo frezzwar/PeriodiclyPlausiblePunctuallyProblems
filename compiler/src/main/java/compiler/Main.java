@@ -27,7 +27,8 @@ public class Main {
             ast.apply(interp) ;
             System.out.println("Ok");
 
-            ast.apply(new SemanticAnalyzer());
+            SymbolTable symTable = new SymbolTable();
+            ast.apply(new SemanticAnalyzer(symTable));
 
             FileSetup.Setup();
             ast.apply(new ClassGenerator());

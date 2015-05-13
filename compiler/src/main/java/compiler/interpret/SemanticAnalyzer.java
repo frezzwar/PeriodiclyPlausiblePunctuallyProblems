@@ -8,7 +8,11 @@ import java.util.*;
 
 public class SemanticAnalyzer extends DepthFirstAdapter {
 
-	SymbolTable symbolTable = new SymbolTable();
+	SymbolTable symbolTable;
+
+	public SemanticAnalyzer(SymbolTable symTable){
+		this.symbolTable = symTable;
+	}
 	
 	@Override
 	public void outAVariableDeclaration(AVariableDeclaration node)

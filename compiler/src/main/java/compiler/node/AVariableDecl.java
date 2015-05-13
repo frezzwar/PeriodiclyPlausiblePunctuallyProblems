@@ -2,62 +2,63 @@
 
 package compiler.node;
 
+import java.util.*;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AFuncDecl extends PFuncDecl
+public final class AVariableDecl extends PVariableDecl
 {
     private TNew _new_;
     private TIdentifier _identifier_;
-    private TParL _parL_;
-    private PParams _params_;
-    private TParR _parR_;
-    private PBody _body_;
+    private TAssign _assign_;
+    private PVariables _variables_;
+    private final LinkedList<PVariableTail> _variableTail_ = new LinkedList<PVariableTail>();
+    private TSemiC _semiC_;
 
-    public AFuncDecl()
+    public AVariableDecl()
     {
         // Constructor
     }
 
-    public AFuncDecl(
+    public AVariableDecl(
         @SuppressWarnings("hiding") TNew _new_,
         @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PParams _params_,
-        @SuppressWarnings("hiding") TParR _parR_,
-        @SuppressWarnings("hiding") PBody _body_)
+        @SuppressWarnings("hiding") TAssign _assign_,
+        @SuppressWarnings("hiding") PVariables _variables_,
+        @SuppressWarnings("hiding") List<?> _variableTail_,
+        @SuppressWarnings("hiding") TSemiC _semiC_)
     {
         // Constructor
         setNew(_new_);
 
         setIdentifier(_identifier_);
 
-        setParL(_parL_);
+        setAssign(_assign_);
 
-        setParams(_params_);
+        setVariables(_variables_);
 
-        setParR(_parR_);
+        setVariableTail(_variableTail_);
 
-        setBody(_body_);
+        setSemiC(_semiC_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AFuncDecl(
+        return new AVariableDecl(
             cloneNode(this._new_),
             cloneNode(this._identifier_),
-            cloneNode(this._parL_),
-            cloneNode(this._params_),
-            cloneNode(this._parR_),
-            cloneNode(this._body_));
+            cloneNode(this._assign_),
+            cloneNode(this._variables_),
+            cloneList(this._variableTail_),
+            cloneNode(this._semiC_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAFuncDecl(this);
+        ((Analysis) sw).caseAVariableDecl(this);
     }
 
     public TNew getNew()
@@ -110,16 +111,16 @@ public final class AFuncDecl extends PFuncDecl
         this._identifier_ = node;
     }
 
-    public TParL getParL()
+    public TAssign getAssign()
     {
-        return this._parL_;
+        return this._assign_;
     }
 
-    public void setParL(TParL node)
+    public void setAssign(TAssign node)
     {
-        if(this._parL_ != null)
+        if(this._assign_ != null)
         {
-            this._parL_.parent(null);
+            this._assign_.parent(null);
         }
 
         if(node != null)
@@ -132,19 +133,19 @@ public final class AFuncDecl extends PFuncDecl
             node.parent(this);
         }
 
-        this._parL_ = node;
+        this._assign_ = node;
     }
 
-    public PParams getParams()
+    public PVariables getVariables()
     {
-        return this._params_;
+        return this._variables_;
     }
 
-    public void setParams(PParams node)
+    public void setVariables(PVariables node)
     {
-        if(this._params_ != null)
+        if(this._variables_ != null)
         {
-            this._params_.parent(null);
+            this._variables_.parent(null);
         }
 
         if(node != null)
@@ -157,19 +158,45 @@ public final class AFuncDecl extends PFuncDecl
             node.parent(this);
         }
 
-        this._params_ = node;
+        this._variables_ = node;
     }
 
-    public TParR getParR()
+    public LinkedList<PVariableTail> getVariableTail()
     {
-        return this._parR_;
+        return this._variableTail_;
     }
 
-    public void setParR(TParR node)
+    public void setVariableTail(List<?> list)
     {
-        if(this._parR_ != null)
+        for(PVariableTail e : this._variableTail_)
         {
-            this._parR_.parent(null);
+            e.parent(null);
+        }
+        this._variableTail_.clear();
+
+        for(Object obj_e : list)
+        {
+            PVariableTail e = (PVariableTail) obj_e;
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
+
+            e.parent(this);
+            this._variableTail_.add(e);
+        }
+    }
+
+    public TSemiC getSemiC()
+    {
+        return this._semiC_;
+    }
+
+    public void setSemiC(TSemiC node)
+    {
+        if(this._semiC_ != null)
+        {
+            this._semiC_.parent(null);
         }
 
         if(node != null)
@@ -182,32 +209,7 @@ public final class AFuncDecl extends PFuncDecl
             node.parent(this);
         }
 
-        this._parR_ = node;
-    }
-
-    public PBody getBody()
-    {
-        return this._body_;
-    }
-
-    public void setBody(PBody node)
-    {
-        if(this._body_ != null)
-        {
-            this._body_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._body_ = node;
+        this._semiC_ = node;
     }
 
     @Override
@@ -216,10 +218,10 @@ public final class AFuncDecl extends PFuncDecl
         return ""
             + toString(this._new_)
             + toString(this._identifier_)
-            + toString(this._parL_)
-            + toString(this._params_)
-            + toString(this._parR_)
-            + toString(this._body_);
+            + toString(this._assign_)
+            + toString(this._variables_)
+            + toString(this._variableTail_)
+            + toString(this._semiC_);
     }
 
     @Override
@@ -238,27 +240,26 @@ public final class AFuncDecl extends PFuncDecl
             return;
         }
 
-        if(this._parL_ == child)
+        if(this._assign_ == child)
         {
-            this._parL_ = null;
+            this._assign_ = null;
             return;
         }
 
-        if(this._params_ == child)
+        if(this._variables_ == child)
         {
-            this._params_ = null;
+            this._variables_ = null;
             return;
         }
 
-        if(this._parR_ == child)
+        if(this._variableTail_.remove(child))
         {
-            this._parR_ = null;
             return;
         }
 
-        if(this._body_ == child)
+        if(this._semiC_ == child)
         {
-            this._body_ = null;
+            this._semiC_ = null;
             return;
         }
 
@@ -281,27 +282,39 @@ public final class AFuncDecl extends PFuncDecl
             return;
         }
 
-        if(this._parL_ == oldChild)
+        if(this._assign_ == oldChild)
         {
-            setParL((TParL) newChild);
+            setAssign((TAssign) newChild);
             return;
         }
 
-        if(this._params_ == oldChild)
+        if(this._variables_ == oldChild)
         {
-            setParams((PParams) newChild);
+            setVariables((PVariables) newChild);
             return;
         }
 
-        if(this._parR_ == oldChild)
+        for(ListIterator<PVariableTail> i = this._variableTail_.listIterator(); i.hasNext();)
         {
-            setParR((TParR) newChild);
-            return;
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PVariableTail) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
+
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
         }
 
-        if(this._body_ == oldChild)
+        if(this._semiC_ == oldChild)
         {
-            setBody((PBody) newChild);
+            setSemiC((TSemiC) newChild);
             return;
         }
 

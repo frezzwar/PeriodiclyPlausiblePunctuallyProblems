@@ -6,17 +6,17 @@ import java.util.*;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVarname extends PVarname
+public final class ADotVarname extends PVarname
 {
     private TIdentifier _identifier_;
     private final LinkedList<PIdlist> _idlist_ = new LinkedList<PIdlist>();
 
-    public AVarname()
+    public ADotVarname()
     {
         // Constructor
     }
 
-    public AVarname(
+    public ADotVarname(
         @SuppressWarnings("hiding") TIdentifier _identifier_,
         @SuppressWarnings("hiding") List<?> _idlist_)
     {
@@ -30,7 +30,7 @@ public final class AVarname extends PVarname
     @Override
     public Object clone()
     {
-        return new AVarname(
+        return new ADotVarname(
             cloneNode(this._identifier_),
             cloneList(this._idlist_));
     }
@@ -38,7 +38,7 @@ public final class AVarname extends PVarname
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVarname(this);
+        ((Analysis) sw).caseADotVarname(this);
     }
 
     public TIdentifier getIdentifier()

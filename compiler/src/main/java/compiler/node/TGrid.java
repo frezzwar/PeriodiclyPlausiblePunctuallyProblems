@@ -5,16 +5,16 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TMain extends Token
+public final class TGrid extends Token
 {
-    public TMain()
+    public TGrid()
     {
-        super.setText("program");
+        super.setText("grid");
     }
 
-    public TMain(int line, int pos)
+    public TGrid(int line, int pos)
     {
-        super.setText("program");
+        super.setText("grid");
         setLine(line);
         setPos(pos);
     }
@@ -22,18 +22,18 @@ public final class TMain extends Token
     @Override
     public Object clone()
     {
-      return new TMain(getLine(), getPos());
+      return new TGrid(getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTMain(this);
+        ((Analysis) sw).caseTGrid(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TMain text.");
+        throw new RuntimeException("Cannot change TGrid text.");
     }
 }

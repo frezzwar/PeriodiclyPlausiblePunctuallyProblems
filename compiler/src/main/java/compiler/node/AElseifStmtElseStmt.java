@@ -5,7 +5,7 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIfelseElsestructure extends PElsestructure
+public final class AElseifStmtElseStmt extends PElseStmt
 {
     private TElse _else_;
     private TIf _if_;
@@ -13,21 +13,21 @@ public final class AIfelseElsestructure extends PElsestructure
     private PExpr _expr_;
     private TParR _parR_;
     private PBody _body_;
-    private PElsestructure _elsestructure_;
+    private PElseStmt _elseStmt_;
 
-    public AIfelseElsestructure()
+    public AElseifStmtElseStmt()
     {
         // Constructor
     }
 
-    public AIfelseElsestructure(
+    public AElseifStmtElseStmt(
         @SuppressWarnings("hiding") TElse _else_,
         @SuppressWarnings("hiding") TIf _if_,
         @SuppressWarnings("hiding") TParL _parL_,
         @SuppressWarnings("hiding") PExpr _expr_,
         @SuppressWarnings("hiding") TParR _parR_,
         @SuppressWarnings("hiding") PBody _body_,
-        @SuppressWarnings("hiding") PElsestructure _elsestructure_)
+        @SuppressWarnings("hiding") PElseStmt _elseStmt_)
     {
         // Constructor
         setElse(_else_);
@@ -42,27 +42,27 @@ public final class AIfelseElsestructure extends PElsestructure
 
         setBody(_body_);
 
-        setElsestructure(_elsestructure_);
+        setElseStmt(_elseStmt_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AIfelseElsestructure(
+        return new AElseifStmtElseStmt(
             cloneNode(this._else_),
             cloneNode(this._if_),
             cloneNode(this._parL_),
             cloneNode(this._expr_),
             cloneNode(this._parR_),
             cloneNode(this._body_),
-            cloneNode(this._elsestructure_));
+            cloneNode(this._elseStmt_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIfelseElsestructure(this);
+        ((Analysis) sw).caseAElseifStmtElseStmt(this);
     }
 
     public TElse getElse()
@@ -215,16 +215,16 @@ public final class AIfelseElsestructure extends PElsestructure
         this._body_ = node;
     }
 
-    public PElsestructure getElsestructure()
+    public PElseStmt getElseStmt()
     {
-        return this._elsestructure_;
+        return this._elseStmt_;
     }
 
-    public void setElsestructure(PElsestructure node)
+    public void setElseStmt(PElseStmt node)
     {
-        if(this._elsestructure_ != null)
+        if(this._elseStmt_ != null)
         {
-            this._elsestructure_.parent(null);
+            this._elseStmt_.parent(null);
         }
 
         if(node != null)
@@ -237,7 +237,7 @@ public final class AIfelseElsestructure extends PElsestructure
             node.parent(this);
         }
 
-        this._elsestructure_ = node;
+        this._elseStmt_ = node;
     }
 
     @Override
@@ -250,7 +250,7 @@ public final class AIfelseElsestructure extends PElsestructure
             + toString(this._expr_)
             + toString(this._parR_)
             + toString(this._body_)
-            + toString(this._elsestructure_);
+            + toString(this._elseStmt_);
     }
 
     @Override
@@ -293,9 +293,9 @@ public final class AIfelseElsestructure extends PElsestructure
             return;
         }
 
-        if(this._elsestructure_ == child)
+        if(this._elseStmt_ == child)
         {
-            this._elsestructure_ = null;
+            this._elseStmt_ = null;
             return;
         }
 
@@ -342,9 +342,9 @@ public final class AIfelseElsestructure extends PElsestructure
             return;
         }
 
-        if(this._elsestructure_ == oldChild)
+        if(this._elseStmt_ == oldChild)
         {
-            setElsestructure((PElsestructure) newChild);
+            setElseStmt((PElseStmt) newChild);
             return;
         }
 

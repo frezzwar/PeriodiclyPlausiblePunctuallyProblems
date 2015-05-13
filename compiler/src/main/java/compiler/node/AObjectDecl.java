@@ -5,36 +5,44 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AFuncDecl extends PFuncDecl
+public final class AObjectDecl extends PObjectDecl
 {
     private TNew _new_;
-    private TIdentifier _identifier_;
+    private TIdentifier _id1_;
+    private TAssign _assign_;
+    private TFigur _figur_;
     private TParL _parL_;
-    private PParams _params_;
+    private TIdentifier _id2_;
     private TParR _parR_;
     private PBody _body_;
 
-    public AFuncDecl()
+    public AObjectDecl()
     {
         // Constructor
     }
 
-    public AFuncDecl(
+    public AObjectDecl(
         @SuppressWarnings("hiding") TNew _new_,
-        @SuppressWarnings("hiding") TIdentifier _identifier_,
+        @SuppressWarnings("hiding") TIdentifier _id1_,
+        @SuppressWarnings("hiding") TAssign _assign_,
+        @SuppressWarnings("hiding") TFigur _figur_,
         @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PParams _params_,
+        @SuppressWarnings("hiding") TIdentifier _id2_,
         @SuppressWarnings("hiding") TParR _parR_,
         @SuppressWarnings("hiding") PBody _body_)
     {
         // Constructor
         setNew(_new_);
 
-        setIdentifier(_identifier_);
+        setId1(_id1_);
+
+        setAssign(_assign_);
+
+        setFigur(_figur_);
 
         setParL(_parL_);
 
-        setParams(_params_);
+        setId2(_id2_);
 
         setParR(_parR_);
 
@@ -45,11 +53,13 @@ public final class AFuncDecl extends PFuncDecl
     @Override
     public Object clone()
     {
-        return new AFuncDecl(
+        return new AObjectDecl(
             cloneNode(this._new_),
-            cloneNode(this._identifier_),
+            cloneNode(this._id1_),
+            cloneNode(this._assign_),
+            cloneNode(this._figur_),
             cloneNode(this._parL_),
-            cloneNode(this._params_),
+            cloneNode(this._id2_),
             cloneNode(this._parR_),
             cloneNode(this._body_));
     }
@@ -57,7 +67,7 @@ public final class AFuncDecl extends PFuncDecl
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAFuncDecl(this);
+        ((Analysis) sw).caseAObjectDecl(this);
     }
 
     public TNew getNew()
@@ -85,16 +95,16 @@ public final class AFuncDecl extends PFuncDecl
         this._new_ = node;
     }
 
-    public TIdentifier getIdentifier()
+    public TIdentifier getId1()
     {
-        return this._identifier_;
+        return this._id1_;
     }
 
-    public void setIdentifier(TIdentifier node)
+    public void setId1(TIdentifier node)
     {
-        if(this._identifier_ != null)
+        if(this._id1_ != null)
         {
-            this._identifier_.parent(null);
+            this._id1_.parent(null);
         }
 
         if(node != null)
@@ -107,7 +117,57 @@ public final class AFuncDecl extends PFuncDecl
             node.parent(this);
         }
 
-        this._identifier_ = node;
+        this._id1_ = node;
+    }
+
+    public TAssign getAssign()
+    {
+        return this._assign_;
+    }
+
+    public void setAssign(TAssign node)
+    {
+        if(this._assign_ != null)
+        {
+            this._assign_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._assign_ = node;
+    }
+
+    public TFigur getFigur()
+    {
+        return this._figur_;
+    }
+
+    public void setFigur(TFigur node)
+    {
+        if(this._figur_ != null)
+        {
+            this._figur_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._figur_ = node;
     }
 
     public TParL getParL()
@@ -135,16 +195,16 @@ public final class AFuncDecl extends PFuncDecl
         this._parL_ = node;
     }
 
-    public PParams getParams()
+    public TIdentifier getId2()
     {
-        return this._params_;
+        return this._id2_;
     }
 
-    public void setParams(PParams node)
+    public void setId2(TIdentifier node)
     {
-        if(this._params_ != null)
+        if(this._id2_ != null)
         {
-            this._params_.parent(null);
+            this._id2_.parent(null);
         }
 
         if(node != null)
@@ -157,7 +217,7 @@ public final class AFuncDecl extends PFuncDecl
             node.parent(this);
         }
 
-        this._params_ = node;
+        this._id2_ = node;
     }
 
     public TParR getParR()
@@ -215,9 +275,11 @@ public final class AFuncDecl extends PFuncDecl
     {
         return ""
             + toString(this._new_)
-            + toString(this._identifier_)
+            + toString(this._id1_)
+            + toString(this._assign_)
+            + toString(this._figur_)
             + toString(this._parL_)
-            + toString(this._params_)
+            + toString(this._id2_)
             + toString(this._parR_)
             + toString(this._body_);
     }
@@ -232,9 +294,21 @@ public final class AFuncDecl extends PFuncDecl
             return;
         }
 
-        if(this._identifier_ == child)
+        if(this._id1_ == child)
         {
-            this._identifier_ = null;
+            this._id1_ = null;
+            return;
+        }
+
+        if(this._assign_ == child)
+        {
+            this._assign_ = null;
+            return;
+        }
+
+        if(this._figur_ == child)
+        {
+            this._figur_ = null;
             return;
         }
 
@@ -244,9 +318,9 @@ public final class AFuncDecl extends PFuncDecl
             return;
         }
 
-        if(this._params_ == child)
+        if(this._id2_ == child)
         {
-            this._params_ = null;
+            this._id2_ = null;
             return;
         }
 
@@ -275,9 +349,21 @@ public final class AFuncDecl extends PFuncDecl
             return;
         }
 
-        if(this._identifier_ == oldChild)
+        if(this._id1_ == oldChild)
         {
-            setIdentifier((TIdentifier) newChild);
+            setId1((TIdentifier) newChild);
+            return;
+        }
+
+        if(this._assign_ == oldChild)
+        {
+            setAssign((TAssign) newChild);
+            return;
+        }
+
+        if(this._figur_ == oldChild)
+        {
+            setFigur((TFigur) newChild);
             return;
         }
 
@@ -287,9 +373,9 @@ public final class AFuncDecl extends PFuncDecl
             return;
         }
 
-        if(this._params_ == oldChild)
+        if(this._id2_ == oldChild)
         {
-            setParams((PParams) newChild);
+            setId2((TIdentifier) newChild);
             return;
         }
 

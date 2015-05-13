@@ -5,17 +5,17 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AElseElsestructure extends PElsestructure
+public final class AElseStmtElseStmt extends PElseStmt
 {
     private TElse _else_;
     private PBody _body_;
 
-    public AElseElsestructure()
+    public AElseStmtElseStmt()
     {
         // Constructor
     }
 
-    public AElseElsestructure(
+    public AElseStmtElseStmt(
         @SuppressWarnings("hiding") TElse _else_,
         @SuppressWarnings("hiding") PBody _body_)
     {
@@ -29,7 +29,7 @@ public final class AElseElsestructure extends PElsestructure
     @Override
     public Object clone()
     {
-        return new AElseElsestructure(
+        return new AElseStmtElseStmt(
             cloneNode(this._else_),
             cloneNode(this._body_));
     }
@@ -37,7 +37,7 @@ public final class AElseElsestructure extends PElsestructure
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAElseElsestructure(this);
+        ((Analysis) sw).caseAElseStmtElseStmt(this);
     }
 
     public TElse getElse()

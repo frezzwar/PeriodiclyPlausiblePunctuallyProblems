@@ -81,13 +81,13 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAVariableDeclarationDecl(AVariableDeclarationDecl node)
+    public void caseAVariableDeclDecl(AVariableDeclDecl node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAControlStatementsDecl(AControlStatementsDecl node)
+    public void caseAControlStmtDecl(AControlStmtDecl node)
     {
         defaultCase(node);
     }
@@ -99,7 +99,31 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAReturnDecl(AReturnDecl node)
+    public void caseAVarGlobalDecls(AVarGlobalDecls node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAObjGlobalDecls(AObjGlobalDecls node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAGridGlobalDecls(AGridGlobalDecls node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAGridDecl(AGridDecl node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAObjectDecl(AObjectDecl node)
     {
         defaultCase(node);
     }
@@ -111,7 +135,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAVariableDeclaration(AVariableDeclaration node)
+    public void caseAVariableDecl(AVariableDecl node)
     {
         defaultCase(node);
     }
@@ -171,37 +195,37 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAWhileControlStatments(AWhileControlStatments node)
+    public void caseAWhileControlStmt(AWhileControlStmt node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseARepeatControlStatments(ARepeatControlStatments node)
+    public void caseARepeatControlStmt(ARepeatControlStmt node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAForeachControlStatments(AForeachControlStatments node)
+    public void caseAForeachControlStmt(AForeachControlStmt node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAIfstructureControlStatments(AIfstructureControlStatments node)
+    public void caseAIfStmtControlStmt(AIfStmtControlStmt node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAElseElsestructure(AElseElsestructure node)
+    public void caseAElseStmtElseStmt(AElseStmtElseStmt node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAIfelseElsestructure(AIfelseElsestructure node)
+    public void caseAElseifStmtElseStmt(AElseifStmtElseStmt node)
     {
         defaultCase(node);
     }
@@ -261,6 +285,12 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseAGridValue(AGridValue node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseALiteralValue(ALiteralValue node)
     {
         defaultCase(node);
@@ -273,7 +303,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAVarname(AVarname node)
+    public void caseADotVarname(ADotVarname node)
     {
         defaultCase(node);
     }
@@ -622,6 +652,18 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTMain(TMain node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTFigur(TFigur node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTGrid(TGrid node)
     {
         defaultCase(node);
     }

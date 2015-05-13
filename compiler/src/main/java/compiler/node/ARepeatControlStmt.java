@@ -5,36 +5,32 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AWhileControlStatments extends PControlStatments
+public final class ARepeatControlStmt extends PControlStmt
 {
     private TRepeat _repeat_;
-    private TWhile _while_;
     private TParL _parL_;
-    private PExpr _expr_;
+    private PValue _value_;
     private TParR _parR_;
     private PBody _body_;
 
-    public AWhileControlStatments()
+    public ARepeatControlStmt()
     {
         // Constructor
     }
 
-    public AWhileControlStatments(
+    public ARepeatControlStmt(
         @SuppressWarnings("hiding") TRepeat _repeat_,
-        @SuppressWarnings("hiding") TWhile _while_,
         @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PExpr _expr_,
+        @SuppressWarnings("hiding") PValue _value_,
         @SuppressWarnings("hiding") TParR _parR_,
         @SuppressWarnings("hiding") PBody _body_)
     {
         // Constructor
         setRepeat(_repeat_);
 
-        setWhile(_while_);
-
         setParL(_parL_);
 
-        setExpr(_expr_);
+        setValue(_value_);
 
         setParR(_parR_);
 
@@ -45,11 +41,10 @@ public final class AWhileControlStatments extends PControlStatments
     @Override
     public Object clone()
     {
-        return new AWhileControlStatments(
+        return new ARepeatControlStmt(
             cloneNode(this._repeat_),
-            cloneNode(this._while_),
             cloneNode(this._parL_),
-            cloneNode(this._expr_),
+            cloneNode(this._value_),
             cloneNode(this._parR_),
             cloneNode(this._body_));
     }
@@ -57,7 +52,7 @@ public final class AWhileControlStatments extends PControlStatments
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAWhileControlStatments(this);
+        ((Analysis) sw).caseARepeatControlStmt(this);
     }
 
     public TRepeat getRepeat()
@@ -85,31 +80,6 @@ public final class AWhileControlStatments extends PControlStatments
         this._repeat_ = node;
     }
 
-    public TWhile getWhile()
-    {
-        return this._while_;
-    }
-
-    public void setWhile(TWhile node)
-    {
-        if(this._while_ != null)
-        {
-            this._while_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._while_ = node;
-    }
-
     public TParL getParL()
     {
         return this._parL_;
@@ -135,16 +105,16 @@ public final class AWhileControlStatments extends PControlStatments
         this._parL_ = node;
     }
 
-    public PExpr getExpr()
+    public PValue getValue()
     {
-        return this._expr_;
+        return this._value_;
     }
 
-    public void setExpr(PExpr node)
+    public void setValue(PValue node)
     {
-        if(this._expr_ != null)
+        if(this._value_ != null)
         {
-            this._expr_.parent(null);
+            this._value_.parent(null);
         }
 
         if(node != null)
@@ -157,7 +127,7 @@ public final class AWhileControlStatments extends PControlStatments
             node.parent(this);
         }
 
-        this._expr_ = node;
+        this._value_ = node;
     }
 
     public TParR getParR()
@@ -215,9 +185,8 @@ public final class AWhileControlStatments extends PControlStatments
     {
         return ""
             + toString(this._repeat_)
-            + toString(this._while_)
             + toString(this._parL_)
-            + toString(this._expr_)
+            + toString(this._value_)
             + toString(this._parR_)
             + toString(this._body_);
     }
@@ -232,21 +201,15 @@ public final class AWhileControlStatments extends PControlStatments
             return;
         }
 
-        if(this._while_ == child)
-        {
-            this._while_ = null;
-            return;
-        }
-
         if(this._parL_ == child)
         {
             this._parL_ = null;
             return;
         }
 
-        if(this._expr_ == child)
+        if(this._value_ == child)
         {
-            this._expr_ = null;
+            this._value_ = null;
             return;
         }
 
@@ -275,21 +238,15 @@ public final class AWhileControlStatments extends PControlStatments
             return;
         }
 
-        if(this._while_ == oldChild)
-        {
-            setWhile((TWhile) newChild);
-            return;
-        }
-
         if(this._parL_ == oldChild)
         {
             setParL((TParL) newChild);
             return;
         }
 
-        if(this._expr_ == oldChild)
+        if(this._value_ == oldChild)
         {
-            setExpr((PExpr) newChild);
+            setValue((PValue) newChild);
             return;
         }
 

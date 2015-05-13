@@ -8,7 +8,7 @@ import compiler.analysis.*;
 public final class ACallParamsTail extends PCallParamsTail
 {
     private TComma _comma_;
-    private PValue _value_;
+    private PExpr _expr_;
 
     public ACallParamsTail()
     {
@@ -17,12 +17,12 @@ public final class ACallParamsTail extends PCallParamsTail
 
     public ACallParamsTail(
         @SuppressWarnings("hiding") TComma _comma_,
-        @SuppressWarnings("hiding") PValue _value_)
+        @SuppressWarnings("hiding") PExpr _expr_)
     {
         // Constructor
         setComma(_comma_);
 
-        setValue(_value_);
+        setExpr(_expr_);
 
     }
 
@@ -31,7 +31,7 @@ public final class ACallParamsTail extends PCallParamsTail
     {
         return new ACallParamsTail(
             cloneNode(this._comma_),
-            cloneNode(this._value_));
+            cloneNode(this._expr_));
     }
 
     @Override
@@ -65,16 +65,16 @@ public final class ACallParamsTail extends PCallParamsTail
         this._comma_ = node;
     }
 
-    public PValue getValue()
+    public PExpr getExpr()
     {
-        return this._value_;
+        return this._expr_;
     }
 
-    public void setValue(PValue node)
+    public void setExpr(PExpr node)
     {
-        if(this._value_ != null)
+        if(this._expr_ != null)
         {
-            this._value_.parent(null);
+            this._expr_.parent(null);
         }
 
         if(node != null)
@@ -87,7 +87,7 @@ public final class ACallParamsTail extends PCallParamsTail
             node.parent(this);
         }
 
-        this._value_ = node;
+        this._expr_ = node;
     }
 
     @Override
@@ -95,7 +95,7 @@ public final class ACallParamsTail extends PCallParamsTail
     {
         return ""
             + toString(this._comma_)
-            + toString(this._value_);
+            + toString(this._expr_);
     }
 
     @Override
@@ -108,9 +108,9 @@ public final class ACallParamsTail extends PCallParamsTail
             return;
         }
 
-        if(this._value_ == child)
+        if(this._expr_ == child)
         {
-            this._value_ = null;
+            this._expr_ = null;
             return;
         }
 
@@ -127,9 +127,9 @@ public final class ACallParamsTail extends PCallParamsTail
             return;
         }
 
-        if(this._value_ == oldChild)
+        if(this._expr_ == oldChild)
         {
-            setValue((PValue) newChild);
+            setExpr((PExpr) newChild);
             return;
         }
 

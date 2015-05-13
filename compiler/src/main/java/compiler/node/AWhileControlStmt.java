@@ -5,30 +5,32 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIfstructureControlStatments extends PControlStatments
+public final class AWhileControlStmt extends PControlStmt
 {
-    private TIf _if_;
+    private TRepeat _repeat_;
+    private TWhile _while_;
     private TParL _parL_;
     private PExpr _expr_;
     private TParR _parR_;
     private PBody _body_;
-    private PElsestructure _elsestructure_;
 
-    public AIfstructureControlStatments()
+    public AWhileControlStmt()
     {
         // Constructor
     }
 
-    public AIfstructureControlStatments(
-        @SuppressWarnings("hiding") TIf _if_,
+    public AWhileControlStmt(
+        @SuppressWarnings("hiding") TRepeat _repeat_,
+        @SuppressWarnings("hiding") TWhile _while_,
         @SuppressWarnings("hiding") TParL _parL_,
         @SuppressWarnings("hiding") PExpr _expr_,
         @SuppressWarnings("hiding") TParR _parR_,
-        @SuppressWarnings("hiding") PBody _body_,
-        @SuppressWarnings("hiding") PElsestructure _elsestructure_)
+        @SuppressWarnings("hiding") PBody _body_)
     {
         // Constructor
-        setIf(_if_);
+        setRepeat(_repeat_);
+
+        setWhile(_while_);
 
         setParL(_parL_);
 
@@ -38,38 +40,36 @@ public final class AIfstructureControlStatments extends PControlStatments
 
         setBody(_body_);
 
-        setElsestructure(_elsestructure_);
-
     }
 
     @Override
     public Object clone()
     {
-        return new AIfstructureControlStatments(
-            cloneNode(this._if_),
+        return new AWhileControlStmt(
+            cloneNode(this._repeat_),
+            cloneNode(this._while_),
             cloneNode(this._parL_),
             cloneNode(this._expr_),
             cloneNode(this._parR_),
-            cloneNode(this._body_),
-            cloneNode(this._elsestructure_));
+            cloneNode(this._body_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIfstructureControlStatments(this);
+        ((Analysis) sw).caseAWhileControlStmt(this);
     }
 
-    public TIf getIf()
+    public TRepeat getRepeat()
     {
-        return this._if_;
+        return this._repeat_;
     }
 
-    public void setIf(TIf node)
+    public void setRepeat(TRepeat node)
     {
-        if(this._if_ != null)
+        if(this._repeat_ != null)
         {
-            this._if_.parent(null);
+            this._repeat_.parent(null);
         }
 
         if(node != null)
@@ -82,7 +82,32 @@ public final class AIfstructureControlStatments extends PControlStatments
             node.parent(this);
         }
 
-        this._if_ = node;
+        this._repeat_ = node;
+    }
+
+    public TWhile getWhile()
+    {
+        return this._while_;
+    }
+
+    public void setWhile(TWhile node)
+    {
+        if(this._while_ != null)
+        {
+            this._while_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._while_ = node;
     }
 
     public TParL getParL()
@@ -185,50 +210,31 @@ public final class AIfstructureControlStatments extends PControlStatments
         this._body_ = node;
     }
 
-    public PElsestructure getElsestructure()
-    {
-        return this._elsestructure_;
-    }
-
-    public void setElsestructure(PElsestructure node)
-    {
-        if(this._elsestructure_ != null)
-        {
-            this._elsestructure_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._elsestructure_ = node;
-    }
-
     @Override
     public String toString()
     {
         return ""
-            + toString(this._if_)
+            + toString(this._repeat_)
+            + toString(this._while_)
             + toString(this._parL_)
             + toString(this._expr_)
             + toString(this._parR_)
-            + toString(this._body_)
-            + toString(this._elsestructure_);
+            + toString(this._body_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._if_ == child)
+        if(this._repeat_ == child)
         {
-            this._if_ = null;
+            this._repeat_ = null;
+            return;
+        }
+
+        if(this._while_ == child)
+        {
+            this._while_ = null;
             return;
         }
 
@@ -256,12 +262,6 @@ public final class AIfstructureControlStatments extends PControlStatments
             return;
         }
 
-        if(this._elsestructure_ == child)
-        {
-            this._elsestructure_ = null;
-            return;
-        }
-
         throw new RuntimeException("Not a child.");
     }
 
@@ -269,9 +269,15 @@ public final class AIfstructureControlStatments extends PControlStatments
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._if_ == oldChild)
+        if(this._repeat_ == oldChild)
         {
-            setIf((TIf) newChild);
+            setRepeat((TRepeat) newChild);
+            return;
+        }
+
+        if(this._while_ == oldChild)
+        {
+            setWhile((TWhile) newChild);
             return;
         }
 
@@ -296,12 +302,6 @@ public final class AIfstructureControlStatments extends PControlStatments
         if(this._body_ == oldChild)
         {
             setBody((PBody) newChild);
-            return;
-        }
-
-        if(this._elsestructure_ == oldChild)
-        {
-            setElsestructure((PElsestructure) newChild);
             return;
         }
 

@@ -2,7 +2,7 @@
 
 package compiler.node;
 
-public abstract class PElsestructure extends Node
+public abstract class PObjectDecl extends Node
 {
     // Empty body
 }

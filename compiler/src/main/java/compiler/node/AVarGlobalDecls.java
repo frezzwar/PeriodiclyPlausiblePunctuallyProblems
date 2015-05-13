@@ -5,46 +5,46 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVariableDeclarationDecl extends PDecl
+public final class AVarGlobalDecls extends PGlobalDecls
 {
-    private PVariableDeclaration _variableDeclaration_;
+    private PVariableDecl _variableDecl_;
 
-    public AVariableDeclarationDecl()
+    public AVarGlobalDecls()
     {
         // Constructor
     }
 
-    public AVariableDeclarationDecl(
-        @SuppressWarnings("hiding") PVariableDeclaration _variableDeclaration_)
+    public AVarGlobalDecls(
+        @SuppressWarnings("hiding") PVariableDecl _variableDecl_)
     {
         // Constructor
-        setVariableDeclaration(_variableDeclaration_);
+        setVariableDecl(_variableDecl_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AVariableDeclarationDecl(
-            cloneNode(this._variableDeclaration_));
+        return new AVarGlobalDecls(
+            cloneNode(this._variableDecl_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVariableDeclarationDecl(this);
+        ((Analysis) sw).caseAVarGlobalDecls(this);
     }
 
-    public PVariableDeclaration getVariableDeclaration()
+    public PVariableDecl getVariableDecl()
     {
-        return this._variableDeclaration_;
+        return this._variableDecl_;
     }
 
-    public void setVariableDeclaration(PVariableDeclaration node)
+    public void setVariableDecl(PVariableDecl node)
     {
-        if(this._variableDeclaration_ != null)
+        if(this._variableDecl_ != null)
         {
-            this._variableDeclaration_.parent(null);
+            this._variableDecl_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AVariableDeclarationDecl extends PDecl
             node.parent(this);
         }
 
-        this._variableDeclaration_ = node;
+        this._variableDecl_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._variableDeclaration_);
+            + toString(this._variableDecl_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._variableDeclaration_ == child)
+        if(this._variableDecl_ == child)
         {
-            this._variableDeclaration_ = null;
+            this._variableDecl_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AVariableDeclarationDecl extends PDecl
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._variableDeclaration_ == oldChild)
+        if(this._variableDecl_ == oldChild)
         {
-            setVariableDeclaration((PVariableDeclaration) newChild);
+            setVariableDecl((PVariableDecl) newChild);
             return;
         }
 

@@ -2,30 +2,37 @@
 
 package compiler.node;
 
-import java.util.*;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVariableDeclaration extends PVariableDeclaration
+public final class AGridDecl extends PGridDecl
 {
     private TNew _new_;
     private TIdentifier _identifier_;
     private TAssign _assign_;
-    private PVariables _variables_;
-    private final LinkedList<PVariableTail> _variableTail_ = new LinkedList<PVariableTail>();
+    private TGrid _grid_;
+    private TParL _parL_;
+    private PValue _int1_;
+    private TComma _comma_;
+    private PValue _int2_;
+    private TParR _parR_;
     private TSemiC _semiC_;
 
-    public AVariableDeclaration()
+    public AGridDecl()
     {
         // Constructor
     }
 
-    public AVariableDeclaration(
+    public AGridDecl(
         @SuppressWarnings("hiding") TNew _new_,
         @SuppressWarnings("hiding") TIdentifier _identifier_,
         @SuppressWarnings("hiding") TAssign _assign_,
-        @SuppressWarnings("hiding") PVariables _variables_,
-        @SuppressWarnings("hiding") List<?> _variableTail_,
+        @SuppressWarnings("hiding") TGrid _grid_,
+        @SuppressWarnings("hiding") TParL _parL_,
+        @SuppressWarnings("hiding") PValue _int1_,
+        @SuppressWarnings("hiding") TComma _comma_,
+        @SuppressWarnings("hiding") PValue _int2_,
+        @SuppressWarnings("hiding") TParR _parR_,
         @SuppressWarnings("hiding") TSemiC _semiC_)
     {
         // Constructor
@@ -35,9 +42,17 @@ public final class AVariableDeclaration extends PVariableDeclaration
 
         setAssign(_assign_);
 
-        setVariables(_variables_);
+        setGrid(_grid_);
 
-        setVariableTail(_variableTail_);
+        setParL(_parL_);
+
+        setInt1(_int1_);
+
+        setComma(_comma_);
+
+        setInt2(_int2_);
+
+        setParR(_parR_);
 
         setSemiC(_semiC_);
 
@@ -46,19 +61,23 @@ public final class AVariableDeclaration extends PVariableDeclaration
     @Override
     public Object clone()
     {
-        return new AVariableDeclaration(
+        return new AGridDecl(
             cloneNode(this._new_),
             cloneNode(this._identifier_),
             cloneNode(this._assign_),
-            cloneNode(this._variables_),
-            cloneList(this._variableTail_),
+            cloneNode(this._grid_),
+            cloneNode(this._parL_),
+            cloneNode(this._int1_),
+            cloneNode(this._comma_),
+            cloneNode(this._int2_),
+            cloneNode(this._parR_),
             cloneNode(this._semiC_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVariableDeclaration(this);
+        ((Analysis) sw).caseAGridDecl(this);
     }
 
     public TNew getNew()
@@ -136,16 +155,16 @@ public final class AVariableDeclaration extends PVariableDeclaration
         this._assign_ = node;
     }
 
-    public PVariables getVariables()
+    public TGrid getGrid()
     {
-        return this._variables_;
+        return this._grid_;
     }
 
-    public void setVariables(PVariables node)
+    public void setGrid(TGrid node)
     {
-        if(this._variables_ != null)
+        if(this._grid_ != null)
         {
-            this._variables_.parent(null);
+            this._grid_.parent(null);
         }
 
         if(node != null)
@@ -158,33 +177,132 @@ public final class AVariableDeclaration extends PVariableDeclaration
             node.parent(this);
         }
 
-        this._variables_ = node;
+        this._grid_ = node;
     }
 
-    public LinkedList<PVariableTail> getVariableTail()
+    public TParL getParL()
     {
-        return this._variableTail_;
+        return this._parL_;
     }
 
-    public void setVariableTail(List<?> list)
+    public void setParL(TParL node)
     {
-        for(PVariableTail e : this._variableTail_)
+        if(this._parL_ != null)
         {
-            e.parent(null);
+            this._parL_.parent(null);
         }
-        this._variableTail_.clear();
 
-        for(Object obj_e : list)
+        if(node != null)
         {
-            PVariableTail e = (PVariableTail) obj_e;
-            if(e.parent() != null)
+            if(node.parent() != null)
             {
-                e.parent().removeChild(e);
+                node.parent().removeChild(node);
             }
 
-            e.parent(this);
-            this._variableTail_.add(e);
+            node.parent(this);
         }
+
+        this._parL_ = node;
+    }
+
+    public PValue getInt1()
+    {
+        return this._int1_;
+    }
+
+    public void setInt1(PValue node)
+    {
+        if(this._int1_ != null)
+        {
+            this._int1_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._int1_ = node;
+    }
+
+    public TComma getComma()
+    {
+        return this._comma_;
+    }
+
+    public void setComma(TComma node)
+    {
+        if(this._comma_ != null)
+        {
+            this._comma_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._comma_ = node;
+    }
+
+    public PValue getInt2()
+    {
+        return this._int2_;
+    }
+
+    public void setInt2(PValue node)
+    {
+        if(this._int2_ != null)
+        {
+            this._int2_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._int2_ = node;
+    }
+
+    public TParR getParR()
+    {
+        return this._parR_;
+    }
+
+    public void setParR(TParR node)
+    {
+        if(this._parR_ != null)
+        {
+            this._parR_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._parR_ = node;
     }
 
     public TSemiC getSemiC()
@@ -219,8 +337,12 @@ public final class AVariableDeclaration extends PVariableDeclaration
             + toString(this._new_)
             + toString(this._identifier_)
             + toString(this._assign_)
-            + toString(this._variables_)
-            + toString(this._variableTail_)
+            + toString(this._grid_)
+            + toString(this._parL_)
+            + toString(this._int1_)
+            + toString(this._comma_)
+            + toString(this._int2_)
+            + toString(this._parR_)
             + toString(this._semiC_);
     }
 
@@ -246,14 +368,39 @@ public final class AVariableDeclaration extends PVariableDeclaration
             return;
         }
 
-        if(this._variables_ == child)
+        if(this._grid_ == child)
         {
-            this._variables_ = null;
+            this._grid_ = null;
             return;
         }
 
-        if(this._variableTail_.remove(child))
+        if(this._parL_ == child)
         {
+            this._parL_ = null;
+            return;
+        }
+
+        if(this._int1_ == child)
+        {
+            this._int1_ = null;
+            return;
+        }
+
+        if(this._comma_ == child)
+        {
+            this._comma_ = null;
+            return;
+        }
+
+        if(this._int2_ == child)
+        {
+            this._int2_ = null;
+            return;
+        }
+
+        if(this._parR_ == child)
+        {
+            this._parR_ = null;
             return;
         }
 
@@ -288,28 +435,40 @@ public final class AVariableDeclaration extends PVariableDeclaration
             return;
         }
 
-        if(this._variables_ == oldChild)
+        if(this._grid_ == oldChild)
         {
-            setVariables((PVariables) newChild);
+            setGrid((TGrid) newChild);
             return;
         }
 
-        for(ListIterator<PVariableTail> i = this._variableTail_.listIterator(); i.hasNext();)
+        if(this._parL_ == oldChild)
         {
-            if(i.next() == oldChild)
-            {
-                if(newChild != null)
-                {
-                    i.set((PVariableTail) newChild);
-                    newChild.parent(this);
-                    oldChild.parent(null);
-                    return;
-                }
+            setParL((TParL) newChild);
+            return;
+        }
 
-                i.remove();
-                oldChild.parent(null);
-                return;
-            }
+        if(this._int1_ == oldChild)
+        {
+            setInt1((PValue) newChild);
+            return;
+        }
+
+        if(this._comma_ == oldChild)
+        {
+            setComma((TComma) newChild);
+            return;
+        }
+
+        if(this._int2_ == oldChild)
+        {
+            setInt2((PValue) newChild);
+            return;
+        }
+
+        if(this._parR_ == oldChild)
+        {
+            setParR((TParR) newChild);
+            return;
         }
 
         if(this._semiC_ == oldChild)

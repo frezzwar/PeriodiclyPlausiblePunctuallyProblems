@@ -8,12 +8,9 @@ import compiler.analysis.*;
 @SuppressWarnings("nls")
 public final class AProgram extends PProgram
 {
+    private final LinkedList<PGlobalDecls> _globalDecls_ = new LinkedList<PGlobalDecls>();
     private TMain _main_;
-    private TParL _parL_;
-    private TParR _parR_;
-    private TCurlyL _curlyL_;
-    private final LinkedList<PDecl> _decl_ = new LinkedList<PDecl>();
-    private TCurlyR _curlyR_;
+    private PBody _body_;
     private final LinkedList<PFuncDecl> _funcDecl_ = new LinkedList<PFuncDecl>();
 
     public AProgram()
@@ -22,26 +19,17 @@ public final class AProgram extends PProgram
     }
 
     public AProgram(
+        @SuppressWarnings("hiding") List<?> _globalDecls_,
         @SuppressWarnings("hiding") TMain _main_,
-        @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") TParR _parR_,
-        @SuppressWarnings("hiding") TCurlyL _curlyL_,
-        @SuppressWarnings("hiding") List<?> _decl_,
-        @SuppressWarnings("hiding") TCurlyR _curlyR_,
+        @SuppressWarnings("hiding") PBody _body_,
         @SuppressWarnings("hiding") List<?> _funcDecl_)
     {
         // Constructor
+        setGlobalDecls(_globalDecls_);
+
         setMain(_main_);
 
-        setParL(_parL_);
-
-        setParR(_parR_);
-
-        setCurlyL(_curlyL_);
-
-        setDecl(_decl_);
-
-        setCurlyR(_curlyR_);
+        setBody(_body_);
 
         setFuncDecl(_funcDecl_);
 
@@ -51,12 +39,9 @@ public final class AProgram extends PProgram
     public Object clone()
     {
         return new AProgram(
+            cloneList(this._globalDecls_),
             cloneNode(this._main_),
-            cloneNode(this._parL_),
-            cloneNode(this._parR_),
-            cloneNode(this._curlyL_),
-            cloneList(this._decl_),
-            cloneNode(this._curlyR_),
+            cloneNode(this._body_),
             cloneList(this._funcDecl_));
     }
 
@@ -64,6 +49,32 @@ public final class AProgram extends PProgram
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAProgram(this);
+    }
+
+    public LinkedList<PGlobalDecls> getGlobalDecls()
+    {
+        return this._globalDecls_;
+    }
+
+    public void setGlobalDecls(List<?> list)
+    {
+        for(PGlobalDecls e : this._globalDecls_)
+        {
+            e.parent(null);
+        }
+        this._globalDecls_.clear();
+
+        for(Object obj_e : list)
+        {
+            PGlobalDecls e = (PGlobalDecls) obj_e;
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
+
+            e.parent(this);
+            this._globalDecls_.add(e);
+        }
     }
 
     public TMain getMain()
@@ -91,16 +102,16 @@ public final class AProgram extends PProgram
         this._main_ = node;
     }
 
-    public TParL getParL()
+    public PBody getBody()
     {
-        return this._parL_;
+        return this._body_;
     }
 
-    public void setParL(TParL node)
+    public void setBody(PBody node)
     {
-        if(this._parL_ != null)
+        if(this._body_ != null)
         {
-            this._parL_.parent(null);
+            this._body_.parent(null);
         }
 
         if(node != null)
@@ -113,108 +124,7 @@ public final class AProgram extends PProgram
             node.parent(this);
         }
 
-        this._parL_ = node;
-    }
-
-    public TParR getParR()
-    {
-        return this._parR_;
-    }
-
-    public void setParR(TParR node)
-    {
-        if(this._parR_ != null)
-        {
-            this._parR_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._parR_ = node;
-    }
-
-    public TCurlyL getCurlyL()
-    {
-        return this._curlyL_;
-    }
-
-    public void setCurlyL(TCurlyL node)
-    {
-        if(this._curlyL_ != null)
-        {
-            this._curlyL_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._curlyL_ = node;
-    }
-
-    public LinkedList<PDecl> getDecl()
-    {
-        return this._decl_;
-    }
-
-    public void setDecl(List<?> list)
-    {
-        for(PDecl e : this._decl_)
-        {
-            e.parent(null);
-        }
-        this._decl_.clear();
-
-        for(Object obj_e : list)
-        {
-            PDecl e = (PDecl) obj_e;
-            if(e.parent() != null)
-            {
-                e.parent().removeChild(e);
-            }
-
-            e.parent(this);
-            this._decl_.add(e);
-        }
-    }
-
-    public TCurlyR getCurlyR()
-    {
-        return this._curlyR_;
-    }
-
-    public void setCurlyR(TCurlyR node)
-    {
-        if(this._curlyR_ != null)
-        {
-            this._curlyR_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._curlyR_ = node;
+        this._body_ = node;
     }
 
     public LinkedList<PFuncDecl> getFuncDecl()
@@ -247,12 +157,9 @@ public final class AProgram extends PProgram
     public String toString()
     {
         return ""
+            + toString(this._globalDecls_)
             + toString(this._main_)
-            + toString(this._parL_)
-            + toString(this._parR_)
-            + toString(this._curlyL_)
-            + toString(this._decl_)
-            + toString(this._curlyR_)
+            + toString(this._body_)
             + toString(this._funcDecl_);
     }
 
@@ -260,38 +167,20 @@ public final class AProgram extends PProgram
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._globalDecls_.remove(child))
+        {
+            return;
+        }
+
         if(this._main_ == child)
         {
             this._main_ = null;
             return;
         }
 
-        if(this._parL_ == child)
+        if(this._body_ == child)
         {
-            this._parL_ = null;
-            return;
-        }
-
-        if(this._parR_ == child)
-        {
-            this._parR_ = null;
-            return;
-        }
-
-        if(this._curlyL_ == child)
-        {
-            this._curlyL_ = null;
-            return;
-        }
-
-        if(this._decl_.remove(child))
-        {
-            return;
-        }
-
-        if(this._curlyR_ == child)
-        {
-            this._curlyR_ = null;
+            this._body_ = null;
             return;
         }
 
@@ -307,37 +196,13 @@ public final class AProgram extends PProgram
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._main_ == oldChild)
-        {
-            setMain((TMain) newChild);
-            return;
-        }
-
-        if(this._parL_ == oldChild)
-        {
-            setParL((TParL) newChild);
-            return;
-        }
-
-        if(this._parR_ == oldChild)
-        {
-            setParR((TParR) newChild);
-            return;
-        }
-
-        if(this._curlyL_ == oldChild)
-        {
-            setCurlyL((TCurlyL) newChild);
-            return;
-        }
-
-        for(ListIterator<PDecl> i = this._decl_.listIterator(); i.hasNext();)
+        for(ListIterator<PGlobalDecls> i = this._globalDecls_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PDecl) newChild);
+                    i.set((PGlobalDecls) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;
@@ -349,9 +214,15 @@ public final class AProgram extends PProgram
             }
         }
 
-        if(this._curlyR_ == oldChild)
+        if(this._main_ == oldChild)
         {
-            setCurlyR((TCurlyR) newChild);
+            setMain((TMain) newChild);
+            return;
+        }
+
+        if(this._body_ == oldChild)
+        {
+            setBody((PBody) newChild);
             return;
         }
 

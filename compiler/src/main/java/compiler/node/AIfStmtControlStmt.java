@@ -5,66 +5,71 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ARepeatControlStatments extends PControlStatments
+public final class AIfStmtControlStmt extends PControlStmt
 {
-    private TRepeat _repeat_;
+    private TIf _if_;
     private TParL _parL_;
-    private PValue _value_;
+    private PExpr _expr_;
     private TParR _parR_;
     private PBody _body_;
+    private PElseStmt _elseStmt_;
 
-    public ARepeatControlStatments()
+    public AIfStmtControlStmt()
     {
         // Constructor
     }
 
-    public ARepeatControlStatments(
-        @SuppressWarnings("hiding") TRepeat _repeat_,
+    public AIfStmtControlStmt(
+        @SuppressWarnings("hiding") TIf _if_,
         @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PValue _value_,
+        @SuppressWarnings("hiding") PExpr _expr_,
         @SuppressWarnings("hiding") TParR _parR_,
-        @SuppressWarnings("hiding") PBody _body_)
+        @SuppressWarnings("hiding") PBody _body_,
+        @SuppressWarnings("hiding") PElseStmt _elseStmt_)
     {
         // Constructor
-        setRepeat(_repeat_);
+        setIf(_if_);
 
         setParL(_parL_);
 
-        setValue(_value_);
+        setExpr(_expr_);
 
         setParR(_parR_);
 
         setBody(_body_);
+
+        setElseStmt(_elseStmt_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ARepeatControlStatments(
-            cloneNode(this._repeat_),
+        return new AIfStmtControlStmt(
+            cloneNode(this._if_),
             cloneNode(this._parL_),
-            cloneNode(this._value_),
+            cloneNode(this._expr_),
             cloneNode(this._parR_),
-            cloneNode(this._body_));
+            cloneNode(this._body_),
+            cloneNode(this._elseStmt_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseARepeatControlStatments(this);
+        ((Analysis) sw).caseAIfStmtControlStmt(this);
     }
 
-    public TRepeat getRepeat()
+    public TIf getIf()
     {
-        return this._repeat_;
+        return this._if_;
     }
 
-    public void setRepeat(TRepeat node)
+    public void setIf(TIf node)
     {
-        if(this._repeat_ != null)
+        if(this._if_ != null)
         {
-            this._repeat_.parent(null);
+            this._if_.parent(null);
         }
 
         if(node != null)
@@ -77,7 +82,7 @@ public final class ARepeatControlStatments extends PControlStatments
             node.parent(this);
         }
 
-        this._repeat_ = node;
+        this._if_ = node;
     }
 
     public TParL getParL()
@@ -105,16 +110,16 @@ public final class ARepeatControlStatments extends PControlStatments
         this._parL_ = node;
     }
 
-    public PValue getValue()
+    public PExpr getExpr()
     {
-        return this._value_;
+        return this._expr_;
     }
 
-    public void setValue(PValue node)
+    public void setExpr(PExpr node)
     {
-        if(this._value_ != null)
+        if(this._expr_ != null)
         {
-            this._value_.parent(null);
+            this._expr_.parent(null);
         }
 
         if(node != null)
@@ -127,7 +132,7 @@ public final class ARepeatControlStatments extends PControlStatments
             node.parent(this);
         }
 
-        this._value_ = node;
+        this._expr_ = node;
     }
 
     public TParR getParR()
@@ -180,24 +185,50 @@ public final class ARepeatControlStatments extends PControlStatments
         this._body_ = node;
     }
 
+    public PElseStmt getElseStmt()
+    {
+        return this._elseStmt_;
+    }
+
+    public void setElseStmt(PElseStmt node)
+    {
+        if(this._elseStmt_ != null)
+        {
+            this._elseStmt_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._elseStmt_ = node;
+    }
+
     @Override
     public String toString()
     {
         return ""
-            + toString(this._repeat_)
+            + toString(this._if_)
             + toString(this._parL_)
-            + toString(this._value_)
+            + toString(this._expr_)
             + toString(this._parR_)
-            + toString(this._body_);
+            + toString(this._body_)
+            + toString(this._elseStmt_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._repeat_ == child)
+        if(this._if_ == child)
         {
-            this._repeat_ = null;
+            this._if_ = null;
             return;
         }
 
@@ -207,9 +238,9 @@ public final class ARepeatControlStatments extends PControlStatments
             return;
         }
 
-        if(this._value_ == child)
+        if(this._expr_ == child)
         {
-            this._value_ = null;
+            this._expr_ = null;
             return;
         }
 
@@ -225,6 +256,12 @@ public final class ARepeatControlStatments extends PControlStatments
             return;
         }
 
+        if(this._elseStmt_ == child)
+        {
+            this._elseStmt_ = null;
+            return;
+        }
+
         throw new RuntimeException("Not a child.");
     }
 
@@ -232,9 +269,9 @@ public final class ARepeatControlStatments extends PControlStatments
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._repeat_ == oldChild)
+        if(this._if_ == oldChild)
         {
-            setRepeat((TRepeat) newChild);
+            setIf((TIf) newChild);
             return;
         }
 
@@ -244,9 +281,9 @@ public final class ARepeatControlStatments extends PControlStatments
             return;
         }
 
-        if(this._value_ == oldChild)
+        if(this._expr_ == oldChild)
         {
-            setValue((PValue) newChild);
+            setExpr((PExpr) newChild);
             return;
         }
 
@@ -259,6 +296,12 @@ public final class ARepeatControlStatments extends PControlStatments
         if(this._body_ == oldChild)
         {
             setBody((PBody) newChild);
+            return;
+        }
+
+        if(this._elseStmt_ == oldChild)
+        {
+            setElseStmt((PElseStmt) newChild);
             return;
         }
 

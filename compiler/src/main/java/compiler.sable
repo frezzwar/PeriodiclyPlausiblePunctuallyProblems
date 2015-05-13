@@ -14,7 +14,6 @@ Helpers
     eol             = cr | lf | cr lf;
 
 Tokens
-
     plus            = '+';
     minus           = '-';
     mult            = '*';
@@ -35,8 +34,7 @@ Tokens
     equal           = '==';
     less_equal      = '<=';
     greater_equal   = '>=';
-    not_equal       = '!=';
-    negate          = '!';
+    negate          = '!=';
     and             = '&&';
     or              = '||';
     less            = '<';
@@ -55,17 +53,16 @@ Tokens
     foreach         = 'foreach';
     in              = 'in';
     return          = 'return';
-    main            = 'main';
+    main            = 'program';
+
     figur           = 'figur';
     grid            = 'grid';
-
     identifier      = letter (normal)* ;
-    
-    string_literal  = '"' not_cr_lf+ '"';   
+
+    string_literal  = '"' not_cr_lf+ '"'; 
     double_literal  = digit* dot digit+;  
     integer_literal = digit+;  
-    
-    
+
     multiline_comment   = '/' '*' [all - ['*' + '/']]* '*' '/' ;
     oneline_comment     = '//' [all - [cr + lf]]* eol?;
     
@@ -75,89 +72,87 @@ Ignored Tokens
     oneline_comment;
 
 Productions
-    program                 =  global_decl* program body func_decl*;    
-               
-    statement               = {decls} global_decl
-                            | {control_statements} control_statments
-                            | {assign} expr semi_c;
+    program             = global_decls* main body func_decl*;    
+             
+    decl                = {variable_decl} variable_decl
+                        | {control_stmt} control_stmt
+                        | {assign} expr semi_c;
+                
+    global_decls        = {var} variable_decl
+                        | {obj} object_decl
+                        | {grid} grid_decl;
 
+    grid_decl           = new identifier assign grid par_l [int1]:value comma [int2]:value par_r semi_c;
 
-    global_decl             = {var_decl} variable_declaration
-                            | {obj_decl} objekt_declaration
-                            | {grid_decl} grid_decl;
+    object_decl         = new [id1]:identifier assign figur par_l [id2]:identifier par_r body;
 
-    grid_decl               = new identifier assign grid par_l [integer1]:value comma [integer2]:value par_r semi_c;
-
-    func_decl               = new identifier assign par_l params? par_r body;
+    func_decl           = new identifier par_l params? par_r body;
+              
+    variable_decl       = new identifier assign variables variable_tail* semi_c;
     
-    variable_declaration    = new identifier assign variables semi_c;
-
-    objekt_declaration      = new identifier assign figur par_l identifier par_r body;
-    
-    variables               = {expr} expr
-                            | {list} brack_l value list_var_tail* brack_r;
-                              
-                                                
-    list_var_tail           = comma value;      
-    
-    call_params             = expr call_params_tail*;
-    
-    call_params_tail        = comma value;
-    
-    return_value            = return expr semi_c;        
-    
-    params                  = new identifier params_tail*;
-    
-    params_tail             = comma new identifier;
-            
-    control_statments       = {while} repeat while par_l expr par_r body 
-                            | {repeat} repeat par_l value par_r body
-                            | {foreach} repeat foreach par_l identifier in varname par_r body
-                            | {ifstructure} if par_l expr par_r body elsestructure?;
-                                                      
-    elsestructure           = {else} else body
-                            | {ifelse} else if par_l expr par_r body elsestructure?;
-    
-    body                    = curly_l statement* return_value? curly_r;
-                        
-    expr                    = {assign} value assign expr
-                            | {increment} value increment expr
-                            | {decrement} value decrement expr
-                            | {boolean} value bool_operator expr
-                            | {numeric} value operator expr
-                            | {minusvalue} minus expr
-                            | {value} value
-                            | {empty} ;
-    
-    value                   = {varname} varname function_call?
-                            | {literal} literal;
-    
-    function_call           = par_l call_params? par_r;
-    
-    varname                 = identifier idlist*
-                            | identifier par_l [integer1]:value comma [integer2]:value par_r dot idlist;
+    variables           = {expr} expr
+                        | {list} brack_l value list_var_tail* brack_r;
+                
+    variable_tail       = comma new identifier assign variables;  
                             
-    idlist                  = dot identifier function_call?;        
-
-    operator                = {minus} minus
-                            | {plus} plus
-                            | {mult} mult
-                            | {div} div;
-
-    bool_operator           = {equal} equal
-                            | {less_equal} less_equal
-                            | {greater_equal} greater_equal
-                            | {negate} negate
-                            | {and} and
-                            | {or} or
-                            | {less} less
-                            | {greater} greater
-                            | {not_equal} not_equal;
+    list_var_tail       = comma value;    
+  
+    call_params         = expr call_params_tail*;
+  
+    call_params_tail    = comma expr;
     
-    literal                 = {boolean} boolean_literal
-                            | {integer} integer_literal
-                            | {double} double_literal
-                            | {string} string_literal;
+    return_value        = return expr semi_c;    
     
-    boolean_literal         = {true} true 
-                            | {false} false;
+    params              = identifier params_tail*;
+    
+    params_tail         = comma new identifier;
+      
+    control_stmt        = {while} repeat while par_l expr par_r body 
+                        | {repeat} repeat par_l value par_r body
+                        | {foreach} repeat foreach par_l identifier in varname par_r body
+                        | {if_stmt} if par_l expr par_r body else_stmt?;
+                              
+    else_stmt           = {else_stmt} else body
+                        | {elseif_stmt} else if par_l expr par_r body else_stmt?;
+    
+    body                = curly_l decl* return_value? curly_r;
+            
+    expr                = {assign} value assign expr
+                        | {increment} value increment expr
+                        | {decrement} value decrement expr
+                        | {boolean} value bool_operator expr
+                        | {numeric} value operator expr
+                        | {minusvalue} minus expr
+                        | {value} value;
+  
+    value               = {varname} varname function_call?
+                        | {grid} identifier function_call idlist+
+                        | {literal} literal;
+    
+    function_call       = par_l call_params? par_r body?;
+    
+    varname             = {dot} identifier idlist*;
+                
+    idlist              = dot identifier;    
+
+    operator            = {minus} minus
+                        | {plus} plus
+                        | {mult} mult
+                        | {div} div;
+
+    bool_operator       = {equal} equal
+                        | {less_equal} less_equal
+                        | {greater_equal} greater_equal
+                        | {negate} negate
+                        | {and} and
+                        | {or} or
+                        | {less} less
+                        | {greater} greater;
+    
+    literal             = {boolean} boolean_literal
+                        | {integer} integer_literal
+                        | {double} double_literal
+                        | {string} string_literal;
+    
+    boolean_literal     = {true} true 
+                        | {false} false;

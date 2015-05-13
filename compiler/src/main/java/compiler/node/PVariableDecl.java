@@ -2,7 +2,7 @@
 
 package compiler.node;
 
-public abstract class PVariableDeclaration extends Node
+public abstract class PVariableDecl extends Node
 {
     // Empty body
 }

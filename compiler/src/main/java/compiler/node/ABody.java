@@ -10,6 +10,7 @@ public final class ABody extends PBody
 {
     private TCurlyL _curlyL_;
     private final LinkedList<PDecl> _decl_ = new LinkedList<PDecl>();
+    private PReturnValue _returnValue_;
     private TCurlyR _curlyR_;
 
     public ABody()
@@ -20,12 +21,15 @@ public final class ABody extends PBody
     public ABody(
         @SuppressWarnings("hiding") TCurlyL _curlyL_,
         @SuppressWarnings("hiding") List<?> _decl_,
+        @SuppressWarnings("hiding") PReturnValue _returnValue_,
         @SuppressWarnings("hiding") TCurlyR _curlyR_)
     {
         // Constructor
         setCurlyL(_curlyL_);
 
         setDecl(_decl_);
+
+        setReturnValue(_returnValue_);
 
         setCurlyR(_curlyR_);
 
@@ -37,6 +41,7 @@ public final class ABody extends PBody
         return new ABody(
             cloneNode(this._curlyL_),
             cloneList(this._decl_),
+            cloneNode(this._returnValue_),
             cloneNode(this._curlyR_));
     }
 
@@ -97,6 +102,31 @@ public final class ABody extends PBody
         }
     }
 
+    public PReturnValue getReturnValue()
+    {
+        return this._returnValue_;
+    }
+
+    public void setReturnValue(PReturnValue node)
+    {
+        if(this._returnValue_ != null)
+        {
+            this._returnValue_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._returnValue_ = node;
+    }
+
     public TCurlyR getCurlyR()
     {
         return this._curlyR_;
@@ -128,6 +158,7 @@ public final class ABody extends PBody
         return ""
             + toString(this._curlyL_)
             + toString(this._decl_)
+            + toString(this._returnValue_)
             + toString(this._curlyR_);
     }
 
@@ -143,6 +174,12 @@ public final class ABody extends PBody
 
         if(this._decl_.remove(child))
         {
+            return;
+        }
+
+        if(this._returnValue_ == child)
+        {
+            this._returnValue_ = null;
             return;
         }
 
@@ -181,6 +218,12 @@ public final class ABody extends PBody
                 oldChild.parent(null);
                 return;
             }
+        }
+
+        if(this._returnValue_ == oldChild)
+        {
+            setReturnValue((PReturnValue) newChild);
+            return;
         }
 
         if(this._curlyR_ == oldChild)

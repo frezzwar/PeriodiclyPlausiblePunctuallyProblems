@@ -2,7 +2,7 @@
 
 package compiler.node;
 
-public abstract class PControlStatments extends Node
+public abstract class PGlobalDecls extends Node
 {
     // Empty body
 }

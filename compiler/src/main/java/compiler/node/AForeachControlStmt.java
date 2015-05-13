@@ -5,7 +5,7 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AForeachControlStatments extends PControlStatments
+public final class AForeachControlStmt extends PControlStmt
 {
     private TRepeat _repeat_;
     private TForeach _foreach_;
@@ -16,12 +16,12 @@ public final class AForeachControlStatments extends PControlStatments
     private TParR _parR_;
     private PBody _body_;
 
-    public AForeachControlStatments()
+    public AForeachControlStmt()
     {
         // Constructor
     }
 
-    public AForeachControlStatments(
+    public AForeachControlStmt(
         @SuppressWarnings("hiding") TRepeat _repeat_,
         @SuppressWarnings("hiding") TForeach _foreach_,
         @SuppressWarnings("hiding") TParL _parL_,
@@ -53,7 +53,7 @@ public final class AForeachControlStatments extends PControlStatments
     @Override
     public Object clone()
     {
-        return new AForeachControlStatments(
+        return new AForeachControlStmt(
             cloneNode(this._repeat_),
             cloneNode(this._foreach_),
             cloneNode(this._parL_),
@@ -67,7 +67,7 @@ public final class AForeachControlStatments extends PControlStatments
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAForeachControlStatments(this);
+        ((Analysis) sw).caseAForeachControlStmt(this);
     }
 
     public TRepeat getRepeat()

@@ -5,46 +5,46 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AControlStatementsDecl extends PDecl
+public final class AControlStmtDecl extends PDecl
 {
-    private PControlStatments _controlStatments_;
+    private PControlStmt _controlStmt_;
 
-    public AControlStatementsDecl()
+    public AControlStmtDecl()
     {
         // Constructor
     }
 
-    public AControlStatementsDecl(
-        @SuppressWarnings("hiding") PControlStatments _controlStatments_)
+    public AControlStmtDecl(
+        @SuppressWarnings("hiding") PControlStmt _controlStmt_)
     {
         // Constructor
-        setControlStatments(_controlStatments_);
+        setControlStmt(_controlStmt_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AControlStatementsDecl(
-            cloneNode(this._controlStatments_));
+        return new AControlStmtDecl(
+            cloneNode(this._controlStmt_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAControlStatementsDecl(this);
+        ((Analysis) sw).caseAControlStmtDecl(this);
     }
 
-    public PControlStatments getControlStatments()
+    public PControlStmt getControlStmt()
     {
-        return this._controlStatments_;
+        return this._controlStmt_;
     }
 
-    public void setControlStatments(PControlStatments node)
+    public void setControlStmt(PControlStmt node)
     {
-        if(this._controlStatments_ != null)
+        if(this._controlStmt_ != null)
         {
-            this._controlStatments_.parent(null);
+            this._controlStmt_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AControlStatementsDecl extends PDecl
             node.parent(this);
         }
 
-        this._controlStatments_ = node;
+        this._controlStmt_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._controlStatments_);
+            + toString(this._controlStmt_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._controlStatments_ == child)
+        if(this._controlStmt_ == child)
         {
-            this._controlStatments_ = null;
+            this._controlStmt_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AControlStatementsDecl extends PDecl
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._controlStatments_ == oldChild)
+        if(this._controlStmt_ == oldChild)
         {
-            setControlStatments((PControlStatments) newChild);
+            setControlStmt((PControlStmt) newChild);
             return;
         }
 

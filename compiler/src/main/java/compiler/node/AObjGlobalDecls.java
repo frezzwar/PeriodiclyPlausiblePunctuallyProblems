@@ -5,46 +5,46 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AReturnDecl extends PDecl
+public final class AObjGlobalDecls extends PGlobalDecls
 {
-    private PReturnValue _returnValue_;
+    private PObjectDecl _objectDecl_;
 
-    public AReturnDecl()
+    public AObjGlobalDecls()
     {
         // Constructor
     }
 
-    public AReturnDecl(
-        @SuppressWarnings("hiding") PReturnValue _returnValue_)
+    public AObjGlobalDecls(
+        @SuppressWarnings("hiding") PObjectDecl _objectDecl_)
     {
         // Constructor
-        setReturnValue(_returnValue_);
+        setObjectDecl(_objectDecl_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AReturnDecl(
-            cloneNode(this._returnValue_));
+        return new AObjGlobalDecls(
+            cloneNode(this._objectDecl_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAReturnDecl(this);
+        ((Analysis) sw).caseAObjGlobalDecls(this);
     }
 
-    public PReturnValue getReturnValue()
+    public PObjectDecl getObjectDecl()
     {
-        return this._returnValue_;
+        return this._objectDecl_;
     }
 
-    public void setReturnValue(PReturnValue node)
+    public void setObjectDecl(PObjectDecl node)
     {
-        if(this._returnValue_ != null)
+        if(this._objectDecl_ != null)
         {
-            this._returnValue_.parent(null);
+            this._objectDecl_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AReturnDecl extends PDecl
             node.parent(this);
         }
 
-        this._returnValue_ = node;
+        this._objectDecl_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._returnValue_);
+            + toString(this._objectDecl_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._returnValue_ == child)
+        if(this._objectDecl_ == child)
         {
-            this._returnValue_ = null;
+            this._objectDecl_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AReturnDecl extends PDecl
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._returnValue_ == oldChild)
+        if(this._objectDecl_ == oldChild)
         {
-            setReturnValue((PReturnValue) newChild);
+            setObjectDecl((PObjectDecl) newChild);
             return;
         }
 

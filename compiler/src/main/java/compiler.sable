@@ -84,7 +84,7 @@ Productions
 
     grid_decl           = new identifier assign grid par_l [int1]:value comma [int2]:value par_r semi_c;
 
-    object_decl         = new [id1]:identifier assign figur par_l [id2]:identifier par_r body;
+    object_decl         = new [id1]:identifier assign figure par_l [id2]:identifier par_r body;
 
     func_decl           = new identifier par_l params? par_r body;
               

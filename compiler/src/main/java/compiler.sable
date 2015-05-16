@@ -58,6 +58,7 @@ Tokens
     figure          = 'figure';
     grid            = 'grid';
     identifier      = letter (normal)* ;
+    event           = 'event';
 
     string_literal  = '"' not_cr_lf+ '"'; 
     double_literal  = digit* dot digit+;  
@@ -72,7 +73,7 @@ Ignored Tokens
     oneline_comment;
 
 Productions
-    program             = global_decls* main body func_decl*;    
+    program             = global_decls* main body func_decl* event_decl?;
              
     decl                = {variable_decl} variable_decl
                         | {control_stmt} control_stmt
@@ -81,6 +82,8 @@ Productions
     global_decls        = {var} variable_decl
                         | {obj} object_decl
                         | {grid} grid_decl;
+
+    event_dcl           = event par_l identifier par_r body;
 
     grid_decl           = new identifier assign grid par_l [int1]:value comma [int2]:value par_r semi_c;
 

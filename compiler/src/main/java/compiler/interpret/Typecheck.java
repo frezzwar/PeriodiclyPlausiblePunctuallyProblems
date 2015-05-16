@@ -11,11 +11,9 @@ import compiler.node.*;
 
 public class Typecheck{
 	
-	public static List<TypeExpression> TypeExpressions(PVariables check, LinkedList<PVariableTail> VariableTail)
+	public static List<TypeExpression> TypeExpressions(PVariables check)
 	{
-		List<TypeExpression> retType = new ArrayList<TypeExpression>();
-			if(VariableTail.size() == 0)
-			{
+		List<TypeExpression> retType = new LinkedList<TypeExpression>();
 				String[] variables = check.toString().split(" ");
 				if(variables[0].equals("grid"))
 				{
@@ -71,13 +69,38 @@ public class Typecheck{
 				}
 				else
 				{
-					//flere operator
+					for(int i = 0; i < variables.length; i++)
+					{
+						List<TypeExpression> TempExpression = new LinkedList<TypeExpression>();
+						int priority = 0;
+						switch (variables[i])
+						{
+							case "+": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.string));
+								  	  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.number),Type.string));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.string),Type.string));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.bool),Type.string));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.bool,   Type.string),Type.string));
+								      priority = 0;
+								      break;
+
+							case "-": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+									  priority = 0;
+									  break;
+
+							case "*": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+									  priority = 1;
+									  break;
+
+							case "/": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+									  priority = 1;
+									  break;
+
+							default:  break;
+						}
+						MultivariableList(retType, TempExpression, priority);
+					}
 				}
-			}
-			else
-			{
-				//variabletail ????
-			}
 		return retType;
 	}
 	
@@ -92,6 +115,101 @@ public class Typecheck{
 	    return false;  
 	  }  
 	  return true;  
+	}
+
+	public static void MultivariableList(List<TypeExpression> ToList, List<TypeExpression> InputList, int priority)
+	{
+		List<TypeExpression> TempList = new LinkedList<>();
+		List<Integer> RemoveList = new LinkedList<>();
+		TempList.addAll(ToList);
+		if(ToList.size() == 0 && InputList.size() != 0)
+		{
+			for(int i = 0; i < InputList.size(); i++)
+			{
+				TempList.add(InputList.get(i));
+			}
+		}
+		else if(InputList.size() != 1 && InputList.size() != 0)
+		{
+			for(int i = 0; i < ToList.size(); i++)
+			{
+				for(int j = 0; j < InputList.size(); j++)
+				{
+						TempList.add(i * InputList.size() + j, ToList.get(i));
+				}
+			}
+			for (int i = 0; i < TempList.size(); i++)
+			{
+				if (priority == 0)
+				{
+					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
+						Type Temp = InputList.get(i % InputList.size()).getInput().get(1);
+						TempList.get(i).Input(Temp);
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
+				else if (priority == 1)
+				{
+					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
+						TempList.get(i).getInput().remove(1);
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(0));
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(1));
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
+			}
+		}
+		else if (InputList.size() != 0)
+		{
+			for (int i = 0; i < TempList.size(); i++)
+			{
+				if (priority == 0)
+				{
+					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
+						Type Temp = InputList.get(i % InputList.size()).getInput().get(1);
+						TempList.get(i).getInput().add(Temp);
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
+				else if(priority == 1)
+				{
+					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
+						TempList.get(i).getInput().remove(1);
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(0));
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(1));
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
+			}
+		}
+		for (int i = RemoveList.size()-1; i >= 0; i--)
+		{
+			int Remove = RemoveList.get(i);
+			TempList.remove(Remove);
+		}
+		ToList.clear();
+		ToList.addAll(TempList);
+		System.out.println(ToList);
 	}
 	
 	public static Type typeChecker(List<TypeExpression> InputList, SymbolTable table, PVariables Variables)
@@ -161,11 +279,11 @@ public class Typecheck{
 		}
 		else if(InputList.size() > 1)
 		{
-			List<Type> TypeList = new ArrayList<Type>();
+			List<Type> TypeList = new LinkedList<Type>();
 			//System.out.println(InputList);
 			for(int i = 0; i < InputList.size(); i++)
 			{
-				List<TypeExpression> Expression = new ArrayList<TypeExpression>();
+				List<TypeExpression> Expression = new LinkedList<TypeExpression>();
 				Expression.add(InputList.get(i));
 				TypeList.add(typeChecker(Expression, table, Variables));
 			}
@@ -181,6 +299,11 @@ public class Typecheck{
 				System.exit(0);
 			}
 		}
+		return null;
+	}
+
+	public static List<TypeExpression> FunctionChecker()
+	{
 		return null;
 	}
 }

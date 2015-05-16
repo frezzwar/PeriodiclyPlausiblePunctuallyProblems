@@ -1,6 +1,7 @@
 package compiler.interpret;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import compiler.interpret.Type;
@@ -8,13 +9,13 @@ import compiler.interpret.Type;
 
 public class TypeExpression
 {		
-	private List<Type> inputList = new ArrayList<Type>();
+	private List<Type> inputList = new LinkedList<>();
 	private Type output;
-	public void Output(Type output) 
+	public void Output(Type output)
 	{
 		this.output = output;
-	}	
-	
+	}
+
 	public void Input(Type input)
 	{
 		this.inputList.add(input);
@@ -34,7 +35,7 @@ public class TypeExpression
 	{
 		if(Input != null)
 		{
-			inputList = Input;
+			inputList.addAll(Input);
 		}
 		else
 		{

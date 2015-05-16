@@ -16,6 +16,8 @@ main()
     number2 = 9;
 
     new bool_test = 10 < 12;
+
+    new temp = 7 + 9 * 7;
     
     if(number2 <= number1)
     {
@@ -54,5 +56,5 @@ new bongo(ding, new dong){
         }
     }
 
-
+    return pongo;
 }

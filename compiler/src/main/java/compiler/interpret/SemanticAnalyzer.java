@@ -13,7 +13,19 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	public SemanticAnalyzer(SymbolTable symTable){
 		this.symbolTable = symTable;
 	}
-	
+
+
+	public void outAFuncDecl(AFuncDecl node)
+	{
+		System.out.println("-------------------------------------------------");
+		for (int i = 0; i < node.getDecl().size(); i++)
+		{
+			System.out.println(node.getDecl().get(i).getClass());
+		}
+		System.out.println("-------------------------------------------------");
+	}
+
+
 	@Override
 	public void outAVariableDecl(AVariableDecl node)
 	{
@@ -46,15 +58,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			System.out.println("Identifier already defined: " + ident);
 			System.exit(0);
 		}
-		else
-		{
-			/*
-			List<TypeExpression> Type = new ArrayList<TypeExpression>();
-			symbolTable.AddVariable(key, Type);
-			*/
-		}
-		// TODO correct type
-		symbolTable.AddVariable(key, Type.undefined);
+		symbolTable.AddVariable(key, Type.parameter);
 	}
 
 	@Override
@@ -66,8 +70,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			System.out.println("Identifier already defined: " + ident);
 			System.exit(0);
 		}
-		// TODO correct type
-		symbolTable.AddVariable(key, Type.undefined);
+		symbolTable.AddVariable(key, Type.parameter);
 	}
 
 	@Override
@@ -104,9 +107,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			System.out.println("Identifier already defined: " + ident);
 			System.exit(0);
 		}
-
-		//TODO correct types
-		symbolTable.AddVariable(key, Type.undefined);
+		symbolTable.AddVariable(key, Type.function);
 		symbolTable.OpenScope();
 	}
 	/*
@@ -147,6 +148,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		TIdentifier ident = node.getIdentifier();
 		String key = ident.toString().toUpperCase().trim();
 
+		//TODO Foreach type
 		symbolTable.OpenScope();
 		symbolTable.AddVariable(key, Type.undefined);
 	}

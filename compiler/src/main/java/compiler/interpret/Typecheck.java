@@ -9,71 +9,99 @@ import java.util.List;
 
 import compiler.node.*;
 
-import static compiler.interpret.Type.number;
 
 public class Typecheck{
 	
 	public static List<TypeExpression> TypeExpressions(PVariables check)
 	{
-		List<TypeExpression> retType = new ArrayList<TypeExpression>();
-
-			String[] variables = check.toString().split(" ");
-			if(variables[0].equals("grid"))
-			{
-				retType.add(new TypeExpression(null, Type.grid));
-				return retType;
-			}
-			else if(variables.length == 1)
-			{
-				if(isNumeric(variables[0]))
+		List<TypeExpression> retType = new LinkedList<TypeExpression>();
+				String[] variables = check.toString().split(" ");
+				if(variables[0].equals("grid"))
 				{
-					retType.add(new TypeExpression(null, number));
+					retType.add(new TypeExpression(null, Type.grid));
 					return retType;
 				}
-				else if(variables[0] == "true" || variables[0] == "false")
+				else if(variables.length == 1)
 				{
-					retType.add(new TypeExpression(null, Type.bool));
-					return retType;
+					if(isNumeric(variables[0]))
+					{
+						retType.add(new TypeExpression(null, Type.number));
+						return retType;
+					}
+					else if(variables[0] == "true" || variables[0] == "false")
+					{
+						retType.add(new TypeExpression(null, Type.bool));
+						return retType;
+					}
+					else if(variables[0].startsWith("\"" ) && variables[0].endsWith("\""))
+					{
+						retType.add(new TypeExpression(null, Type.string));
+						return retType;
+					}
+					else
+					{
+						retType.add(new TypeExpression(null, Type.variable));
+						return retType;
+					}
 				}
-				else if(variables[0].startsWith("\"" ) && variables[0].endsWith("\""))
+				else if (variables.length == 3)
 				{
-					retType.add(new TypeExpression(null, Type.string));
-					return retType;
+					switch (variables[1])
+					{
+					case "+": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.string));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.number),Type.string));
+							  retType.add(new TypeExpression(Arrays.asList(Type.number, Type.string),Type.string));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.bool),Type.string));
+							  retType.add(new TypeExpression(Arrays.asList(Type.bool,   Type.string),Type.string));
+							  break;
+					
+					case "-": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+					  		  break; 
+						
+					case "*": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+							  break;
+					
+					case "/": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+							  break;
+					}
+					//System.out.println(retType);
+			  		return retType;
 				}
 				else
 				{
-					retType.add(new TypeExpression(null, Type.variable));
-					return retType;
+					for(int i = 0; i < variables.length; i++)
+					{
+						List<TypeExpression> TempExpression = new LinkedList<TypeExpression>();
+						int priority = 0;
+						switch (variables[i])
+						{
+							case "+": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.string));
+								  	  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.number),Type.string));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.string),Type.string));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.bool),Type.string));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.bool,   Type.string),Type.string));
+								      priority = 0;
+								      break;
+
+							case "-": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+									  priority = 0;
+									  break;
+
+							case "*": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+									  priority = 1;
+									  break;
+
+							case "/": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
+									  priority = 1;
+									  break;
+
+							default:  break;
+						}
+						MultivariableList(retType, TempExpression, priority);
+					}
 				}
-			}
-			else if (variables.length == 3)
-			{
-				switch (variables[1])
-				{
-				case "+": retType.add(new TypeExpression(Arrays.asList(number, number), number));
-						  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.string));
-						  retType.add(new TypeExpression(Arrays.asList(Type.string, number),Type.string));
-						  retType.add(new TypeExpression(Arrays.asList(number, Type.string),Type.string));
-						  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.bool),Type.string));
-						  retType.add(new TypeExpression(Arrays.asList(Type.bool,   Type.string),Type.string));
-						  break;
-
-				case "-": retType.add(new TypeExpression(Arrays.asList(number, number), number));
-						  break;
-
-				case "*": retType.add(new TypeExpression(Arrays.asList(number, number), number));
-						  break;
-
-				case "/": retType.add(new TypeExpression(Arrays.asList(number, number), number));
-						  break;
-				}
-				//System.out.println(retType);
-				return retType;
-			}
-			else
-			{
-				//flere operator
-			}
 		return retType;
 	}
 	
@@ -88,6 +116,101 @@ public class Typecheck{
 	    return false;  
 	  }  
 	  return true;  
+	}
+
+	public static void MultivariableList(List<TypeExpression> ToList, List<TypeExpression> InputList, int priority)
+	{
+		List<TypeExpression> TempList = new LinkedList<>();
+		List<Integer> RemoveList = new LinkedList<>();
+		TempList.addAll(ToList);
+		if(ToList.size() == 0 && InputList.size() != 0)
+		{
+			for(int i = 0; i < InputList.size(); i++)
+			{
+				TempList.add(InputList.get(i));
+			}
+		}
+		else if(InputList.size() != 1 && InputList.size() != 0)
+		{
+			for(int i = 0; i < ToList.size(); i++)
+			{
+				for(int j = 0; j < InputList.size(); j++)
+				{
+						TempList.add(i * InputList.size() + j, ToList.get(i));
+				}
+			}
+			for (int i = 0; i < TempList.size(); i++)
+			{
+				if (priority == 0)
+				{
+					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
+						Type Temp = InputList.get(i % InputList.size()).getInput().get(1);
+						TempList.get(i).Input(Temp);
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
+				else if (priority == 1)
+				{
+					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
+						TempList.get(i).getInput().remove(1);
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(0));
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(1));
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
+			}
+		}
+		else if (InputList.size() != 0)
+		{
+			for (int i = 0; i < TempList.size(); i++)
+			{
+				if (priority == 0)
+				{
+					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
+						Type Temp = InputList.get(i % InputList.size()).getInput().get(1);
+						TempList.get(i).getInput().add(Temp);
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
+				else if(priority == 1)
+				{
+					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
+						TempList.get(i).getInput().remove(1);
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(0));
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(1));
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
+			}
+		}
+		for (int i = RemoveList.size()-1; i >= 0; i--)
+		{
+			int Remove = RemoveList.get(i);
+			TempList.remove(Remove);
+		}
+		ToList.clear();
+		ToList.addAll(TempList);
+		System.out.println(ToList);
 	}
 	
 	public static Type typeChecker(List<TypeExpression> InputList, SymbolTable table, PVariables Variables)
@@ -121,7 +244,7 @@ public class Typecheck{
 					{
 						typesafe = true;
 					}
-					else if(isNumeric(variables[i]) && Expression.getInput().get(i/2) == number)
+					else if(isNumeric(variables[i]) && Expression.getInput().get(i/2) == Type.number)
 					{
 						typesafe = true;
 					}
@@ -177,6 +300,11 @@ public class Typecheck{
 				System.exit(0);
 			}
 		}
+		return null;
+	}
+
+	public static List<TypeExpression> FunctionChecker()
+	{
 		return null;
 	}
 

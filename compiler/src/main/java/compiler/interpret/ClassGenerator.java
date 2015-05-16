@@ -198,6 +198,7 @@ public class ClassGenerator extends DepthFirstAdapter
 
 	}
 
+	@Override
 	public void inAMember(AMember node){
 		String ident = node.getIdentifier().toString();
 		String key = ident.toUpperCase().trim();

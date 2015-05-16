@@ -5,12 +5,29 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class SymbolTable {
-	//private HashMap<String, Type> types = new HashMap<>(); // OBSOLETE
+	private HashMap<String, FunctionInfo> functions = new HashMap<>();
 	private Stack<Scope> scopes = new Stack<>();
 	private Scope currentScope = null;
 
 	public SymbolTable(){
 		this.OpenScope();
+	}
+
+	public void AddFunction(String name, FunctionInfo inf){
+		functions.put(name, inf);
+	}
+	public boolean FuncPrevDeclared(String name){
+		return functions.containsKey(name);
+	}
+
+	public boolean FuncCallLegal(String name, FunctionInfo info){
+		return info.Equals(functions.get(name));
+	}
+
+	public void CheckFunction(String name, FunctionInfo info){
+		if (!functions.containsKey(name)){
+			System.out.println("");
+		}
 	}
 
 	public Scope CurrentScope(){
@@ -54,7 +71,7 @@ public class SymbolTable {
 			return scope.GetVariable(name);
 		}
 		else if (scope.Parent() != null){
-			getVariable(scope.Parent(), name);
+			return getVariable(scope.Parent(), name);
 		}
 
 		return null;
@@ -63,6 +80,9 @@ public class SymbolTable {
 	@Override
 	public String toString(){
 		String st = "\nSymboltable:\n";
+
+		st += "Functions: " + functions.toString() + "\n";
+
 		if (!scopes.empty()){
 			for (Scope s : scopes){
 				st += s.toString() + "\n" + s.GetAllVariables().toString() + "\n";

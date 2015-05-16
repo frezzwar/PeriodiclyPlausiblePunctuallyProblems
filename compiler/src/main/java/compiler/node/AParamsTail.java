@@ -8,7 +8,6 @@ import compiler.analysis.*;
 public final class AParamsTail extends PParamsTail
 {
     private TComma _comma_;
-    private TNew _new_;
     private TIdentifier _identifier_;
 
     public AParamsTail()
@@ -18,13 +17,10 @@ public final class AParamsTail extends PParamsTail
 
     public AParamsTail(
         @SuppressWarnings("hiding") TComma _comma_,
-        @SuppressWarnings("hiding") TNew _new_,
         @SuppressWarnings("hiding") TIdentifier _identifier_)
     {
         // Constructor
         setComma(_comma_);
-
-        setNew(_new_);
 
         setIdentifier(_identifier_);
 
@@ -35,7 +31,6 @@ public final class AParamsTail extends PParamsTail
     {
         return new AParamsTail(
             cloneNode(this._comma_),
-            cloneNode(this._new_),
             cloneNode(this._identifier_));
     }
 
@@ -70,31 +65,6 @@ public final class AParamsTail extends PParamsTail
         this._comma_ = node;
     }
 
-    public TNew getNew()
-    {
-        return this._new_;
-    }
-
-    public void setNew(TNew node)
-    {
-        if(this._new_ != null)
-        {
-            this._new_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._new_ = node;
-    }
-
     public TIdentifier getIdentifier()
     {
         return this._identifier_;
@@ -125,7 +95,6 @@ public final class AParamsTail extends PParamsTail
     {
         return ""
             + toString(this._comma_)
-            + toString(this._new_)
             + toString(this._identifier_);
     }
 
@@ -136,12 +105,6 @@ public final class AParamsTail extends PParamsTail
         if(this._comma_ == child)
         {
             this._comma_ = null;
-            return;
-        }
-
-        if(this._new_ == child)
-        {
-            this._new_ = null;
             return;
         }
 
@@ -161,12 +124,6 @@ public final class AParamsTail extends PParamsTail
         if(this._comma_ == oldChild)
         {
             setComma((TComma) newChild);
-            return;
-        }
-
-        if(this._new_ == oldChild)
-        {
-            setNew((TNew) newChild);
             return;
         }
 

@@ -10,7 +10,7 @@ public final class AObjectDecl extends PObjectDecl
     private TNew _new_;
     private TIdentifier _id1_;
     private TAssign _assign_;
-    private TFigur _figur_;
+    private TFigure _figure_;
     private TParL _parL_;
     private TIdentifier _id2_;
     private TParR _parR_;
@@ -25,7 +25,7 @@ public final class AObjectDecl extends PObjectDecl
         @SuppressWarnings("hiding") TNew _new_,
         @SuppressWarnings("hiding") TIdentifier _id1_,
         @SuppressWarnings("hiding") TAssign _assign_,
-        @SuppressWarnings("hiding") TFigur _figur_,
+        @SuppressWarnings("hiding") TFigure _figure_,
         @SuppressWarnings("hiding") TParL _parL_,
         @SuppressWarnings("hiding") TIdentifier _id2_,
         @SuppressWarnings("hiding") TParR _parR_,
@@ -38,7 +38,7 @@ public final class AObjectDecl extends PObjectDecl
 
         setAssign(_assign_);
 
-        setFigur(_figur_);
+        setFigure(_figure_);
 
         setParL(_parL_);
 
@@ -57,7 +57,7 @@ public final class AObjectDecl extends PObjectDecl
             cloneNode(this._new_),
             cloneNode(this._id1_),
             cloneNode(this._assign_),
-            cloneNode(this._figur_),
+            cloneNode(this._figure_),
             cloneNode(this._parL_),
             cloneNode(this._id2_),
             cloneNode(this._parR_),
@@ -145,16 +145,16 @@ public final class AObjectDecl extends PObjectDecl
         this._assign_ = node;
     }
 
-    public TFigur getFigur()
+    public TFigure getFigure()
     {
-        return this._figur_;
+        return this._figure_;
     }
 
-    public void setFigur(TFigur node)
+    public void setFigure(TFigure node)
     {
-        if(this._figur_ != null)
+        if(this._figure_ != null)
         {
-            this._figur_.parent(null);
+            this._figure_.parent(null);
         }
 
         if(node != null)
@@ -167,7 +167,7 @@ public final class AObjectDecl extends PObjectDecl
             node.parent(this);
         }
 
-        this._figur_ = node;
+        this._figure_ = node;
     }
 
     public TParL getParL()
@@ -277,7 +277,7 @@ public final class AObjectDecl extends PObjectDecl
             + toString(this._new_)
             + toString(this._id1_)
             + toString(this._assign_)
-            + toString(this._figur_)
+            + toString(this._figure_)
             + toString(this._parL_)
             + toString(this._id2_)
             + toString(this._parR_)
@@ -306,9 +306,9 @@ public final class AObjectDecl extends PObjectDecl
             return;
         }
 
-        if(this._figur_ == child)
+        if(this._figure_ == child)
         {
-            this._figur_ = null;
+            this._figure_ = null;
             return;
         }
 
@@ -361,9 +361,9 @@ public final class AObjectDecl extends PObjectDecl
             return;
         }
 
-        if(this._figur_ == oldChild)
+        if(this._figure_ == oldChild)
         {
-            setFigur((TFigur) newChild);
+            setFigure((TFigure) newChild);
             return;
         }
 

@@ -2,7 +2,7 @@
 
 package compiler.node;
 
-public abstract class PIdlist extends Node
+public abstract class PMember extends Node
 {
     // Empty body
 }

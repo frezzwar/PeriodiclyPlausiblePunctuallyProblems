@@ -2,7 +2,6 @@
 
 package compiler.node;
 
-import java.util.*;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
@@ -12,7 +11,6 @@ public final class AVariableDecl extends PVariableDecl
     private TIdentifier _identifier_;
     private TAssign _assign_;
     private PVariables _variables_;
-    private final LinkedList<PVariableTail> _variableTail_ = new LinkedList<PVariableTail>();
     private TSemiC _semiC_;
 
     public AVariableDecl()
@@ -25,7 +23,6 @@ public final class AVariableDecl extends PVariableDecl
         @SuppressWarnings("hiding") TIdentifier _identifier_,
         @SuppressWarnings("hiding") TAssign _assign_,
         @SuppressWarnings("hiding") PVariables _variables_,
-        @SuppressWarnings("hiding") List<?> _variableTail_,
         @SuppressWarnings("hiding") TSemiC _semiC_)
     {
         // Constructor
@@ -36,8 +33,6 @@ public final class AVariableDecl extends PVariableDecl
         setAssign(_assign_);
 
         setVariables(_variables_);
-
-        setVariableTail(_variableTail_);
 
         setSemiC(_semiC_);
 
@@ -51,7 +46,6 @@ public final class AVariableDecl extends PVariableDecl
             cloneNode(this._identifier_),
             cloneNode(this._assign_),
             cloneNode(this._variables_),
-            cloneList(this._variableTail_),
             cloneNode(this._semiC_));
     }
 
@@ -161,32 +155,6 @@ public final class AVariableDecl extends PVariableDecl
         this._variables_ = node;
     }
 
-    public LinkedList<PVariableTail> getVariableTail()
-    {
-        return this._variableTail_;
-    }
-
-    public void setVariableTail(List<?> list)
-    {
-        for(PVariableTail e : this._variableTail_)
-        {
-            e.parent(null);
-        }
-        this._variableTail_.clear();
-
-        for(Object obj_e : list)
-        {
-            PVariableTail e = (PVariableTail) obj_e;
-            if(e.parent() != null)
-            {
-                e.parent().removeChild(e);
-            }
-
-            e.parent(this);
-            this._variableTail_.add(e);
-        }
-    }
-
     public TSemiC getSemiC()
     {
         return this._semiC_;
@@ -220,7 +188,6 @@ public final class AVariableDecl extends PVariableDecl
             + toString(this._identifier_)
             + toString(this._assign_)
             + toString(this._variables_)
-            + toString(this._variableTail_)
             + toString(this._semiC_);
     }
 
@@ -249,11 +216,6 @@ public final class AVariableDecl extends PVariableDecl
         if(this._variables_ == child)
         {
             this._variables_ = null;
-            return;
-        }
-
-        if(this._variableTail_.remove(child))
-        {
             return;
         }
 
@@ -292,24 +254,6 @@ public final class AVariableDecl extends PVariableDecl
         {
             setVariables((PVariables) newChild);
             return;
-        }
-
-        for(ListIterator<PVariableTail> i = this._variableTail_.listIterator(); i.hasNext();)
-        {
-            if(i.next() == oldChild)
-            {
-                if(newChild != null)
-                {
-                    i.set((PVariableTail) newChild);
-                    newChild.parent(this);
-                    oldChild.parent(null);
-                    return;
-                }
-
-                i.remove();
-                oldChild.parent(null);
-                return;
-            }
         }
 
         if(this._semiC_ == oldChild)

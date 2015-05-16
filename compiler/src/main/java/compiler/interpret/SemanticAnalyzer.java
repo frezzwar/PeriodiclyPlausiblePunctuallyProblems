@@ -8,20 +8,20 @@ import java.util.*;
 
 public class SemanticAnalyzer extends DepthFirstAdapter {
 
-	SymbolTable symbolTable;
+	private SymbolTable symbolTable;
 
 	public SemanticAnalyzer(SymbolTable symTable){
 		this.symbolTable = symTable;
 	}
 	
 	@Override
-	public void outAVariableDeclaration(AVariableDeclaration node)
+	public void outAVariableDecl(AVariableDecl node)
 	{
 		TIdentifier ident = node.getIdentifier();
 		
 		String key = ident.toString().toUpperCase().trim();
 		
-		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables(), node.getVariableTail());
+		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables());
 		Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables());
 
 		if(symbolTable.VarDeclaredInCurrentScope(key))
@@ -123,28 +123,27 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	*/
 
 	@Override
-	public void inAIfstructureControlStatments(AIfstructureControlStatments node){
+	public void inAIfStmtControlStmt(AIfStmtControlStmt node){
 		symbolTable.OpenScope();
 	}
 
 	@Override
-	public void outAIfstructureControlStatments(AIfstructureControlStatments node){
+	public void outAIfStmtControlStmt(AIfStmtControlStmt node){
 		symbolTable.CloseScope();
 	}
 
 	@Override
-	public void inAElseElsestructure(AElseElsestructure node){
+	public void inAElseStmtElseStmt(AElseStmtElseStmt node){
 		symbolTable.OpenScope();
 	}
 
 	@Override
-	public void outAElseElsestructure(AElseElsestructure node){
+	public void outAElseStmtElseStmt(AElseStmtElseStmt node){
 		symbolTable.CloseScope();
 	}
 
-	//TODO Statments -> Statement
 	@Override
-	public void inAForeachControlStatments(AForeachControlStatments node){
+	public void inAForeachControlStmt(AForeachControlStmt node){
 		TIdentifier ident = node.getIdentifier();
 		String key = ident.toString().toUpperCase().trim();
 
@@ -153,28 +152,57 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	}
 
 	@Override
-	public void outAForeachControlStatments(AForeachControlStatments node){
+	public void outAForeachControlStmt(AForeachControlStmt node){
 		symbolTable.CloseScope();
 	}
 
 	@Override
-	public void inARepeatControlStatments(ARepeatControlStatments node){
+	public void inARepeatControlStmt(ARepeatControlStmt node){
 		symbolTable.OpenScope();
 	}
 
 	@Override
-	public void outARepeatControlStatments(ARepeatControlStatments node){
+	public void outARepeatControlStmt(ARepeatControlStmt node){
 		symbolTable.CloseScope();
 	}
 
 	@Override
-	public void inAWhileControlStatments(AWhileControlStatments node){
+	public void inAWhileControlStmt(AWhileControlStmt node){
 		symbolTable.OpenScope();
 	}
 
 	@Override
-	public void outAWhileControlStatments(AWhileControlStatments node){
+	public void outAWhileControlStmt(AWhileControlStmt node){
 		symbolTable.CloseScope();
 	}
+
+	@Override
+	public void inAFuncCall(AFuncCall node){
+		TIdentifier ident = node.getIdentifier();
+		String key = ident.toString().toUpperCase().trim();
+		if (!symbolTable.FuncPrevDeclared(key)){
+			System.out.println("Function not declared: " + ident.toString());
+			System.exit(0);
+		}
+
+		FunctionInfo info = Typecheck.GetFuncCallTypes(node);
+		if (!symbolTable.FuncCallLegal(key, info)){
+			System.out.println("Call parameters does not match declared parameters");
+			System.exit(0);
+		}
+	}
+
+	@Override
+	public void inAGridDecl(AGridDecl node){
+		String ident = node.getIdentifier().toString();
+		String key = ident.toUpperCase().trim();
+		if (symbolTable.CurrentScope().VarDeclaredInScope(key)){
+			System.out.println("Identifier already declared: " + ident);
+			System.exit(0);
+		}
+		symbolTable.AddVariable(key, Type.grid);
+	}
+
+
 
 }

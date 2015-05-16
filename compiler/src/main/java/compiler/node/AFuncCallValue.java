@@ -5,46 +5,46 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVarnameValue extends PValue
+public final class AFuncCallValue extends PValue
 {
-    private PVarname _varname_;
+    private PFuncCall _funcCall_;
 
-    public AVarnameValue()
+    public AFuncCallValue()
     {
         // Constructor
     }
 
-    public AVarnameValue(
-        @SuppressWarnings("hiding") PVarname _varname_)
+    public AFuncCallValue(
+        @SuppressWarnings("hiding") PFuncCall _funcCall_)
     {
         // Constructor
-        setVarname(_varname_);
+        setFuncCall(_funcCall_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AVarnameValue(
-            cloneNode(this._varname_));
+        return new AFuncCallValue(
+            cloneNode(this._funcCall_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVarnameValue(this);
+        ((Analysis) sw).caseAFuncCallValue(this);
     }
 
-    public PVarname getVarname()
+    public PFuncCall getFuncCall()
     {
-        return this._varname_;
+        return this._funcCall_;
     }
 
-    public void setVarname(PVarname node)
+    public void setFuncCall(PFuncCall node)
     {
-        if(this._varname_ != null)
+        if(this._funcCall_ != null)
         {
-            this._varname_.parent(null);
+            this._funcCall_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AVarnameValue extends PValue
             node.parent(this);
         }
 
-        this._varname_ = node;
+        this._funcCall_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._varname_);
+            + toString(this._funcCall_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._varname_ == child)
+        if(this._funcCall_ == child)
         {
-            this._varname_ = null;
+            this._funcCall_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AVarnameValue extends PValue
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._varname_ == oldChild)
+        if(this._funcCall_ == oldChild)
         {
-            setVarname((PVarname) newChild);
+            setFuncCall((PFuncCall) newChild);
             return;
         }
 

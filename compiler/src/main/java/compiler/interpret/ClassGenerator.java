@@ -3,17 +3,24 @@ package compiler.interpret;
 
 
 
+import compiler.analysis.DepthFirstAdapter;
+import compiler.node.*;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.io.File;
-
-import compiler.analysis.DepthFirstAdapter;
-import compiler.node.*;
-import org.sablecc.sablecc.node.AIdBasic;
+import java.text.MessageFormat;
+import java.util.Formatter;
 
 public class ClassGenerator extends DepthFirstAdapter
-{	
+{
+	private SymbolTable symbolTable;
+	private static int SizeOfCell = 40;
+
+	public ClassGenerator(SymbolTable sym){
+		this.symbolTable = sym;
+	}
+
 	public void write(String output)
 	{
 		try{
@@ -29,7 +36,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	}
 	String code = "";
 	
-	public void inAVariableDeclaration(AVariableDeclaration node)
+	public void inAVariableDecl(AVariableDecl node)
 	{
 		code = "var " + node.getIdentifier() + node.getAssign() + node.getVariables() + ";\n";
 		write(code);
@@ -48,20 +55,25 @@ public class ClassGenerator extends DepthFirstAdapter
 		
 	}
 	
-	public void inAIfstructureControlStatments(AIfstructureControlStatments node)
+	public void inAIfStmtControlStmt(AIfStmtControlStmt node)
 	{
 		code = node.getIf().toString() + "( ";
 		write(code);
 	}
 
 	@Override
-	public void inAElseElsestructure(AElseElsestructure node){
+	public void inAElseStmtElseStmt(AElseStmtElseStmt node){
 		code = node.getElse().toString();
 		write(code);
 	}
 
 	@Override
 	public void inABody(ABody node){
+		if (node.parent().getClass() == AProgram.class){
+			code = "function main()";
+			write(code);
+		}
+
 		code = node.getCurlyL() + "\n";
 		write(code);
 	}
@@ -103,13 +115,13 @@ public class ClassGenerator extends DepthFirstAdapter
 	}
 
 	@Override
-	public void inAForeachControlStatments(AForeachControlStatments node){
+	public void inAForeachControlStmt(AForeachControlStmt node){
 		code = "for ( " + node.getIdentifier() + "of " + node.getVarname() + ")";
 		write(code);
 	}
 
 	@Override
-	public void inAWhileControlStatments(AWhileControlStatments node){
+	public void inAWhileControlStmt(AWhileControlStmt node){
 		code = "while " + node.getParL();
 		write(code);
 	}
@@ -117,10 +129,10 @@ public class ClassGenerator extends DepthFirstAdapter
 	// TODO FIX NESTED REPEATS, NOT WORKING PROPERLY
 	private static String counter = "i";
 	@Override
-	public void inARepeatControlStatments(ARepeatControlStatments node){
-		if (node.parent().getClass() == AControlStatementsDecl.class){
-			AControlStatementsDecl temp = (AControlStatementsDecl)node.parent();
-			if (temp.getControlStatments().getClass() == ARepeatControlStatments.class){
+	public void inARepeatControlStmt(ARepeatControlStmt node){
+		if (node.parent().getClass() == AControlStmtDecl.class){
+			AControlStmtDecl temp = (AControlStmtDecl)node.parent();
+			if (temp.getControlStmt().getClass() == ARepeatControlStmt.class){
 				counter += "i";
 			}
 
@@ -146,4 +158,78 @@ public class ClassGenerator extends DepthFirstAdapter
 			write(code);
 		}
 	}
+
+	@Override
+	public void inAGridDecl(AGridDecl node){
+		String ident = node.getIdentifier().toString();
+		String width = node.getInt1().toString();
+		String height = node.getInt2().toString();
+		String temp = "var " + ident + "= new Array(" + width + ");\n" +
+				"for (var i = 0; i < " + width + "; i++){\n  " +
+				ident + "[i] = new Array(" + height + ");\n}\n";
+
+		code = temp;
+
+		try{
+			int w = Integer.parseInt(width.trim()) * SizeOfCell;
+			int h = Integer.parseInt(height.trim()) * SizeOfCell;
+			code += CreateHtmlCanvas(w, h);
+		}catch(NumberFormatException e){
+			e.printStackTrace();
+		}
+
+		write(code);
+	}
+
+	private String CreateHtmlCanvas(int width, int height){
+		String str = "// Creates HTML Canvas\n" +
+		"var canvas = document.createElement(\"canvas\");\n" +
+		"var ctx = canvas.getContext(\"2d\");\n" +
+		"canvas.width = " + width +";\n" +
+		"canvas.height = " + height + ";\n" +
+		"document.body.appendChild(canvas);\n\n";
+
+		return str;
+	}
+
+	@Override
+	public void inAProgram(AProgram node){
+		// Nothing here yet...
+
+	}
+
+	public void inAMember(AMember node){
+		String ident = node.getIdentifier().toString();
+		String key = ident.toUpperCase().trim();
+		if (node.parent().getClass() == AVarname.class){
+			AVarname temp = (AVarname) node.parent();
+			String temp_ident = temp.getIdentifier().toString();
+			String temp_key = temp_ident.toUpperCase().trim();
+			if (symbolTable.GetVariable(temp_key) == Type.grid){
+				if (key.equals("BACKGROUND")){
+					if (temp.parent().parent().getClass() == AAssignExpr.class){
+						AAssignExpr tempAssignNode = (AAssignExpr) temp.parent().parent();
+						String param = tempAssignNode.getExpr().toString();
+						code = CreateGridBackground(param);
+						write(code);
+
+					}
+				}
+			}
+		}
+	}
+
+	private String CreateGridBackground(String src){
+		String str = "// Set background image\n" +
+				"var bgReady = false;\n" +
+				"var bgImage = new Image();\n" +
+				"bgImage.onload = function () {\n" +
+				"	bgReady = true; \n};\n" +
+				"bgImage.src = " + src + ";\n" +
+				"if (bgReady) {\n" +
+				"ctx.drawImage(bgImage, 0, 0);\n}\n\n";
+
+		return str;
+	}
+
 }

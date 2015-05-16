@@ -238,7 +238,7 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTFigur(@SuppressWarnings("unused") TFigur node)
+    public void caseTFigure(@SuppressWarnings("unused") TFigure node)
     {
         this.index = 38;
     }

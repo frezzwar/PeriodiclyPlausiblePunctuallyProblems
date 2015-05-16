@@ -9,74 +9,70 @@ import java.util.List;
 
 import compiler.node.*;
 
+import static compiler.interpret.Type.number;
+
 public class Typecheck{
 	
-	public static List<TypeExpression> TypeExpressions(PVariables check, LinkedList<PVariableTail> VariableTail)
+	public static List<TypeExpression> TypeExpressions(PVariables check)
 	{
 		List<TypeExpression> retType = new ArrayList<TypeExpression>();
-			if(VariableTail.size() == 0)
+
+			String[] variables = check.toString().split(" ");
+			if(variables[0].equals("grid"))
 			{
-				String[] variables = check.toString().split(" ");
-				if(variables[0].equals("grid"))
+				retType.add(new TypeExpression(null, Type.grid));
+				return retType;
+			}
+			else if(variables.length == 1)
+			{
+				if(isNumeric(variables[0]))
 				{
-					retType.add(new TypeExpression(null, Type.grid));
+					retType.add(new TypeExpression(null, number));
 					return retType;
 				}
-				else if(variables.length == 1)
+				else if(variables[0] == "true" || variables[0] == "false")
 				{
-					if(isNumeric(variables[0]))
-					{
-						retType.add(new TypeExpression(null, Type.number));
-						return retType;
-					}
-					else if(variables[0] == "true" || variables[0] == "false")
-					{
-						retType.add(new TypeExpression(null, Type.bool));
-						return retType;
-					}
-					else if(variables[0].startsWith("\"" ) && variables[0].endsWith("\""))
-					{
-						retType.add(new TypeExpression(null, Type.string));
-						return retType;
-					}
-					else
-					{
-						retType.add(new TypeExpression(null, Type.variable));
-						return retType;
-					}
+					retType.add(new TypeExpression(null, Type.bool));
+					return retType;
 				}
-				else if (variables.length == 3)
+				else if(variables[0].startsWith("\"" ) && variables[0].endsWith("\""))
 				{
-					switch (variables[1])
-					{
-					case "+": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
-							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.string));
-							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.number),Type.string));
-							  retType.add(new TypeExpression(Arrays.asList(Type.number, Type.string),Type.string));
-							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.bool),Type.string));
-							  retType.add(new TypeExpression(Arrays.asList(Type.bool,   Type.string),Type.string));
-							  break;
-					
-					case "-": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
-					  		  break; 
-						
-					case "*": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
-							  break;
-					
-					case "/": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
-							  break;
-					}
-					//System.out.println(retType);
-			  		return retType;
+					retType.add(new TypeExpression(null, Type.string));
+					return retType;
 				}
 				else
 				{
-					//flere operator
+					retType.add(new TypeExpression(null, Type.variable));
+					return retType;
 				}
+			}
+			else if (variables.length == 3)
+			{
+				switch (variables[1])
+				{
+				case "+": retType.add(new TypeExpression(Arrays.asList(number, number), number));
+						  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.string));
+						  retType.add(new TypeExpression(Arrays.asList(Type.string, number),Type.string));
+						  retType.add(new TypeExpression(Arrays.asList(number, Type.string),Type.string));
+						  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.bool),Type.string));
+						  retType.add(new TypeExpression(Arrays.asList(Type.bool,   Type.string),Type.string));
+						  break;
+
+				case "-": retType.add(new TypeExpression(Arrays.asList(number, number), number));
+						  break;
+
+				case "*": retType.add(new TypeExpression(Arrays.asList(number, number), number));
+						  break;
+
+				case "/": retType.add(new TypeExpression(Arrays.asList(number, number), number));
+						  break;
+				}
+				//System.out.println(retType);
+				return retType;
 			}
 			else
 			{
-				//variabletail ????
+				//flere operator
 			}
 		return retType;
 	}
@@ -125,7 +121,7 @@ public class Typecheck{
 					{
 						typesafe = true;
 					}
-					else if(isNumeric(variables[i]) && Expression.getInput().get(i/2) == Type.number)
+					else if(isNumeric(variables[i]) && Expression.getInput().get(i/2) == number)
 					{
 						typesafe = true;
 					}
@@ -182,5 +178,22 @@ public class Typecheck{
 			}
 		}
 		return null;
+	}
+
+	//TODO THIS IS TEMPORARY FOR MAKING THE FUNCTION STUFF!!!
+	public static FunctionInfo CheckFunctionTypes(AFuncDecl node){
+		Type returnType = number;
+		ArrayList<Type> params = new ArrayList<>();
+		params.add(number);
+
+		return new FunctionInfo(returnType, params);
+	}
+
+	public static FunctionInfo GetFuncCallTypes(AFuncCall node){
+		Type returnType = number;
+		ArrayList<Type> params = new ArrayList<>();
+		params.add(number);
+
+		return new FunctionInfo(returnType, params);
 	}
 }

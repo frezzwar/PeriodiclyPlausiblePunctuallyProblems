@@ -8,9 +8,8 @@ import compiler.analysis.*;
 @SuppressWarnings("nls")
 public final class AGridValue extends PValue
 {
-    private TIdentifier _identifier_;
-    private PFunctionCall _functionCall_;
-    private final LinkedList<PIdlist> _idlist_ = new LinkedList<PIdlist>();
+    private PFuncCall _funcCall_;
+    private final LinkedList<PMember> _member_ = new LinkedList<PMember>();
 
     public AGridValue()
     {
@@ -18,16 +17,13 @@ public final class AGridValue extends PValue
     }
 
     public AGridValue(
-        @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") PFunctionCall _functionCall_,
-        @SuppressWarnings("hiding") List<?> _idlist_)
+        @SuppressWarnings("hiding") PFuncCall _funcCall_,
+        @SuppressWarnings("hiding") List<?> _member_)
     {
         // Constructor
-        setIdentifier(_identifier_);
+        setFuncCall(_funcCall_);
 
-        setFunctionCall(_functionCall_);
-
-        setIdlist(_idlist_);
+        setMember(_member_);
 
     }
 
@@ -35,9 +31,8 @@ public final class AGridValue extends PValue
     public Object clone()
     {
         return new AGridValue(
-            cloneNode(this._identifier_),
-            cloneNode(this._functionCall_),
-            cloneList(this._idlist_));
+            cloneNode(this._funcCall_),
+            cloneList(this._member_));
     }
 
     @Override
@@ -46,16 +41,16 @@ public final class AGridValue extends PValue
         ((Analysis) sw).caseAGridValue(this);
     }
 
-    public TIdentifier getIdentifier()
+    public PFuncCall getFuncCall()
     {
-        return this._identifier_;
+        return this._funcCall_;
     }
 
-    public void setIdentifier(TIdentifier node)
+    public void setFuncCall(PFuncCall node)
     {
-        if(this._identifier_ != null)
+        if(this._funcCall_ != null)
         {
-            this._identifier_.parent(null);
+            this._funcCall_.parent(null);
         }
 
         if(node != null)
@@ -68,57 +63,32 @@ public final class AGridValue extends PValue
             node.parent(this);
         }
 
-        this._identifier_ = node;
+        this._funcCall_ = node;
     }
 
-    public PFunctionCall getFunctionCall()
+    public LinkedList<PMember> getMember()
     {
-        return this._functionCall_;
+        return this._member_;
     }
 
-    public void setFunctionCall(PFunctionCall node)
+    public void setMember(List<?> list)
     {
-        if(this._functionCall_ != null)
-        {
-            this._functionCall_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._functionCall_ = node;
-    }
-
-    public LinkedList<PIdlist> getIdlist()
-    {
-        return this._idlist_;
-    }
-
-    public void setIdlist(List<?> list)
-    {
-        for(PIdlist e : this._idlist_)
+        for(PMember e : this._member_)
         {
             e.parent(null);
         }
-        this._idlist_.clear();
+        this._member_.clear();
 
         for(Object obj_e : list)
         {
-            PIdlist e = (PIdlist) obj_e;
+            PMember e = (PMember) obj_e;
             if(e.parent() != null)
             {
                 e.parent().removeChild(e);
             }
 
             e.parent(this);
-            this._idlist_.add(e);
+            this._member_.add(e);
         }
     }
 
@@ -126,28 +96,21 @@ public final class AGridValue extends PValue
     public String toString()
     {
         return ""
-            + toString(this._identifier_)
-            + toString(this._functionCall_)
-            + toString(this._idlist_);
+            + toString(this._funcCall_)
+            + toString(this._member_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._identifier_ == child)
+        if(this._funcCall_ == child)
         {
-            this._identifier_ = null;
+            this._funcCall_ = null;
             return;
         }
 
-        if(this._functionCall_ == child)
-        {
-            this._functionCall_ = null;
-            return;
-        }
-
-        if(this._idlist_.remove(child))
+        if(this._member_.remove(child))
         {
             return;
         }
@@ -159,25 +122,19 @@ public final class AGridValue extends PValue
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._identifier_ == oldChild)
+        if(this._funcCall_ == oldChild)
         {
-            setIdentifier((TIdentifier) newChild);
+            setFuncCall((PFuncCall) newChild);
             return;
         }
 
-        if(this._functionCall_ == oldChild)
-        {
-            setFunctionCall((PFunctionCall) newChild);
-            return;
-        }
-
-        for(ListIterator<PIdlist> i = this._idlist_.listIterator(); i.hasNext();)
+        for(ListIterator<PMember> i = this._member_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PIdlist) newChild);
+                    i.set((PMember) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

@@ -711,7 +711,7 @@ public class Lexer
     Token new36(@SuppressWarnings("hiding") int line, @SuppressWarnings("hiding") int pos) { return new TIn(line, pos); }
     Token new37(@SuppressWarnings("hiding") int line, @SuppressWarnings("hiding") int pos) { return new TReturn(line, pos); }
     Token new38(@SuppressWarnings("hiding") int line, @SuppressWarnings("hiding") int pos) { return new TMain(line, pos); }
-    Token new39(@SuppressWarnings("hiding") int line, @SuppressWarnings("hiding") int pos) { return new TFigur(line, pos); }
+    Token new39(@SuppressWarnings("hiding") int line, @SuppressWarnings("hiding") int pos) { return new TFigure(line, pos); }
     Token new40(@SuppressWarnings("hiding") int line, @SuppressWarnings("hiding") int pos) { return new TGrid(line, pos); }
     Token new41(@SuppressWarnings("hiding") String text, @SuppressWarnings("hiding") int line, @SuppressWarnings("hiding") int pos) { return new TIdentifier(text, line, pos); }
     Token new42(@SuppressWarnings("hiding") String text, @SuppressWarnings("hiding") int line, @SuppressWarnings("hiding") int pos) { return new TStringLiteral(text, line, pos); }
@@ -874,15 +874,16 @@ public class Lexer
             {{48, 122, -23}, },
             {{48, 100, -30}, {101, 101, 102}, {102, 122, 48}, },
             {{48, 122, -23}, },
+            {{48, 100, -30}, {101, 101, 103}, {102, 122, 48}, },
+            {{48, 95, -23}, {97, 98, 48}, {99, 99, 104}, {100, 122, 48}, },
+            {{48, 95, -23}, {97, 97, 105}, {98, 122, 48}, },
+            {{48, 95, -23}, {97, 108, 48}, {109, 109, 106}, {110, 122, 48}, },
+            {{48, 95, -23}, {97, 115, 48}, {116, 116, 107}, {117, 122, 48}, },
+            {{48, 109, -60}, {110, 110, 108}, {111, 122, 48}, },
             {{48, 122, -23}, },
-            {{48, 95, -23}, {97, 98, 48}, {99, 99, 103}, {100, 122, 48}, },
-            {{48, 95, -23}, {97, 97, 104}, {98, 122, 48}, },
-            {{48, 95, -23}, {97, 108, 48}, {109, 109, 105}, {110, 122, 48}, },
-            {{48, 95, -23}, {97, 115, 48}, {116, 116, 106}, {117, 122, 48}, },
-            {{48, 109, -60}, {110, 110, 107}, {111, 122, 48}, },
             {{48, 122, -23}, },
-            {{48, 103, -34}, {104, 104, 108}, {105, 122, 48}, },
-            {{48, 108, -101}, {109, 109, 109}, {110, 122, 48}, },
+            {{48, 103, -34}, {104, 104, 109}, {105, 122, 48}, },
+            {{48, 108, -101}, {109, 109, 110}, {110, 122, 48}, },
             {{48, 122, -23}, },
             {{48, 122, -23}, },
             {{48, 122, -23}, },
@@ -894,7 +895,7 @@ public class Lexer
     private static int[][] accept;
 /*  {
         // INITIAL
-        {14, 14, 14, 14, 14, -1, 11, -1, 5, 6, 2, 0, 12, 1, 15, 3, 44, 13, 22, 4, 23, 41, 9, 10, 41, 41, 41, 41, 41, 41, 41, 41, 41, 7, -1, 8, 19, -1, 20, 24, 25, 43, -1, 46, -1, 17, 16, 18, 41, 41, 41, 41, 41, 41, 33, 36, 41, 41, 41, 41, 29, 41, 41, 21, 42, -1, -1, 46, 46, 46, 41, 41, 41, 41, 41, 28, 41, 41, 41, 41, 41, 41, 45, 46, 34, 41, 41, 41, 40, 41, 41, 41, 41, 26, 41, 27, 39, 41, 41, 41, 41, 41, 31, 41, 41, 32, 30, 37, 35, 38, },
+        {14, 14, 14, 14, 14, -1, 11, -1, 5, 6, 2, 0, 12, 1, 15, 3, 44, 13, 22, 4, 23, 41, 9, 10, 41, 41, 41, 41, 41, 41, 41, 41, 41, 7, -1, 8, 19, -1, 20, 24, 25, 43, -1, 46, -1, 17, 16, 18, 41, 41, 41, 41, 41, 41, 33, 36, 41, 41, 41, 41, 29, 41, 41, 21, 42, -1, -1, 46, 46, 46, 41, 41, 41, 41, 41, 28, 41, 41, 41, 41, 41, 41, 45, 46, 34, 41, 41, 41, 40, 41, 41, 41, 41, 26, 41, 27, 41, 41, 41, 41, 41, 41, 31, 39, 41, 41, 32, 30, 37, 35, 38, },
 
     };*/
 

@@ -22,4 +22,6 @@ gen/
 *.DS_Store
 *.js
 *.html
+*.png
+*.jpg
 

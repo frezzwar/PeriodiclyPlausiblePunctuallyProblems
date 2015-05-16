@@ -153,12 +153,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAVariableTail(AVariableTail node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseAListVarTail(AListVarTail node)
     {
         defaultCase(node);
@@ -285,6 +279,12 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseAFuncCallValue(AFuncCallValue node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseAGridValue(AGridValue node)
     {
         defaultCase(node);
@@ -297,19 +297,19 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAFunctionCall(AFunctionCall node)
+    public void caseAFuncCall(AFuncCall node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseADotVarname(ADotVarname node)
+    public void caseAVarname(AVarname node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAIdlist(AIdlist node)
+    public void caseAMember(AMember node)
     {
         defaultCase(node);
     }
@@ -657,7 +657,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTFigur(TFigur node)
+    public void caseTFigure(TFigure node)
     {
         defaultCase(node);
     }

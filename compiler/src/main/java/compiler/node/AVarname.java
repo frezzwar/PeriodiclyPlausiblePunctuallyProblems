@@ -6,39 +6,39 @@ import java.util.*;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ADotVarname extends PVarname
+public final class AVarname extends PVarname
 {
     private TIdentifier _identifier_;
-    private final LinkedList<PIdlist> _idlist_ = new LinkedList<PIdlist>();
+    private final LinkedList<PMember> _member_ = new LinkedList<PMember>();
 
-    public ADotVarname()
+    public AVarname()
     {
         // Constructor
     }
 
-    public ADotVarname(
+    public AVarname(
         @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") List<?> _idlist_)
+        @SuppressWarnings("hiding") List<?> _member_)
     {
         // Constructor
         setIdentifier(_identifier_);
 
-        setIdlist(_idlist_);
+        setMember(_member_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ADotVarname(
+        return new AVarname(
             cloneNode(this._identifier_),
-            cloneList(this._idlist_));
+            cloneList(this._member_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseADotVarname(this);
+        ((Analysis) sw).caseAVarname(this);
     }
 
     public TIdentifier getIdentifier()
@@ -66,29 +66,29 @@ public final class ADotVarname extends PVarname
         this._identifier_ = node;
     }
 
-    public LinkedList<PIdlist> getIdlist()
+    public LinkedList<PMember> getMember()
     {
-        return this._idlist_;
+        return this._member_;
     }
 
-    public void setIdlist(List<?> list)
+    public void setMember(List<?> list)
     {
-        for(PIdlist e : this._idlist_)
+        for(PMember e : this._member_)
         {
             e.parent(null);
         }
-        this._idlist_.clear();
+        this._member_.clear();
 
         for(Object obj_e : list)
         {
-            PIdlist e = (PIdlist) obj_e;
+            PMember e = (PMember) obj_e;
             if(e.parent() != null)
             {
                 e.parent().removeChild(e);
             }
 
             e.parent(this);
-            this._idlist_.add(e);
+            this._member_.add(e);
         }
     }
 
@@ -97,7 +97,7 @@ public final class ADotVarname extends PVarname
     {
         return ""
             + toString(this._identifier_)
-            + toString(this._idlist_);
+            + toString(this._member_);
     }
 
     @Override
@@ -110,7 +110,7 @@ public final class ADotVarname extends PVarname
             return;
         }
 
-        if(this._idlist_.remove(child))
+        if(this._member_.remove(child))
         {
             return;
         }
@@ -128,13 +128,13 @@ public final class ADotVarname extends PVarname
             return;
         }
 
-        for(ListIterator<PIdlist> i = this._idlist_.listIterator(); i.hasNext();)
+        for(ListIterator<PMember> i = this._member_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PIdlist) newChild);
+                    i.set((PMember) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

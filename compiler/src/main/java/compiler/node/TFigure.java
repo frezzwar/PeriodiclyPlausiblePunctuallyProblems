@@ -5,16 +5,16 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TFigur extends Token
+public final class TFigure extends Token
 {
-    public TFigur()
+    public TFigure()
     {
-        super.setText("figur");
+        super.setText("figure");
     }
 
-    public TFigur(int line, int pos)
+    public TFigure(int line, int pos)
     {
-        super.setText("figur");
+        super.setText("figure");
         setLine(line);
         setPos(pos);
     }
@@ -22,18 +22,18 @@ public final class TFigur extends Token
     @Override
     public Object clone()
     {
-      return new TFigur(getLine(), getPos());
+      return new TFigure(getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTFigur(this);
+        ((Analysis) sw).caseTFigure(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TFigur text.");
+        throw new RuntimeException("Cannot change TFigure text.");
     }
 }

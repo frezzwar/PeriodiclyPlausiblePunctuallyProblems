@@ -55,7 +55,7 @@ Tokens
     return          = 'return';
     main            = 'program';
 
-    figur           = 'figur';
+    figure          = 'figure';
     grid            = 'grid';
     identifier      = letter (normal)* ;
 
@@ -88,12 +88,10 @@ Productions
 
     func_decl           = new identifier par_l params? par_r body;
               
-    variable_decl       = new identifier assign variables variable_tail* semi_c;
+    variable_decl       = new identifier assign variables semi_c;
     
     variables           = {expr} expr
                         | {list} brack_l value list_var_tail* brack_r;
-                
-    variable_tail       = comma new identifier assign variables;  
                             
     list_var_tail       = comma value;    
   
@@ -105,7 +103,7 @@ Productions
     
     params              = identifier params_tail*;
     
-    params_tail         = comma new identifier;
+    params_tail         = comma identifier;
       
     control_stmt        = {while} repeat while par_l expr par_r body 
                         | {repeat} repeat par_l value par_r body
@@ -125,15 +123,16 @@ Productions
                         | {minusvalue} minus expr
                         | {value} value;
   
-    value               = {varname} varname function_call?
-                        | {grid} identifier function_call idlist+
+    value               = {varname} varname
+                        | {func_call} func_call
+                        | {grid} func_call member+
                         | {literal} literal;
     
-    function_call       = par_l call_params? par_r body?;
+    func_call           = identifier par_l call_params? par_r body?;
     
-    varname             = {dot} identifier idlist*;
+    varname             = identifier member*;
                 
-    idlist              = dot identifier;    
+    member              = dot identifier;    
 
     operator            = {minus} minus
                         | {plus} plus

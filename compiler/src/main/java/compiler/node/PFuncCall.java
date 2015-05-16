@@ -2,7 +2,7 @@
 
 package compiler.node;
 
-public abstract class PFunctionCall extends Node
+public abstract class PFuncCall extends Node
 {
     // Empty body
 }

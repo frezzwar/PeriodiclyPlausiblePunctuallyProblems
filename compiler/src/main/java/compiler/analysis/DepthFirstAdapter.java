@@ -288,9 +288,9 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getAssign().apply(this);
         }
-        if(node.getFigur() != null)
+        if(node.getFigure() != null)
         {
-            node.getFigur().apply(this);
+            node.getFigure().apply(this);
         }
         if(node.getParL() != null)
         {
@@ -382,13 +382,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getVariables().apply(this);
         }
-        {
-            List<PVariableTail> copy = new ArrayList<PVariableTail>(node.getVariableTail());
-            for(PVariableTail e : copy)
-            {
-                e.apply(this);
-            }
-        }
         if(node.getSemiC() != null)
         {
             node.getSemiC().apply(this);
@@ -451,43 +444,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getBrackR().apply(this);
         }
         outAListVariables(node);
-    }
-
-    public void inAVariableTail(AVariableTail node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAVariableTail(AVariableTail node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAVariableTail(AVariableTail node)
-    {
-        inAVariableTail(node);
-        if(node.getComma() != null)
-        {
-            node.getComma().apply(this);
-        }
-        if(node.getNew() != null)
-        {
-            node.getNew().apply(this);
-        }
-        if(node.getIdentifier() != null)
-        {
-            node.getIdentifier().apply(this);
-        }
-        if(node.getAssign() != null)
-        {
-            node.getAssign().apply(this);
-        }
-        if(node.getVariables() != null)
-        {
-            node.getVariables().apply(this);
-        }
-        outAVariableTail(node);
     }
 
     public void inAListVarTail(AListVarTail node)
@@ -642,10 +598,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
         if(node.getComma() != null)
         {
             node.getComma().apply(this);
-        }
-        if(node.getNew() != null)
-        {
-            node.getNew().apply(this);
         }
         if(node.getIdentifier() != null)
         {
@@ -1137,11 +1089,28 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getVarname().apply(this);
         }
-        if(node.getFunctionCall() != null)
-        {
-            node.getFunctionCall().apply(this);
-        }
         outAVarnameValue(node);
+    }
+
+    public void inAFuncCallValue(AFuncCallValue node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAFuncCallValue(AFuncCallValue node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAFuncCallValue(AFuncCallValue node)
+    {
+        inAFuncCallValue(node);
+        if(node.getFuncCall() != null)
+        {
+            node.getFuncCall().apply(this);
+        }
+        outAFuncCallValue(node);
     }
 
     public void inAGridValue(AGridValue node)
@@ -1158,17 +1127,13 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAGridValue(AGridValue node)
     {
         inAGridValue(node);
-        if(node.getIdentifier() != null)
+        if(node.getFuncCall() != null)
         {
-            node.getIdentifier().apply(this);
-        }
-        if(node.getFunctionCall() != null)
-        {
-            node.getFunctionCall().apply(this);
+            node.getFuncCall().apply(this);
         }
         {
-            List<PIdlist> copy = new ArrayList<PIdlist>(node.getIdlist());
-            for(PIdlist e : copy)
+            List<PMember> copy = new ArrayList<PMember>(node.getMember());
+            for(PMember e : copy)
             {
                 e.apply(this);
             }
@@ -1197,20 +1162,24 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outALiteralValue(node);
     }
 
-    public void inAFunctionCall(AFunctionCall node)
+    public void inAFuncCall(AFuncCall node)
     {
         defaultIn(node);
     }
 
-    public void outAFunctionCall(AFunctionCall node)
+    public void outAFuncCall(AFuncCall node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAFunctionCall(AFunctionCall node)
+    public void caseAFuncCall(AFuncCall node)
     {
-        inAFunctionCall(node);
+        inAFuncCall(node);
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
         if(node.getParL() != null)
         {
             node.getParL().apply(this);
@@ -1227,51 +1196,51 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getBody().apply(this);
         }
-        outAFunctionCall(node);
+        outAFuncCall(node);
     }
 
-    public void inADotVarname(ADotVarname node)
+    public void inAVarname(AVarname node)
     {
         defaultIn(node);
     }
 
-    public void outADotVarname(ADotVarname node)
+    public void outAVarname(AVarname node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseADotVarname(ADotVarname node)
+    public void caseAVarname(AVarname node)
     {
-        inADotVarname(node);
+        inAVarname(node);
         if(node.getIdentifier() != null)
         {
             node.getIdentifier().apply(this);
         }
         {
-            List<PIdlist> copy = new ArrayList<PIdlist>(node.getIdlist());
-            for(PIdlist e : copy)
+            List<PMember> copy = new ArrayList<PMember>(node.getMember());
+            for(PMember e : copy)
             {
                 e.apply(this);
             }
         }
-        outADotVarname(node);
+        outAVarname(node);
     }
 
-    public void inAIdlist(AIdlist node)
+    public void inAMember(AMember node)
     {
         defaultIn(node);
     }
 
-    public void outAIdlist(AIdlist node)
+    public void outAMember(AMember node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIdlist(AIdlist node)
+    public void caseAMember(AMember node)
     {
-        inAIdlist(node);
+        inAMember(node);
         if(node.getDot() != null)
         {
             node.getDot().apply(this);
@@ -1280,7 +1249,7 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getIdentifier().apply(this);
         }
-        outAIdlist(node);
+        outAMember(node);
     }
 
     public void inAMinusOperator(AMinusOperator node)

@@ -25,7 +25,6 @@ public interface Analysis extends Switch
     void caseAVariableDecl(AVariableDecl node);
     void caseAExprVariables(AExprVariables node);
     void caseAListVariables(AListVariables node);
-    void caseAVariableTail(AVariableTail node);
     void caseAListVarTail(AListVarTail node);
     void caseACallParams(ACallParams node);
     void caseACallParamsTail(ACallParamsTail node);
@@ -47,11 +46,12 @@ public interface Analysis extends Switch
     void caseAMinusvalueExpr(AMinusvalueExpr node);
     void caseAValueExpr(AValueExpr node);
     void caseAVarnameValue(AVarnameValue node);
+    void caseAFuncCallValue(AFuncCallValue node);
     void caseAGridValue(AGridValue node);
     void caseALiteralValue(ALiteralValue node);
-    void caseAFunctionCall(AFunctionCall node);
-    void caseADotVarname(ADotVarname node);
-    void caseAIdlist(AIdlist node);
+    void caseAFuncCall(AFuncCall node);
+    void caseAVarname(AVarname node);
+    void caseAMember(AMember node);
     void caseAMinusOperator(AMinusOperator node);
     void caseAPlusOperator(APlusOperator node);
     void caseAMultOperator(AMultOperator node);
@@ -110,7 +110,7 @@ public interface Analysis extends Switch
     void caseTIn(TIn node);
     void caseTReturn(TReturn node);
     void caseTMain(TMain node);
-    void caseTFigur(TFigur node);
+    void caseTFigure(TFigure node);
     void caseTGrid(TGrid node);
     void caseTIdentifier(TIdentifier node);
     void caseTStringLiteral(TStringLiteral node);

@@ -117,6 +117,12 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseAEventDecl(AEventDecl node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseAGridDecl(AGridDecl node)
     {
         defaultCase(node);
@@ -268,6 +274,12 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseAValueExpr(AValueExpr node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAParamaExpr(AParamaExpr node)
     {
         defaultCase(node);
     }
@@ -670,6 +682,12 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTIdentifier(TIdentifier node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTEvent(TEvent node)
     {
         defaultCase(node);
     }

@@ -256,26 +256,32 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTStringLiteral(@SuppressWarnings("unused") TStringLiteral node)
+    public void caseTEvent(@SuppressWarnings("unused") TEvent node)
     {
         this.index = 41;
     }
 
     @Override
-    public void caseTDoubleLiteral(@SuppressWarnings("unused") TDoubleLiteral node)
+    public void caseTStringLiteral(@SuppressWarnings("unused") TStringLiteral node)
     {
         this.index = 42;
     }
 
     @Override
-    public void caseTIntegerLiteral(@SuppressWarnings("unused") TIntegerLiteral node)
+    public void caseTDoubleLiteral(@SuppressWarnings("unused") TDoubleLiteral node)
     {
         this.index = 43;
     }
 
     @Override
-    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    public void caseTIntegerLiteral(@SuppressWarnings("unused") TIntegerLiteral node)
     {
         this.index = 44;
+    }
+
+    @Override
+    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    {
+        this.index = 45;
     }
 }

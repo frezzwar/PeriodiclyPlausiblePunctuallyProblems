@@ -30,6 +30,11 @@ public class TypeExpression
 	{
 		return output;
 	}
+
+	public TypeExpression Copy()
+	{
+		return new TypeExpression(inputList, output);
+	}
 	
 	public TypeExpression(List<Type> Input, Type Output)
 	{

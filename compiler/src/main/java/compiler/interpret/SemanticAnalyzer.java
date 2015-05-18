@@ -15,24 +15,12 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	}
 
 
-	public void outAFuncDecl(AFuncDecl node)
-	{
-		System.out.println("-------------------------------------------------");
-		for (int i = 0; i < node.getDecl().size(); i++)
-		{
-			System.out.println(node.getDecl().get(i).getClass());
-		}
-		System.out.println("-------------------------------------------------");
-	}
-
-
 	@Override
 	public void outAVariableDecl(AVariableDecl node)
 	{
 		TIdentifier ident = node.getIdentifier();
 		
 		String key = ident.toString().toUpperCase().trim();
-		
 		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables());
 		Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables());
 
@@ -97,34 +85,8 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	}
 
 	@Override
-	public void inAFuncDecl(AFuncDecl node){
-		TIdentifier ident = node.getIdentifier();
-
-		String key = ident.toString().toUpperCase().trim();
-
-		if (symbolTable.VarDeclaredInCurrentScope(key))
-		{
-			System.out.println("Identifier already defined: " + ident);
-			System.exit(0);
-		}
-		symbolTable.AddVariable(key, Type.function);
-		symbolTable.OpenScope();
-	}
-	/*
-	// MUCH SHORTER, BUT CREATES PROBLEMS WITH ADDING PARAMETERS TO THE CORRECT SCOPE
-	@Override
-	public void inABody(ABody node){
-		symbolTable.OpenScope();
-	}
-
-	@Override
-	public void outABody(ABody node){
-		symbolTable.CloseScope();
-	}
-	*/
-
-	@Override
 	public void inAIfStmtControlStmt(AIfStmtControlStmt node){
+
 		symbolTable.OpenScope();
 	}
 
@@ -184,12 +146,6 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		String key = ident.toString().toUpperCase().trim();
 		if (!symbolTable.FuncPrevDeclared(key)){
 			System.out.println("Function not declared: " + ident.toString());
-			System.exit(0);
-		}
-
-		FunctionInfo info = Typecheck.GetFuncCallTypes(node);
-		if (!symbolTable.FuncCallLegal(key, info)){
-			System.out.println("Call parameters does not match declared parameters");
 			System.exit(0);
 		}
 	}

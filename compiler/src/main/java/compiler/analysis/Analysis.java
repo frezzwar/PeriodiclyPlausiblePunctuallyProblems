@@ -19,6 +19,7 @@ public interface Analysis extends Switch
     void caseAVarGlobalDecls(AVarGlobalDecls node);
     void caseAObjGlobalDecls(AObjGlobalDecls node);
     void caseAGridGlobalDecls(AGridGlobalDecls node);
+    void caseAEventDecl(AEventDecl node);
     void caseAGridDecl(AGridDecl node);
     void caseAObjectDecl(AObjectDecl node);
     void caseAFuncDecl(AFuncDecl node);
@@ -45,6 +46,7 @@ public interface Analysis extends Switch
     void caseANumericExpr(ANumericExpr node);
     void caseAMinusvalueExpr(AMinusvalueExpr node);
     void caseAValueExpr(AValueExpr node);
+    void caseAParamaExpr(AParamaExpr node);
     void caseAVarnameValue(AVarnameValue node);
     void caseAFuncCallValue(AFuncCallValue node);
     void caseAGridValue(AGridValue node);
@@ -113,6 +115,7 @@ public interface Analysis extends Switch
     void caseTFigure(TFigure node);
     void caseTGrid(TGrid node);
     void caseTIdentifier(TIdentifier node);
+    void caseTEvent(TEvent node);
     void caseTStringLiteral(TStringLiteral node);
     void caseTDoubleLiteral(TDoubleLiteral node);
     void caseTIntegerLiteral(TIntegerLiteral node);

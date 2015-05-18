@@ -12,6 +12,7 @@ public final class AProgram extends PProgram
     private TMain _main_;
     private PBody _body_;
     private final LinkedList<PFuncDecl> _funcDecl_ = new LinkedList<PFuncDecl>();
+    private PEventDecl _eventDecl_;
 
     public AProgram()
     {
@@ -22,7 +23,8 @@ public final class AProgram extends PProgram
         @SuppressWarnings("hiding") List<?> _globalDecls_,
         @SuppressWarnings("hiding") TMain _main_,
         @SuppressWarnings("hiding") PBody _body_,
-        @SuppressWarnings("hiding") List<?> _funcDecl_)
+        @SuppressWarnings("hiding") List<?> _funcDecl_,
+        @SuppressWarnings("hiding") PEventDecl _eventDecl_)
     {
         // Constructor
         setGlobalDecls(_globalDecls_);
@@ -33,6 +35,8 @@ public final class AProgram extends PProgram
 
         setFuncDecl(_funcDecl_);
 
+        setEventDecl(_eventDecl_);
+
     }
 
     @Override
@@ -42,7 +46,8 @@ public final class AProgram extends PProgram
             cloneList(this._globalDecls_),
             cloneNode(this._main_),
             cloneNode(this._body_),
-            cloneList(this._funcDecl_));
+            cloneList(this._funcDecl_),
+            cloneNode(this._eventDecl_));
     }
 
     @Override
@@ -153,6 +158,31 @@ public final class AProgram extends PProgram
         }
     }
 
+    public PEventDecl getEventDecl()
+    {
+        return this._eventDecl_;
+    }
+
+    public void setEventDecl(PEventDecl node)
+    {
+        if(this._eventDecl_ != null)
+        {
+            this._eventDecl_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._eventDecl_ = node;
+    }
+
     @Override
     public String toString()
     {
@@ -160,7 +190,8 @@ public final class AProgram extends PProgram
             + toString(this._globalDecls_)
             + toString(this._main_)
             + toString(this._body_)
-            + toString(this._funcDecl_);
+            + toString(this._funcDecl_)
+            + toString(this._eventDecl_);
     }
 
     @Override
@@ -186,6 +217,12 @@ public final class AProgram extends PProgram
 
         if(this._funcDecl_.remove(child))
         {
+            return;
+        }
+
+        if(this._eventDecl_ == child)
+        {
+            this._eventDecl_ = null;
             return;
         }
 
@@ -242,6 +279,12 @@ public final class AProgram extends PProgram
                 oldChild.parent(null);
                 return;
             }
+        }
+
+        if(this._eventDecl_ == oldChild)
+        {
+            setEventDecl((PEventDecl) newChild);
+            return;
         }
 
         throw new RuntimeException("Not a child.");

@@ -8,8 +8,8 @@ Helpers
     letter          = [['a' .. 'z'] + ['A' .. 'Z']];
     digit           = ['0' .. '9'];
     nonzero_digit   = ['1' .. '9'];
-    normal          = [[digit + '_'] + letter];   
-    dot             = '.';  
+    normal          = [[digit + '_'] + letter];
+    dot             = '.';
     not_cr_lf       = [all - [cr + lf]];
     eol             = cr | lf | cr lf;
 
@@ -60,13 +60,13 @@ Tokens
     identifier      = letter (normal)* ;
     event           = 'event';
 
-    string_literal  = '"' not_cr_lf+ '"'; 
-    double_literal  = digit* dot digit+;  
-    integer_literal = digit+;  
+    string_literal  = '"' not_cr_lf+ '"';
+    double_literal  = digit* dot digit+;
+    integer_literal = digit+;
 
     multiline_comment   = '/' '*' [all - ['*' + '/']]* '*' '/' ;
     oneline_comment     = '//' [all - [cr + lf]]* eol?;
-    
+
 Ignored Tokens
     blank,
     multiline_comment,
@@ -74,68 +74,69 @@ Ignored Tokens
 
 Productions
     program             = global_decls* main body func_decl* event_decl?;
-             
+
     decl                = {variable_decl} variable_decl
                         | {control_stmt} control_stmt
                         | {assign} expr semi_c;
-                
+
     global_decls        = {var} variable_decl
                         | {obj} object_decl
                         | {grid} grid_decl;
 
-    event_dcl           = event par_l identifier par_r body;
+    event_decl           = event par_l identifier par_r body;
 
     grid_decl           = new identifier assign grid par_l [int1]:value comma [int2]:value par_r semi_c;
 
     object_decl         = new [id1]:identifier assign figure par_l [id2]:identifier par_r body;
 
     func_decl           = new identifier par_l params? par_r body;
-              
+
     variable_decl       = new identifier assign variables semi_c;
-    
+
     variables           = {expr} expr
                         | {list} brack_l value list_var_tail* brack_r;
-                            
-    list_var_tail       = comma value;    
-  
+
+    list_var_tail       = comma value;
+
     call_params         = expr call_params_tail*;
-  
+
     call_params_tail    = comma expr;
-    
-    return_value        = return expr semi_c;    
-    
+
+    return_value        = return expr semi_c;
+
     params              = identifier params_tail*;
-    
+
     params_tail         = comma identifier;
-      
-    control_stmt        = {while} repeat while par_l expr par_r body 
+
+    control_stmt        = {while} repeat while par_l expr par_r body
                         | {repeat} repeat par_l value par_r body
                         | {foreach} repeat foreach par_l identifier in varname par_r body
                         | {if_stmt} if par_l expr par_r body else_stmt?;
-                              
+
     else_stmt           = {else_stmt} else body
                         | {elseif_stmt} else if par_l expr par_r body else_stmt?;
-    
+
     body                = curly_l decl* return_value? curly_r;
-            
+
     expr                = {assign} value assign expr
                         | {increment} value increment expr
                         | {decrement} value decrement expr
                         | {boolean} value bool_operator expr
                         | {numeric} value operator expr
                         | {minusvalue} minus expr
-                        | {value} value;
-  
+                        | {value} value
+                        | {parama} par_l expr par_r;
+
     value               = {varname} varname
                         | {func_call} func_call
                         | {grid} func_call member+
                         | {literal} literal;
-    
+
     func_call           = identifier par_l call_params? par_r body?;
-    
+
     varname             = identifier member*;
-                
-    member              = dot identifier;    
+
+    member              = dot identifier;
 
     operator            = {minus} minus
                         | {plus} plus
@@ -150,11 +151,11 @@ Productions
                         | {or} or
                         | {less} less
                         | {greater} greater;
-    
+
     literal             = {boolean} boolean_literal
                         | {integer} integer_literal
                         | {double} double_literal
                         | {string} string_literal;
-    
-    boolean_literal     = {true} true 
+
+    boolean_literal     = {true} true
                         | {false} false;

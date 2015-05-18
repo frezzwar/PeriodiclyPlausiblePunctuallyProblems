@@ -28,11 +28,12 @@ public class Main {
             System.out.println("Ok");
 
             SymbolTable symTable = new SymbolTable();
-            ast.apply(new FunctionAnalyzer(symTable));
-            ast.apply(new SemanticAnalyzer(symTable));
+
+            ast.apply(new FunctionChecker(symTable));
+            //ast.apply(new SemanticAnalyzer(symTable));
 
             FileSetup.Setup();
-            ast.apply(new ClassGenerator(symTable));
+            //ast.apply(new ClassGenerator(symTable));
             System.out.println("FINISHED");
 
          }

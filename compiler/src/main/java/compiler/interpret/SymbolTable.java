@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class SymbolTable {
-	private HashMap<String, FunctionInfo> functions = new HashMap<>();
+	private HashMap<String, TypeExpression> functions = new HashMap<>();
 	private Stack<Scope> scopes = new Stack<>();
 	private Scope currentScope = null;
 
@@ -13,21 +13,13 @@ public class SymbolTable {
 		this.OpenScope();
 	}
 
-	public void AddFunction(String name, FunctionInfo inf){
+	public void AddFunction(String name, TypeExpression inf){
 		functions.put(name, inf);
 	}
+
+
 	public boolean FuncPrevDeclared(String name){
 		return functions.containsKey(name);
-	}
-
-	public boolean FuncCallLegal(String name, FunctionInfo info){
-		return info.Equals(functions.get(name));
-	}
-
-	public void CheckFunction(String name, FunctionInfo info){
-		if (!functions.containsKey(name)){
-			System.out.println("");
-		}
 	}
 
 	public Scope CurrentScope(){

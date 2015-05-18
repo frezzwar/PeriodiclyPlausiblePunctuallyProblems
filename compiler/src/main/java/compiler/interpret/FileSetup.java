@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 
-public class FileSetup {
+public class FileSetup  {
 	
 	public static void Setup()
 	{

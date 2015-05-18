@@ -72,6 +72,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
                 e.apply(this);
             }
         }
+        if(node.getEventDecl() != null)
+        {
+            node.getEventDecl().apply(this);
+        }
         outAProgram(node);
     }
 
@@ -203,6 +207,43 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getGridDecl().apply(this);
         }
         outAGridGlobalDecls(node);
+    }
+
+    public void inAEventDecl(AEventDecl node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAEventDecl(AEventDecl node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAEventDecl(AEventDecl node)
+    {
+        inAEventDecl(node);
+        if(node.getEvent() != null)
+        {
+            node.getEvent().apply(this);
+        }
+        if(node.getParL() != null)
+        {
+            node.getParL().apply(this);
+        }
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
+        if(node.getParR() != null)
+        {
+            node.getParR().apply(this);
+        }
+        if(node.getBody() != null)
+        {
+            node.getBody().apply(this);
+        }
+        outAEventDecl(node);
     }
 
     public void inAGridDecl(AGridDecl node)
@@ -1069,6 +1110,39 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getValue().apply(this);
         }
         outAValueExpr(node);
+    }
+
+    public void inAParamaExpr(AParamaExpr node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAParamaExpr(AParamaExpr node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAParamaExpr(AParamaExpr node)
+    {
+        inAParamaExpr(node);
+        if(node.getParL() != null)
+        {
+            node.getParL().apply(this);
+        }
+        if(node.getParamBody() != null)
+        {
+            node.getParamBody().apply(this);
+        }
+        if(node.getParR() != null)
+        {
+            node.getParR().apply(this);
+        }
+        if(node.getExpr() != null)
+        {
+            node.getExpr().apply(this);
+        }
+        outAParamaExpr(node);
     }
 
     public void inAVarnameValue(AVarnameValue node)

@@ -1,5 +1,6 @@
 package compiler.interpret;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -64,6 +65,39 @@ public class Typecheck{
 					
 					case "/": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.number));
 							  break;
+
+					case "==":retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+							  retType.add(new TypeExpression(Arrays.asList(Type.bool, Type.bool),Type.number));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+							  break;
+
+					case "!=":retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+							  retType.add(new TypeExpression(Arrays.asList(Type.bool, Type.bool),Type.number));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+							  break;
+
+					case "<": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+							  break;
+
+					case ">": retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+							  break;
+
+					case "<=":retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+							  break;
+
+					case ">=":retType.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+							  retType.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+							  break;
+
+					case "&&":retType.add(new TypeExpression(Arrays.asList(Type.bool, Type.bool),Type.bool));
+							  break;
+
+					case "||":retType.add(new TypeExpression(Arrays.asList(Type.bool, Type.bool),Type.bool));
+							  break;
+
 					}
 					//System.out.println(retType);
 			  		return retType;
@@ -134,9 +168,10 @@ public class Typecheck{
 		{
 			for(int i = 0; i < ToList.size(); i++)
 			{
-				for(int j = 0; j < InputList.size(); j++)
+				for(int j = 0; j < InputList.size()-1; j++)
 				{
-						TempList.add(i * InputList.size() + j, ToList.get(i));
+					TypeExpression temp = ToList.get(i).Copy();
+					TempList.add(i * InputList.size() + j, temp);
 				}
 			}
 			for (int i = 0; i < TempList.size(); i++)
@@ -156,7 +191,7 @@ public class Typecheck{
 				}
 				else if (priority == 1)
 				{
-					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					if (TempList.get(i).getInput().get(TempList.size()-1) == InputList.get(i % InputList.size()).getOutput())
 					{
 						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
 						TempList.get(i).getInput().remove(1);
@@ -189,7 +224,7 @@ public class Typecheck{
 				}
 				else if(priority == 1)
 				{
-					if (TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					if (TempList.get(i).getInput().get(TempList.get(i).getInput().size()-1) == InputList.get(i % InputList.size()).getOutput())
 					{
 						TempList.get(i).Output(InputList.get(i % InputList.size()).getOutput());
 						TempList.get(i).getInput().remove(1);
@@ -306,22 +341,5 @@ public class Typecheck{
 	public static List<TypeExpression> FunctionChecker()
 	{
 		return null;
-	}
-
-	//TODO THIS IS TEMPORARY FOR MAKING THE FUNCTION STUFF!!!
-	public static FunctionInfo CheckFunctionTypes(AFuncDecl node){
-		Type returnType = number;
-		ArrayList<Type> params = new ArrayList<>();
-		params.add(number);
-
-		return new FunctionInfo(returnType, params);
-	}
-
-	public static FunctionInfo GetFuncCallTypes(AFuncCall node){
-		Type returnType = number;
-		ArrayList<Type> params = new ArrayList<>();
-		params.add(number);
-
-		return new FunctionInfo(returnType, params);
 	}
 }

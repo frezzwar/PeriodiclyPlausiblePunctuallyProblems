@@ -199,7 +199,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	}
 
 	@Override
-	public void inAMember(AMember node){
+	public void inADotMember(ADotMember node){
 		String ident = node.getIdentifier().toString();
 		String key = ident.toUpperCase().trim();
 		if (node.parent().getClass() == AVarname.class){

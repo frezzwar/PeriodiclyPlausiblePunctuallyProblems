@@ -237,6 +237,24 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseAObjBody(AObjBody node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADeclObjDecls(ADeclObjDecls node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAObjDeclsObjDecls(AObjDeclsObjDecls node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseAAssignExpr(AAssignExpr node)
     {
         defaultCase(node);
@@ -285,6 +303,18 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseAParamaBoolExpr(AParamaBoolExpr node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAParamaNumericExpr(AParamaNumericExpr node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseAVarnameValue(AVarnameValue node)
     {
         defaultCase(node);
@@ -321,7 +351,13 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAMember(AMember node)
+    public void caseADotMember(ADotMember node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMethodCallMember(AMethodCallMember node)
     {
         defaultCase(node);
     }
@@ -681,13 +717,13 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTIdentifier(TIdentifier node)
+    public void caseTEvent(TEvent node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseTEvent(TEvent node)
+    public void caseTIdentifier(TIdentifier node)
     {
         defaultCase(node);
     }

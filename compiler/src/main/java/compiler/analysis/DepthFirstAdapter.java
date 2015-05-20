@@ -345,9 +345,9 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getParR().apply(this);
         }
-        if(node.getBody() != null)
+        if(node.getObjBody() != null)
         {
-            node.getBody().apply(this);
+            node.getObjBody().apply(this);
         }
         outAObjectDecl(node);
     }
@@ -921,6 +921,80 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outABody(node);
     }
 
+    public void inAObjBody(AObjBody node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAObjBody(AObjBody node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAObjBody(AObjBody node)
+    {
+        inAObjBody(node);
+        if(node.getCurlyL() != null)
+        {
+            node.getCurlyL().apply(this);
+        }
+        {
+            List<PObjDecls> copy = new ArrayList<PObjDecls>(node.getObjDecls());
+            for(PObjDecls e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        if(node.getCurlyR() != null)
+        {
+            node.getCurlyR().apply(this);
+        }
+        outAObjBody(node);
+    }
+
+    public void inADeclObjDecls(ADeclObjDecls node)
+    {
+        defaultIn(node);
+    }
+
+    public void outADeclObjDecls(ADeclObjDecls node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseADeclObjDecls(ADeclObjDecls node)
+    {
+        inADeclObjDecls(node);
+        if(node.getDecl() != null)
+        {
+            node.getDecl().apply(this);
+        }
+        outADeclObjDecls(node);
+    }
+
+    public void inAObjDeclsObjDecls(AObjDeclsObjDecls node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAObjDeclsObjDecls(AObjDeclsObjDecls node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAObjDeclsObjDecls(AObjDeclsObjDecls node)
+    {
+        inAObjDeclsObjDecls(node);
+        if(node.getFuncDecl() != null)
+        {
+            node.getFuncDecl().apply(this);
+        }
+        outAObjDeclsObjDecls(node);
+    }
+
     public void inAAssignExpr(AAssignExpr node)
     {
         defaultIn(node);
@@ -1130,19 +1204,89 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getParL().apply(this);
         }
-        if(node.getParamBody() != null)
+        if(node.getExpr() != null)
         {
-            node.getParamBody().apply(this);
+            node.getExpr().apply(this);
         }
         if(node.getParR() != null)
         {
             node.getParR().apply(this);
         }
-        if(node.getExpr() != null)
-        {
-            node.getExpr().apply(this);
-        }
         outAParamaExpr(node);
+    }
+
+    public void inAParamaBoolExpr(AParamaBoolExpr node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAParamaBoolExpr(AParamaBoolExpr node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAParamaBoolExpr(AParamaBoolExpr node)
+    {
+        inAParamaBoolExpr(node);
+        if(node.getParL() != null)
+        {
+            node.getParL().apply(this);
+        }
+        if(node.getBody() != null)
+        {
+            node.getBody().apply(this);
+        }
+        if(node.getParR() != null)
+        {
+            node.getParR().apply(this);
+        }
+        if(node.getBoolOperator() != null)
+        {
+            node.getBoolOperator().apply(this);
+        }
+        if(node.getForllowExpr() != null)
+        {
+            node.getForllowExpr().apply(this);
+        }
+        outAParamaBoolExpr(node);
+    }
+
+    public void inAParamaNumericExpr(AParamaNumericExpr node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAParamaNumericExpr(AParamaNumericExpr node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAParamaNumericExpr(AParamaNumericExpr node)
+    {
+        inAParamaNumericExpr(node);
+        if(node.getParL() != null)
+        {
+            node.getParL().apply(this);
+        }
+        if(node.getBody() != null)
+        {
+            node.getBody().apply(this);
+        }
+        if(node.getParR() != null)
+        {
+            node.getParR().apply(this);
+        }
+        if(node.getOperator() != null)
+        {
+            node.getOperator().apply(this);
+        }
+        if(node.getForllowExpr() != null)
+        {
+            node.getForllowExpr().apply(this);
+        }
+        outAParamaNumericExpr(node);
     }
 
     public void inAVarnameValue(AVarnameValue node)
@@ -1301,20 +1445,20 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outAVarname(node);
     }
 
-    public void inAMember(AMember node)
+    public void inADotMember(ADotMember node)
     {
         defaultIn(node);
     }
 
-    public void outAMember(AMember node)
+    public void outADotMember(ADotMember node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAMember(AMember node)
+    public void caseADotMember(ADotMember node)
     {
-        inAMember(node);
+        inADotMember(node);
         if(node.getDot() != null)
         {
             node.getDot().apply(this);
@@ -1323,7 +1467,44 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getIdentifier().apply(this);
         }
-        outAMember(node);
+        outADotMember(node);
+    }
+
+    public void inAMethodCallMember(AMethodCallMember node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAMethodCallMember(AMethodCallMember node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAMethodCallMember(AMethodCallMember node)
+    {
+        inAMethodCallMember(node);
+        if(node.getDot() != null)
+        {
+            node.getDot().apply(this);
+        }
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
+        if(node.getParL() != null)
+        {
+            node.getParL().apply(this);
+        }
+        if(node.getCallParams() != null)
+        {
+            node.getCallParams().apply(this);
+        }
+        if(node.getParR() != null)
+        {
+            node.getParR().apply(this);
+        }
+        outAMethodCallMember(node);
     }
 
     public void inAMinusOperator(AMinusOperator node)

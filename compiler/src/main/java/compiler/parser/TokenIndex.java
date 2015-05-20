@@ -250,13 +250,13 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTIdentifier(@SuppressWarnings("unused") TIdentifier node)
+    public void caseTEvent(@SuppressWarnings("unused") TEvent node)
     {
         this.index = 40;
     }
 
     @Override
-    public void caseTEvent(@SuppressWarnings("unused") TEvent node)
+    public void caseTIdentifier(@SuppressWarnings("unused") TIdentifier node)
     {
         this.index = 41;
     }

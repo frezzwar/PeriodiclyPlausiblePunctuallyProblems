@@ -5,26 +5,34 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AParamaExpr extends PExpr
+public final class AMethodCallMember extends PMember
 {
+    private TDot _dot_;
+    private TIdentifier _identifier_;
     private TParL _parL_;
-    private PExpr _expr_;
+    private PCallParams _callParams_;
     private TParR _parR_;
 
-    public AParamaExpr()
+    public AMethodCallMember()
     {
         // Constructor
     }
 
-    public AParamaExpr(
+    public AMethodCallMember(
+        @SuppressWarnings("hiding") TDot _dot_,
+        @SuppressWarnings("hiding") TIdentifier _identifier_,
         @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PExpr _expr_,
+        @SuppressWarnings("hiding") PCallParams _callParams_,
         @SuppressWarnings("hiding") TParR _parR_)
     {
         // Constructor
+        setDot(_dot_);
+
+        setIdentifier(_identifier_);
+
         setParL(_parL_);
 
-        setExpr(_expr_);
+        setCallParams(_callParams_);
 
         setParR(_parR_);
 
@@ -33,16 +41,68 @@ public final class AParamaExpr extends PExpr
     @Override
     public Object clone()
     {
-        return new AParamaExpr(
+        return new AMethodCallMember(
+            cloneNode(this._dot_),
+            cloneNode(this._identifier_),
             cloneNode(this._parL_),
-            cloneNode(this._expr_),
+            cloneNode(this._callParams_),
             cloneNode(this._parR_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAParamaExpr(this);
+        ((Analysis) sw).caseAMethodCallMember(this);
+    }
+
+    public TDot getDot()
+    {
+        return this._dot_;
+    }
+
+    public void setDot(TDot node)
+    {
+        if(this._dot_ != null)
+        {
+            this._dot_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._dot_ = node;
+    }
+
+    public TIdentifier getIdentifier()
+    {
+        return this._identifier_;
+    }
+
+    public void setIdentifier(TIdentifier node)
+    {
+        if(this._identifier_ != null)
+        {
+            this._identifier_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._identifier_ = node;
     }
 
     public TParL getParL()
@@ -70,16 +130,16 @@ public final class AParamaExpr extends PExpr
         this._parL_ = node;
     }
 
-    public PExpr getExpr()
+    public PCallParams getCallParams()
     {
-        return this._expr_;
+        return this._callParams_;
     }
 
-    public void setExpr(PExpr node)
+    public void setCallParams(PCallParams node)
     {
-        if(this._expr_ != null)
+        if(this._callParams_ != null)
         {
-            this._expr_.parent(null);
+            this._callParams_.parent(null);
         }
 
         if(node != null)
@@ -92,7 +152,7 @@ public final class AParamaExpr extends PExpr
             node.parent(this);
         }
 
-        this._expr_ = node;
+        this._callParams_ = node;
     }
 
     public TParR getParR()
@@ -124,8 +184,10 @@ public final class AParamaExpr extends PExpr
     public String toString()
     {
         return ""
+            + toString(this._dot_)
+            + toString(this._identifier_)
             + toString(this._parL_)
-            + toString(this._expr_)
+            + toString(this._callParams_)
             + toString(this._parR_);
     }
 
@@ -133,15 +195,27 @@ public final class AParamaExpr extends PExpr
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._dot_ == child)
+        {
+            this._dot_ = null;
+            return;
+        }
+
+        if(this._identifier_ == child)
+        {
+            this._identifier_ = null;
+            return;
+        }
+
         if(this._parL_ == child)
         {
             this._parL_ = null;
             return;
         }
 
-        if(this._expr_ == child)
+        if(this._callParams_ == child)
         {
-            this._expr_ = null;
+            this._callParams_ = null;
             return;
         }
 
@@ -158,15 +232,27 @@ public final class AParamaExpr extends PExpr
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._dot_ == oldChild)
+        {
+            setDot((TDot) newChild);
+            return;
+        }
+
+        if(this._identifier_ == oldChild)
+        {
+            setIdentifier((TIdentifier) newChild);
+            return;
+        }
+
         if(this._parL_ == oldChild)
         {
             setParL((TParL) newChild);
             return;
         }
 
-        if(this._expr_ == oldChild)
+        if(this._callParams_ == oldChild)
         {
-            setExpr((PExpr) newChild);
+            setCallParams((PCallParams) newChild);
             return;
         }
 

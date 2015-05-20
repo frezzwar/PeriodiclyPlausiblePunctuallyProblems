@@ -1,0 +1,37 @@
+new variable = true;
+new objekt = figure(ImageName){
+ new variable = 10;
+ new method (param1, param2) {
+ return 10;
+ }
+ new list = [];
+ }
+new grid1 = grid(10,10);
+new list = [];
+program{
+
+new variable1 = 5;
+list.add(variable1);
+variable1 = 50;
+func(variable1);
+objekt.method(1, 2);
+grid1(2, 2).addobj(objekt);
+if (true) {
+
+}
+else if (false) {
+
+}
+else {
+
+}
+repeat while (true) {
+
+}
+}
+new func (param){
+
+}
+event(keypress){
+
+}

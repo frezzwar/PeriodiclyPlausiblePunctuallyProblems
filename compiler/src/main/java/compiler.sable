@@ -57,8 +57,8 @@ Tokens
 
     figure          = 'figure';
     grid            = 'grid';
-    identifier      = letter (normal)* ;
     event           = 'event';
+    identifier      = letter (normal)* ;
 
     string_literal  = '"' not_cr_lf+ '"';
     double_literal  = digit* dot digit+;
@@ -87,14 +87,14 @@ Productions
 
     grid_decl           = new identifier assign grid par_l [int1]:value comma [int2]:value par_r semi_c;
 
-    object_decl         = new [id1]:identifier assign figure par_l [id2]:identifier par_r body;
+    object_decl         = new [id1]:identifier assign figure par_l [id2]:identifier par_r obj_body;
 
     func_decl           = new identifier par_l params? par_r body;
 
     variable_decl       = new identifier assign variables semi_c;
 
     variables           = {expr} expr
-                        | {list} brack_l value list_var_tail* brack_r;
+                        | {list} brack_l value? list_var_tail* brack_r;
 
     list_var_tail       = comma value;
 
@@ -118,6 +118,11 @@ Productions
 
     body                = curly_l decl* return_value? curly_r;
 
+    obj_body            = curly_l obj_decls* curly_r;
+
+    obj_decls           = {decl} decl
+                        | {obj_decls} func_decl;
+
 
     expr                = {assign} value assign expr
                         | {increment} value increment expr
@@ -139,7 +144,8 @@ Productions
 
     varname             = identifier member*;
 
-    member              = dot identifier;
+    member              = {dot} dot identifier
+                        | {method_call} dot identifier par_l call_params? par_r;
 
     operator            = {minus} minus
                         | {plus} plus

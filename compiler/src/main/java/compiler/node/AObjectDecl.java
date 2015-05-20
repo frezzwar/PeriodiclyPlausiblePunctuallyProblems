@@ -14,7 +14,7 @@ public final class AObjectDecl extends PObjectDecl
     private TParL _parL_;
     private TIdentifier _id2_;
     private TParR _parR_;
-    private PBody _body_;
+    private PObjBody _objBody_;
 
     public AObjectDecl()
     {
@@ -29,7 +29,7 @@ public final class AObjectDecl extends PObjectDecl
         @SuppressWarnings("hiding") TParL _parL_,
         @SuppressWarnings("hiding") TIdentifier _id2_,
         @SuppressWarnings("hiding") TParR _parR_,
-        @SuppressWarnings("hiding") PBody _body_)
+        @SuppressWarnings("hiding") PObjBody _objBody_)
     {
         // Constructor
         setNew(_new_);
@@ -46,7 +46,7 @@ public final class AObjectDecl extends PObjectDecl
 
         setParR(_parR_);
 
-        setBody(_body_);
+        setObjBody(_objBody_);
 
     }
 
@@ -61,7 +61,7 @@ public final class AObjectDecl extends PObjectDecl
             cloneNode(this._parL_),
             cloneNode(this._id2_),
             cloneNode(this._parR_),
-            cloneNode(this._body_));
+            cloneNode(this._objBody_));
     }
 
     @Override
@@ -245,16 +245,16 @@ public final class AObjectDecl extends PObjectDecl
         this._parR_ = node;
     }
 
-    public PBody getBody()
+    public PObjBody getObjBody()
     {
-        return this._body_;
+        return this._objBody_;
     }
 
-    public void setBody(PBody node)
+    public void setObjBody(PObjBody node)
     {
-        if(this._body_ != null)
+        if(this._objBody_ != null)
         {
-            this._body_.parent(null);
+            this._objBody_.parent(null);
         }
 
         if(node != null)
@@ -267,7 +267,7 @@ public final class AObjectDecl extends PObjectDecl
             node.parent(this);
         }
 
-        this._body_ = node;
+        this._objBody_ = node;
     }
 
     @Override
@@ -281,7 +281,7 @@ public final class AObjectDecl extends PObjectDecl
             + toString(this._parL_)
             + toString(this._id2_)
             + toString(this._parR_)
-            + toString(this._body_);
+            + toString(this._objBody_);
     }
 
     @Override
@@ -330,9 +330,9 @@ public final class AObjectDecl extends PObjectDecl
             return;
         }
 
-        if(this._body_ == child)
+        if(this._objBody_ == child)
         {
-            this._body_ = null;
+            this._objBody_ = null;
             return;
         }
 
@@ -385,9 +385,9 @@ public final class AObjectDecl extends PObjectDecl
             return;
         }
 
-        if(this._body_ == oldChild)
+        if(this._objBody_ == oldChild)
         {
-            setBody((PBody) newChild);
+            setObjBody((PObjBody) newChild);
             return;
         }
 

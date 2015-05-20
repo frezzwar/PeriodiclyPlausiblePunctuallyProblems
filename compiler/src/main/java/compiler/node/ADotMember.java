@@ -5,17 +5,17 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AMember extends PMember
+public final class ADotMember extends PMember
 {
     private TDot _dot_;
     private TIdentifier _identifier_;
 
-    public AMember()
+    public ADotMember()
     {
         // Constructor
     }
 
-    public AMember(
+    public ADotMember(
         @SuppressWarnings("hiding") TDot _dot_,
         @SuppressWarnings("hiding") TIdentifier _identifier_)
     {
@@ -29,7 +29,7 @@ public final class AMember extends PMember
     @Override
     public Object clone()
     {
-        return new AMember(
+        return new ADotMember(
             cloneNode(this._dot_),
             cloneNode(this._identifier_));
     }
@@ -37,7 +37,7 @@ public final class AMember extends PMember
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAMember(this);
+        ((Analysis) sw).caseADotMember(this);
     }
 
     public TDot getDot()

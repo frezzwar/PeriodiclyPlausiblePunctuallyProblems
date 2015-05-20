@@ -150,7 +150,7 @@ public class FunctionChecker extends DepthFirstAdapter
         else if(expresion.getClass() == ANumericExpr.class)
         {
             ANumericExpr expr = (ANumericExpr) expresion;
-            Typecheck.TypeExpressions(expr.getValue().)
+            //Typecheck.TypeExpressions(expr.getValue().)
         }
         else if(expresion.getClass() == AMinusvalueExpr.class)
         {

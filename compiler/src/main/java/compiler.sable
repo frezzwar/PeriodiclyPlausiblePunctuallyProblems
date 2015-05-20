@@ -118,6 +118,7 @@ Productions
 
     body                = curly_l decl* return_value? curly_r;
 
+
     expr                = {assign} value assign expr
                         | {increment} value increment expr
                         | {decrement} value decrement expr
@@ -125,7 +126,9 @@ Productions
                         | {numeric} value operator expr
                         | {minusvalue} minus expr
                         | {value} value
-                        | {parama} par_l expr par_r;
+                        | {parama} par_l expr par_r
+                        | {parama_bool} par_l [body]:expr par_r bool_operator [forllow_expr]:expr
+                        | {parama_numeric} par_l [body]:expr par_r operator [forllow_expr]:expr;
 
     value               = {varname} varname
                         | {func_call} func_call

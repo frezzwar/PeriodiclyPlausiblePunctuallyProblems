@@ -19,7 +19,7 @@ program
     
     number2 = 9;
 
-    //new thisPar = 5 + ( 5 + 4) / 4;
+    new thisPar = 5 + ( 5 + 4) / 4;
 
     new bool_test = 10 < 12;
 

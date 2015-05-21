@@ -1,7 +1,7 @@
 Package     compiler;
 
 Helpers
-    all             = [0 .. 0xFFFF];
+    all             = [0 .. 0xFFF];
     tab             = 9;
     lf              = 10;
     cr              = 13;

@@ -21,8 +21,8 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		TIdentifier ident = node.getIdentifier();
 		
 		String key = ident.toString().toUpperCase().trim();
-		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables());
-		Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables());
+		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables().toString());
+		Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables().toString());
 
 		if(symbolTable.VarDeclaredInCurrentScope(key))
 		{
@@ -33,6 +33,15 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		{
 			symbolTable.AddVariable(key, type);
 		}
+	}
+
+	public void outAAssignExpr(AAssignExpr node)
+	{
+		PValue ident = node.getValue();
+		System.out.println(ident.getClass());
+		String key = ident.toString().toUpperCase().trim();
+		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getExpr().toString());
+		Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getExpr().toString());
 	}
 
 	@Override
@@ -59,22 +68,6 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			System.exit(0);
 		}
 		symbolTable.AddVariable(key, Type.parameter);
-	}
-
-	@Override
-	public void outAVarname(AVarname node)
-	{
-		TIdentifier ident = node.getIdentifier();
-		
-		String key = ident.toString().toUpperCase().trim();
-		if(!key.equals("GRID"))
-		{
-			if(!symbolTable.VarPrevDeclared(key))
-			{
-				System.out.println("Identifier not defined: " + ident);
-				System.exit(0);
-			}
-		}
 	}
 
 	@Override

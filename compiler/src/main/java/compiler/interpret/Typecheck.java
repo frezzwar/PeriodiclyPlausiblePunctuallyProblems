@@ -13,10 +13,10 @@ import compiler.node.*;
 
 public class Typecheck{
 	
-	public static List<TypeExpression> TypeExpressions(PVariables check)
+	public static List<TypeExpression> TypeExpressions(String check)
 	{
 		List<TypeExpression> retType = new LinkedList<TypeExpression>();
-				String[] variables = check.toString().split(" ");
+				String[] variables = check.split(" ");
 				if(variables[0].equals("grid"))
 				{
 					retType.add(new TypeExpression(null, Type.grid));
@@ -248,7 +248,7 @@ public class Typecheck{
 		System.out.println(ToList);
 	}
 	
-	public static Type typeChecker(List<TypeExpression> InputList, SymbolTable table, PVariables Variables)
+	public static Type typeChecker(List<TypeExpression> InputList, SymbolTable table, String Variables)
 	{
 		Boolean typesafe = false;
 		//System.out.println("TypeCheck : " + InputList + " : " + Variables);
@@ -264,32 +264,33 @@ public class Typecheck{
 				else
 				{
 					//retunerer typen af variablen
-					return table.GetVariable(Variables.toString().toUpperCase().trim());
+					return table.GetVariable(Variables.toUpperCase().trim());
 				}
 			}
 			else
 			{
-				String[] variables = Variables.toString().split(" ");
+				String[] variables = Variables.split(" ");
 				//lave tjek om inputet er tilladt
+				int expression = 0;
 				for(int i = 0; i < variables.length; i += 2)
 				{
 					String key = variables[i].toUpperCase().trim();
 					//System.out.println(key);
-					if(variables[i].equals("grid") && Expression.getInput().get(i/2) == Type.grid)
+					if(variables[i].equals("grid") && Expression.getInput().get(expression) == Type.grid)
 					{
 						typesafe = true;
 					}
-					else if(isNumeric(variables[i]) && Expression.getInput().get(i/2) == Type.number)
+					else if(isNumeric(variables[i]) && Expression.getInput().get(expression) == Type.number)
 					{
 						typesafe = true;
 					}
-					else if((variables[i].startsWith("\"") && variables[i].endsWith("\"")) && Expression.getInput().get(i/2) == Type.string)
+					else if((variables[i].startsWith("\"") && variables[i].endsWith("\"")) && Expression.getInput().get(expression) == Type.string)
 					{
 						typesafe = true;
 					}
 					else if(table.GetVariable(key) != null)
 					{
-						if(table.GetVariable(key).equals(Expression.getInput().get(i/2)))
+						if(table.GetVariable(key).equals(Expression.getInput().get(expression)))
 						{
 							typesafe = true;
 						}
@@ -299,11 +300,16 @@ public class Typecheck{
 							break;
 						}
 					}
+					else if (variables[i].equals("+") || variables[i].equals("-") || variables[i].equals("*") || variables[i].equals("/") || variables[i].equals("==") || variables[i].equals("<=") || variables[i].equals(">=") || variables[i].equals("!=") || variables[i].equals("&&") || variables[i].equals("||") || variables[i].equals("<") || variables[i].equals(">") || variables[i].equals("(") || variables[i].equals(")"))
+					{
+						expression--;
+					}
 					else
 					{
 						typesafe = false;
 						break;
 					}
+					expression++;
 				}
 				if(typesafe)
 				{
@@ -331,8 +337,19 @@ public class Typecheck{
 			}
 			else
 			{
-				System.out.println("Type Error in " + Variables);
-				System.exit(0);
+				Type type = null;
+				for (int i = 0; i < TypeList.size(); i++)
+				{
+					if(TypeList.get(i) != null && type == null)
+					{
+						type = TypeList.get(i);
+					}
+					else if(TypeList.get(i) != null && type != type)
+					{
+						System.out.println("Type Error in " + Variables);
+						System.exit(0);
+					}
+				}
 			}
 		}
 		return null;

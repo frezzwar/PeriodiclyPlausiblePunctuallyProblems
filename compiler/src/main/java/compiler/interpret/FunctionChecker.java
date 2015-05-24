@@ -27,8 +27,8 @@ public class FunctionChecker extends DepthFirstAdapter
 
         String key = ident.toString().toUpperCase().trim();
 
-        List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables());
-        Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables());
+        List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables().toString());
+        Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables().toString());
 
         if(symbolTable.VarDeclaredInCurrentScope(key))
         {
@@ -38,21 +38,6 @@ public class FunctionChecker extends DepthFirstAdapter
         else
         {
             symbolTable.AddVariable(key, type);
-        }
-    }
-
-    public void outAVarname(AVarname node)
-    {
-        TIdentifier ident = node.getIdentifier();
-
-        String key = ident.toString().toUpperCase().trim();
-        if(!key.equals("GRID"))
-        {
-            if(!symbolTable.VarPrevDeclared(key))
-            {
-                System.out.println("Identifier not defined: " + ident);
-                System.exit(0);
-            }
         }
     }
 
@@ -176,12 +161,12 @@ public class FunctionChecker extends DepthFirstAdapter
         {
             parameters.add(Type.parameter);
         }
-        symbolTable.AddFunction(key, new TypeExpression(null, Type.function));
         symbolTable.OpenScope();
     }
 
     public void outAFuncDecl(AFuncDecl node)
     {
         symbolTable.CloseScope();
+        symbolTable.AddFunction(node.getIdentifier().toString().toUpperCase(), TypeExpression);
     }
 }

@@ -110,7 +110,7 @@ Productions
 
     control_stmt        = {while} repeat while par_l expr par_r body
                         | {repeat} repeat par_l value par_r body
-                        | {foreach} repeat foreach par_l identifier in varname par_r body
+                        | {foreach} repeat foreach par_l [identifier]:identifier in [list]:identifier par_r body
                         | {if_stmt} if par_l expr par_r body else_stmt?;
 
     else_stmt           = {else_stmt} else body
@@ -135,14 +135,12 @@ Productions
                         | {parama_bool} par_l [body]:expr par_r bool_operator [forllow_expr]:expr
                         | {parama_numeric} par_l [body]:expr par_r operator [forllow_expr]:expr;
 
-    value               = {varname} varname
+    value               = {value} identifier
+                        | {value_member} identifier member+
                         | {func_call} func_call
-                        | {grid} func_call member+
                         | {literal} literal;
 
     func_call           = identifier par_l call_params? par_r body?;
-
-    varname             = identifier member*;
 
     member              = {dot} dot identifier
                         | {method_call} dot identifier par_l call_params? par_r;

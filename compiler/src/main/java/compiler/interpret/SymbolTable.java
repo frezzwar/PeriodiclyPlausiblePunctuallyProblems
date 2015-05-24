@@ -2,10 +2,11 @@ package compiler.interpret;
 
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 public class SymbolTable {
-	private HashMap<String, TypeExpression> functions = new HashMap<>();
+	private HashMap<String, List<TypeExpression>> functions = new HashMap<>();
 	private Stack<Scope> scopes = new Stack<>();
 	private Scope currentScope = null;
 
@@ -13,7 +14,7 @@ public class SymbolTable {
 		this.OpenScope();
 	}
 
-	public void AddFunction(String name, TypeExpression inf){
+	public void AddFunction(String name, List<TypeExpression> inf){
 		functions.put(name, inf);
 	}
 

@@ -6,22 +6,22 @@ import java.util.*;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AGridValue extends PValue
+public final class AValueMemberValue extends PValue
 {
-    private PFuncCall _funcCall_;
+    private TIdentifier _identifier_;
     private final LinkedList<PMember> _member_ = new LinkedList<PMember>();
 
-    public AGridValue()
+    public AValueMemberValue()
     {
         // Constructor
     }
 
-    public AGridValue(
-        @SuppressWarnings("hiding") PFuncCall _funcCall_,
+    public AValueMemberValue(
+        @SuppressWarnings("hiding") TIdentifier _identifier_,
         @SuppressWarnings("hiding") List<?> _member_)
     {
         // Constructor
-        setFuncCall(_funcCall_);
+        setIdentifier(_identifier_);
 
         setMember(_member_);
 
@@ -30,27 +30,27 @@ public final class AGridValue extends PValue
     @Override
     public Object clone()
     {
-        return new AGridValue(
-            cloneNode(this._funcCall_),
+        return new AValueMemberValue(
+            cloneNode(this._identifier_),
             cloneList(this._member_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAGridValue(this);
+        ((Analysis) sw).caseAValueMemberValue(this);
     }
 
-    public PFuncCall getFuncCall()
+    public TIdentifier getIdentifier()
     {
-        return this._funcCall_;
+        return this._identifier_;
     }
 
-    public void setFuncCall(PFuncCall node)
+    public void setIdentifier(TIdentifier node)
     {
-        if(this._funcCall_ != null)
+        if(this._identifier_ != null)
         {
-            this._funcCall_.parent(null);
+            this._identifier_.parent(null);
         }
 
         if(node != null)
@@ -63,7 +63,7 @@ public final class AGridValue extends PValue
             node.parent(this);
         }
 
-        this._funcCall_ = node;
+        this._identifier_ = node;
     }
 
     public LinkedList<PMember> getMember()
@@ -96,7 +96,7 @@ public final class AGridValue extends PValue
     public String toString()
     {
         return ""
-            + toString(this._funcCall_)
+            + toString(this._identifier_)
             + toString(this._member_);
     }
 
@@ -104,9 +104,9 @@ public final class AGridValue extends PValue
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._funcCall_ == child)
+        if(this._identifier_ == child)
         {
-            this._funcCall_ = null;
+            this._identifier_ = null;
             return;
         }
 
@@ -122,9 +122,9 @@ public final class AGridValue extends PValue
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._funcCall_ == oldChild)
+        if(this._identifier_ == oldChild)
         {
-            setFuncCall((PFuncCall) newChild);
+            setIdentifier((TIdentifier) newChild);
             return;
         }
 

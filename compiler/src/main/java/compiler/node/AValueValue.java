@@ -5,46 +5,46 @@ package compiler.node;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVarnameValue extends PValue
+public final class AValueValue extends PValue
 {
-    private PVarname _varname_;
+    private TIdentifier _identifier_;
 
-    public AVarnameValue()
+    public AValueValue()
     {
         // Constructor
     }
 
-    public AVarnameValue(
-        @SuppressWarnings("hiding") PVarname _varname_)
+    public AValueValue(
+        @SuppressWarnings("hiding") TIdentifier _identifier_)
     {
         // Constructor
-        setVarname(_varname_);
+        setIdentifier(_identifier_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AVarnameValue(
-            cloneNode(this._varname_));
+        return new AValueValue(
+            cloneNode(this._identifier_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVarnameValue(this);
+        ((Analysis) sw).caseAValueValue(this);
     }
 
-    public PVarname getVarname()
+    public TIdentifier getIdentifier()
     {
-        return this._varname_;
+        return this._identifier_;
     }
 
-    public void setVarname(PVarname node)
+    public void setIdentifier(TIdentifier node)
     {
-        if(this._varname_ != null)
+        if(this._identifier_ != null)
         {
-            this._varname_.parent(null);
+            this._identifier_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AVarnameValue extends PValue
             node.parent(this);
         }
 
-        this._varname_ = node;
+        this._identifier_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._varname_);
+            + toString(this._identifier_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._varname_ == child)
+        if(this._identifier_ == child)
         {
-            this._varname_ = null;
+            this._identifier_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AVarnameValue extends PValue
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._varname_ == oldChild)
+        if(this._identifier_ == oldChild)
         {
-            setVarname((PVarname) newChild);
+            setIdentifier((TIdentifier) newChild);
             return;
         }
 

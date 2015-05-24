@@ -116,7 +116,7 @@ public class ClassGenerator extends DepthFirstAdapter
 
 	@Override
 	public void inAForeachControlStmt(AForeachControlStmt node){
-		code = "for ( " + node.getIdentifier() + "of " + node.getVarname() + ")";
+		code = "for ( " + node.getIdentifier() + "of " + node.getList() + ")";
 		write(code);
 	}
 
@@ -198,27 +198,6 @@ public class ClassGenerator extends DepthFirstAdapter
 
 	}
 
-	@Override
-	public void inADotMember(ADotMember node){
-		String ident = node.getIdentifier().toString();
-		String key = ident.toUpperCase().trim();
-		if (node.parent().getClass() == AVarname.class){
-			AVarname temp = (AVarname) node.parent();
-			String temp_ident = temp.getIdentifier().toString();
-			String temp_key = temp_ident.toUpperCase().trim();
-			if (symbolTable.GetVariable(temp_key) == Type.grid){
-				if (key.equals("BACKGROUND")){
-					if (temp.parent().parent().getClass() == AAssignExpr.class){
-						AAssignExpr tempAssignNode = (AAssignExpr) temp.parent().parent();
-						String param = tempAssignNode.getExpr().toString();
-						code = CreateGridBackground(param);
-						write(code);
-
-					}
-				}
-			}
-		}
-	}
 
 	private String CreateGridBackground(String src){
 		String str = "// Set background image\n" +

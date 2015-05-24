@@ -315,19 +315,19 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAVarnameValue(AVarnameValue node)
+    public void caseAValueValue(AValueValue node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAValueMemberValue(AValueMemberValue node)
     {
         defaultCase(node);
     }
 
     @Override
     public void caseAFuncCallValue(AFuncCallValue node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAGridValue(AGridValue node)
     {
         defaultCase(node);
     }
@@ -340,12 +340,6 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseAFuncCall(AFuncCall node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAVarname(AVarname node)
     {
         defaultCase(node);
     }

@@ -52,12 +52,11 @@ public interface Analysis extends Switch
     void caseAParamaExpr(AParamaExpr node);
     void caseAParamaBoolExpr(AParamaBoolExpr node);
     void caseAParamaNumericExpr(AParamaNumericExpr node);
-    void caseAVarnameValue(AVarnameValue node);
+    void caseAValueValue(AValueValue node);
+    void caseAValueMemberValue(AValueMemberValue node);
     void caseAFuncCallValue(AFuncCallValue node);
-    void caseAGridValue(AGridValue node);
     void caseALiteralValue(ALiteralValue node);
     void caseAFuncCall(AFuncCall node);
-    void caseAVarname(AVarname node);
     void caseADotMember(ADotMember node);
     void caseAMethodCallMember(AMethodCallMember node);
     void caseAMinusOperator(AMinusOperator node);

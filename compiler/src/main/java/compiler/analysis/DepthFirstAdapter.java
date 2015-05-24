@@ -759,9 +759,9 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getIn().apply(this);
         }
-        if(node.getVarname() != null)
+        if(node.getList() != null)
         {
-            node.getVarname().apply(this);
+            node.getList().apply(this);
         }
         if(node.getParR() != null)
         {
@@ -1289,25 +1289,53 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outAParamaNumericExpr(node);
     }
 
-    public void inAVarnameValue(AVarnameValue node)
+    public void inAValueValue(AValueValue node)
     {
         defaultIn(node);
     }
 
-    public void outAVarnameValue(AVarnameValue node)
+    public void outAValueValue(AValueValue node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAVarnameValue(AVarnameValue node)
+    public void caseAValueValue(AValueValue node)
     {
-        inAVarnameValue(node);
-        if(node.getVarname() != null)
+        inAValueValue(node);
+        if(node.getIdentifier() != null)
         {
-            node.getVarname().apply(this);
+            node.getIdentifier().apply(this);
         }
-        outAVarnameValue(node);
+        outAValueValue(node);
+    }
+
+    public void inAValueMemberValue(AValueMemberValue node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAValueMemberValue(AValueMemberValue node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAValueMemberValue(AValueMemberValue node)
+    {
+        inAValueMemberValue(node);
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
+        {
+            List<PMember> copy = new ArrayList<PMember>(node.getMember());
+            for(PMember e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        outAValueMemberValue(node);
     }
 
     public void inAFuncCallValue(AFuncCallValue node)
@@ -1329,34 +1357,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getFuncCall().apply(this);
         }
         outAFuncCallValue(node);
-    }
-
-    public void inAGridValue(AGridValue node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAGridValue(AGridValue node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAGridValue(AGridValue node)
-    {
-        inAGridValue(node);
-        if(node.getFuncCall() != null)
-        {
-            node.getFuncCall().apply(this);
-        }
-        {
-            List<PMember> copy = new ArrayList<PMember>(node.getMember());
-            for(PMember e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        outAGridValue(node);
     }
 
     public void inALiteralValue(ALiteralValue node)
@@ -1415,34 +1415,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getBody().apply(this);
         }
         outAFuncCall(node);
-    }
-
-    public void inAVarname(AVarname node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAVarname(AVarname node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAVarname(AVarname node)
-    {
-        inAVarname(node);
-        if(node.getIdentifier() != null)
-        {
-            node.getIdentifier().apply(this);
-        }
-        {
-            List<PMember> copy = new ArrayList<PMember>(node.getMember());
-            for(PMember e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        outAVarname(node);
     }
 
     public void inADotMember(ADotMember node)

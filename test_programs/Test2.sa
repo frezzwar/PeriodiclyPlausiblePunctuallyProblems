@@ -3,6 +3,8 @@ new grid1 = grid(10, 12);
 
 program
 {
+    new thisPar = 5 + ( 5 + 4) / 4;
+
     grid1.background = "test_img.png";
 
     new number1 = 5;
@@ -18,8 +20,6 @@ program
     new number5 = 5 +5 + 5;
     
     number2 = 9;
-
-    new thisPar = 5 + ( 5 + 4) / 4;
 
     new bool_test = 10 < 12;
 

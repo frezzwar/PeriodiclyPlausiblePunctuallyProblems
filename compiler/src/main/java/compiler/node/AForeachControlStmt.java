@@ -12,7 +12,7 @@ public final class AForeachControlStmt extends PControlStmt
     private TParL _parL_;
     private TIdentifier _identifier_;
     private TIn _in_;
-    private PVarname _varname_;
+    private TIdentifier _list_;
     private TParR _parR_;
     private PBody _body_;
 
@@ -27,7 +27,7 @@ public final class AForeachControlStmt extends PControlStmt
         @SuppressWarnings("hiding") TParL _parL_,
         @SuppressWarnings("hiding") TIdentifier _identifier_,
         @SuppressWarnings("hiding") TIn _in_,
-        @SuppressWarnings("hiding") PVarname _varname_,
+        @SuppressWarnings("hiding") TIdentifier _list_,
         @SuppressWarnings("hiding") TParR _parR_,
         @SuppressWarnings("hiding") PBody _body_)
     {
@@ -42,7 +42,7 @@ public final class AForeachControlStmt extends PControlStmt
 
         setIn(_in_);
 
-        setVarname(_varname_);
+        setList(_list_);
 
         setParR(_parR_);
 
@@ -59,7 +59,7 @@ public final class AForeachControlStmt extends PControlStmt
             cloneNode(this._parL_),
             cloneNode(this._identifier_),
             cloneNode(this._in_),
-            cloneNode(this._varname_),
+            cloneNode(this._list_),
             cloneNode(this._parR_),
             cloneNode(this._body_));
     }
@@ -195,16 +195,16 @@ public final class AForeachControlStmt extends PControlStmt
         this._in_ = node;
     }
 
-    public PVarname getVarname()
+    public TIdentifier getList()
     {
-        return this._varname_;
+        return this._list_;
     }
 
-    public void setVarname(PVarname node)
+    public void setList(TIdentifier node)
     {
-        if(this._varname_ != null)
+        if(this._list_ != null)
         {
-            this._varname_.parent(null);
+            this._list_.parent(null);
         }
 
         if(node != null)
@@ -217,7 +217,7 @@ public final class AForeachControlStmt extends PControlStmt
             node.parent(this);
         }
 
-        this._varname_ = node;
+        this._list_ = node;
     }
 
     public TParR getParR()
@@ -279,7 +279,7 @@ public final class AForeachControlStmt extends PControlStmt
             + toString(this._parL_)
             + toString(this._identifier_)
             + toString(this._in_)
-            + toString(this._varname_)
+            + toString(this._list_)
             + toString(this._parR_)
             + toString(this._body_);
     }
@@ -318,9 +318,9 @@ public final class AForeachControlStmt extends PControlStmt
             return;
         }
 
-        if(this._varname_ == child)
+        if(this._list_ == child)
         {
-            this._varname_ = null;
+            this._list_ = null;
             return;
         }
 
@@ -373,9 +373,9 @@ public final class AForeachControlStmt extends PControlStmt
             return;
         }
 
-        if(this._varname_ == oldChild)
+        if(this._list_ == oldChild)
         {
-            setVarname((PVarname) newChild);
+            setList((TIdentifier) newChild);
             return;
         }
 

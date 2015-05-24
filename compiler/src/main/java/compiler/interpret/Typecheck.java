@@ -29,7 +29,7 @@ public class Typecheck{
 						retType.add(new TypeExpression(null, Type.number));
 						return retType;
 					}
-					else if(variables[0] == "true" || variables[0] == "false")
+					else if(variables[0].equals("true") || variables[0].equals("false"))
 					{
 						retType.add(new TypeExpression(null, Type.bool));
 						return retType;

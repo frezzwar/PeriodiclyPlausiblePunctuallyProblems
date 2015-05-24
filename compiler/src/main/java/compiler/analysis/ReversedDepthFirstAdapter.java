@@ -1331,13 +1331,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAValueMemberValue(AValueMemberValue node)
     {
         inAValueMemberValue(node);
+        if(node.getMember() != null)
         {
-            List<PMember> copy = new ArrayList<PMember>(node.getMember());
-            Collections.reverse(copy);
-            for(PMember e : copy)
-            {
-                e.apply(this);
-            }
+            node.getMember().apply(this);
         }
         if(node.getIdentifier() != null)
         {

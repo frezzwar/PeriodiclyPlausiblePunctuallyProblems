@@ -2,14 +2,13 @@
 
 package compiler.node;
 
-import java.util.*;
 import compiler.analysis.*;
 
 @SuppressWarnings("nls")
 public final class AValueMemberValue extends PValue
 {
     private TIdentifier _identifier_;
-    private final LinkedList<PMember> _member_ = new LinkedList<PMember>();
+    private PMember _member_;
 
     public AValueMemberValue()
     {
@@ -18,7 +17,7 @@ public final class AValueMemberValue extends PValue
 
     public AValueMemberValue(
         @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") List<?> _member_)
+        @SuppressWarnings("hiding") PMember _member_)
     {
         // Constructor
         setIdentifier(_identifier_);
@@ -32,7 +31,7 @@ public final class AValueMemberValue extends PValue
     {
         return new AValueMemberValue(
             cloneNode(this._identifier_),
-            cloneList(this._member_));
+            cloneNode(this._member_));
     }
 
     @Override
@@ -66,30 +65,29 @@ public final class AValueMemberValue extends PValue
         this._identifier_ = node;
     }
 
-    public LinkedList<PMember> getMember()
+    public PMember getMember()
     {
         return this._member_;
     }
 
-    public void setMember(List<?> list)
+    public void setMember(PMember node)
     {
-        for(PMember e : this._member_)
+        if(this._member_ != null)
         {
-            e.parent(null);
+            this._member_.parent(null);
         }
-        this._member_.clear();
 
-        for(Object obj_e : list)
+        if(node != null)
         {
-            PMember e = (PMember) obj_e;
-            if(e.parent() != null)
+            if(node.parent() != null)
             {
-                e.parent().removeChild(e);
+                node.parent().removeChild(node);
             }
 
-            e.parent(this);
-            this._member_.add(e);
+            node.parent(this);
         }
+
+        this._member_ = node;
     }
 
     @Override
@@ -110,8 +108,9 @@ public final class AValueMemberValue extends PValue
             return;
         }
 
-        if(this._member_.remove(child))
+        if(this._member_ == child)
         {
+            this._member_ = null;
             return;
         }
 
@@ -128,22 +127,10 @@ public final class AValueMemberValue extends PValue
             return;
         }
 
-        for(ListIterator<PMember> i = this._member_.listIterator(); i.hasNext();)
+        if(this._member_ == oldChild)
         {
-            if(i.next() == oldChild)
-            {
-                if(newChild != null)
-                {
-                    i.set((PMember) newChild);
-                    newChild.parent(this);
-                    oldChild.parent(null);
-                    return;
-                }
-
-                i.remove();
-                oldChild.parent(null);
-                return;
-            }
+            setMember((PMember) newChild);
+            return;
         }
 
         throw new RuntimeException("Not a child.");

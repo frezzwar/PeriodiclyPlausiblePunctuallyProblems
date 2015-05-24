@@ -136,7 +136,7 @@ Productions
                         | {parama_numeric} par_l [body]:expr par_r operator [forllow_expr]:expr;
 
     value               = {value} identifier
-                        | {value_member} identifier member+
+                        | {value_member} identifier member
                         | {func_call} func_call
                         | {literal} literal;
 

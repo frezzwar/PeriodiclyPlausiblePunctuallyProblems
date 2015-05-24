@@ -19,10 +19,34 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	public void outAVariableDecl(AVariableDecl node)
 	{
 		TIdentifier ident = node.getIdentifier();
-		
+		Type type = null;
 		String key = ident.toString().toUpperCase().trim();
-		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables().toString());
-		Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables().toString());
+		if (node.getVariables().getClass() != AListVariables.class)
+		{
+			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables().toString());
+			type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables().toString());
+		}
+		else
+		{
+			AListVariables listVariables = (AListVariables) node.getVariables();
+			String[] temp = listVariables.getValue().toString().split(",");
+			for (int i = 0; i < temp.length; i++)
+			{
+				if (type == null)
+				{
+					List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(temp[0].toString().trim());
+					type = Typecheck.typeChecker(TypeExpression, symbolTable, temp[0].toString().trim());
+				}
+				else
+				{
+					List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(temp[i].toString().trim());
+					if(type != Typecheck.typeChecker(TypeExpression, symbolTable, temp[i].toString().trim()))
+					{
+						System.out.println("Type Error" + node.getIdentifier());
+					}
+				}
+			}
+		}
 
 		if(symbolTable.VarDeclaredInCurrentScope(key))
 		{
@@ -38,10 +62,27 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	public void outAAssignExpr(AAssignExpr node)
 	{
 		PValue ident = node.getValue();
-		System.out.println(ident.getClass());
-		String key = ident.toString().toUpperCase().trim();
-		List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getExpr().toString());
-		Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getExpr().toString());
+		if (ident.getClass() != AValueMemberValue.class)
+		{
+			String key = ident.toString().toUpperCase().trim();
+			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getExpr().toString());
+			Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getExpr().toString());
+
+			if (symbolTable.VarPrevDeclared(key))
+			{
+				if (symbolTable.GetVariable(key) != type)
+				{
+					System.out.println(ident + "is of type " + symbolTable.GetVariable(key) + ", but you are trying to assign it a " + type);
+					System.exit(0);
+				}
+			}
+		}
+		else
+		{
+			AValueMemberValue member = (AValueMemberValue)ident;
+			String key = member.getIdentifier().toString();
+			//TODO figur typecheck
+		}
 	}
 
 	@Override
@@ -102,10 +143,10 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	public void inAForeachControlStmt(AForeachControlStmt node){
 		TIdentifier ident = node.getIdentifier();
 		String key = ident.toString().toUpperCase().trim();
+		String listKey = node.getList().toString().toUpperCase().trim();
 
-		//TODO Foreach type
 		symbolTable.OpenScope();
-		symbolTable.AddVariable(key, Type.undefined);
+		symbolTable.AddVariable(key, symbolTable.GetVariable(listKey));
 	}
 
 	@Override
@@ -153,7 +194,4 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		}
 		symbolTable.AddVariable(key, Type.grid);
 	}
-
-
-
 }

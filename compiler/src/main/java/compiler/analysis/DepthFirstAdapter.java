@@ -1328,12 +1328,9 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getIdentifier().apply(this);
         }
+        if(node.getMember() != null)
         {
-            List<PMember> copy = new ArrayList<PMember>(node.getMember());
-            for(PMember e : copy)
-            {
-                e.apply(this);
-            }
+            node.getMember().apply(this);
         }
         outAValueMemberValue(node);
     }

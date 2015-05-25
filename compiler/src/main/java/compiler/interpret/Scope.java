@@ -22,6 +22,14 @@ public class Scope {
 		this.opened = true;
 	}
 
+	public void ChangeVariable(String key, Type type)
+	{
+		if (variables.containsKey(key))
+		{
+			variables.put(key, type);
+		}
+	}
+
 	public void CloseScope(){
 		this.opened = false;
 	}

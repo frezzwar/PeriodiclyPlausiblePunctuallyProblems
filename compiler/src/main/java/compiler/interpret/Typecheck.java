@@ -139,7 +139,7 @@ public class Typecheck{
 		return retType;
 	}
 	
-	public static boolean isNumeric(String str)  
+	private static boolean isNumeric(String str)
 	{  
 	  try  
 	  {  
@@ -152,7 +152,7 @@ public class Typecheck{
 	  return true;  
 	}
 
-	public static void MultivariableList(List<TypeExpression> ToList, List<TypeExpression> InputList, int priority)
+	private static void MultivariableList(List<TypeExpression> ToList, List<TypeExpression> InputList, int priority)
 	{
 		List<TypeExpression> TempList = new LinkedList<>();
 		List<Integer> RemoveList = new LinkedList<>();

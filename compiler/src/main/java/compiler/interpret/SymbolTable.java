@@ -2,6 +2,7 @@ package compiler.interpret;
 
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -14,10 +15,41 @@ public class SymbolTable {
 		this.OpenScope();
 	}
 
-	public void AddFunction(String name, List<TypeExpression> inf){
-		functions.put(name, inf);
+	public void ChangeType(String key, Type type)
+	{
+		changeType(currentScope, key, type);
 	}
 
+	private void changeType(Scope scope, String key, Type type)
+	{
+		if (scope.GetVariable(key) != null){
+			scope.ChangeVariable(key, type);
+		}
+		else if (scope.Parent() != null){
+			changeType(scope.Parent(), key, type);
+		}
+	}
+
+	public void AddFunction(String name, List<TypeExpression> inf){
+		List<TypeExpression> temp = new LinkedList<>();
+		for (int i = 0; i < inf.size(); i++)
+		{
+			temp.add(inf.get(i).Copy());
+		}
+		functions.put(name, temp);
+	}
+
+	public List<TypeExpression> GetFunction(String key)
+	{
+		if (functions.containsKey(key))
+		{
+			return functions.get(key);
+		}
+		else
+		{
+			return null;
+		}
+	}
 
 	public boolean FuncPrevDeclared(String name){
 		return functions.containsKey(name);

@@ -14,7 +14,6 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		this.symbolTable = symTable;
 	}
 
-
 	@Override
 	public void outAVariableDecl(AVariableDecl node)
 	{
@@ -181,6 +180,11 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		if (!symbolTable.FuncPrevDeclared(key)){
 			System.out.println("Function not declared: " + ident.toString());
 			System.exit(0);
+		}
+		else
+		{
+			List<TypeExpression> typeExpressions = symbolTable.GetFunction(key);
+			//Typecheck.typeChecker()
 		}
 	}
 

@@ -1,0 +1,22 @@
+program
+{
+    new temp = func(3, 4, 5);
+}
+
+new func(par1, par2, par3)
+{
+    if(par1 < par2)
+    {
+        return par3 * 4;
+    }
+    else if(par2 < par3)
+    {
+        return par1;
+    }
+    else if(par1 == par2)
+    {
+        return 8;
+    }
+    return par1*par2*par3;
+
+}

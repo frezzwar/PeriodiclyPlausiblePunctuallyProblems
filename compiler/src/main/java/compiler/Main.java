@@ -24,7 +24,7 @@ public class Main {
             // Get our Interpreter going.
             Interpreter interp = new Interpreter () ;
             System.out.println();
-            ast.apply(interp) ;
+//            ast.apply(interp) ;
             System.out.println("Ok");
 
             SymbolTable symTable = new SymbolTable();

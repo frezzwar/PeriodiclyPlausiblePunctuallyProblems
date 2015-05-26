@@ -8,9 +8,7 @@ import compiler.analysis.*;
 public final class ARepeatControlStmt extends PControlStmt
 {
     private TRepeat _repeat_;
-    private TParL _parL_;
-    private PValue _value_;
-    private TParR _parR_;
+    private PRepeatCount _repeatCount_;
     private PBody _body_;
 
     public ARepeatControlStmt()
@@ -20,19 +18,13 @@ public final class ARepeatControlStmt extends PControlStmt
 
     public ARepeatControlStmt(
         @SuppressWarnings("hiding") TRepeat _repeat_,
-        @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PValue _value_,
-        @SuppressWarnings("hiding") TParR _parR_,
+        @SuppressWarnings("hiding") PRepeatCount _repeatCount_,
         @SuppressWarnings("hiding") PBody _body_)
     {
         // Constructor
         setRepeat(_repeat_);
 
-        setParL(_parL_);
-
-        setValue(_value_);
-
-        setParR(_parR_);
+        setRepeatCount(_repeatCount_);
 
         setBody(_body_);
 
@@ -43,9 +35,7 @@ public final class ARepeatControlStmt extends PControlStmt
     {
         return new ARepeatControlStmt(
             cloneNode(this._repeat_),
-            cloneNode(this._parL_),
-            cloneNode(this._value_),
-            cloneNode(this._parR_),
+            cloneNode(this._repeatCount_),
             cloneNode(this._body_));
     }
 
@@ -80,16 +70,16 @@ public final class ARepeatControlStmt extends PControlStmt
         this._repeat_ = node;
     }
 
-    public TParL getParL()
+    public PRepeatCount getRepeatCount()
     {
-        return this._parL_;
+        return this._repeatCount_;
     }
 
-    public void setParL(TParL node)
+    public void setRepeatCount(PRepeatCount node)
     {
-        if(this._parL_ != null)
+        if(this._repeatCount_ != null)
         {
-            this._parL_.parent(null);
+            this._repeatCount_.parent(null);
         }
 
         if(node != null)
@@ -102,57 +92,7 @@ public final class ARepeatControlStmt extends PControlStmt
             node.parent(this);
         }
 
-        this._parL_ = node;
-    }
-
-    public PValue getValue()
-    {
-        return this._value_;
-    }
-
-    public void setValue(PValue node)
-    {
-        if(this._value_ != null)
-        {
-            this._value_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._value_ = node;
-    }
-
-    public TParR getParR()
-    {
-        return this._parR_;
-    }
-
-    public void setParR(TParR node)
-    {
-        if(this._parR_ != null)
-        {
-            this._parR_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._parR_ = node;
+        this._repeatCount_ = node;
     }
 
     public PBody getBody()
@@ -185,9 +125,7 @@ public final class ARepeatControlStmt extends PControlStmt
     {
         return ""
             + toString(this._repeat_)
-            + toString(this._parL_)
-            + toString(this._value_)
-            + toString(this._parR_)
+            + toString(this._repeatCount_)
             + toString(this._body_);
     }
 
@@ -201,21 +139,9 @@ public final class ARepeatControlStmt extends PControlStmt
             return;
         }
 
-        if(this._parL_ == child)
+        if(this._repeatCount_ == child)
         {
-            this._parL_ = null;
-            return;
-        }
-
-        if(this._value_ == child)
-        {
-            this._value_ = null;
-            return;
-        }
-
-        if(this._parR_ == child)
-        {
-            this._parR_ = null;
+            this._repeatCount_ = null;
             return;
         }
 
@@ -238,21 +164,9 @@ public final class ARepeatControlStmt extends PControlStmt
             return;
         }
 
-        if(this._parL_ == oldChild)
+        if(this._repeatCount_ == oldChild)
         {
-            setParL((TParL) newChild);
-            return;
-        }
-
-        if(this._value_ == oldChild)
-        {
-            setValue((PValue) newChild);
-            return;
-        }
-
-        if(this._parR_ == oldChild)
-        {
-            setParR((TParR) newChild);
+            setRepeatCount((PRepeatCount) newChild);
             return;
         }
 

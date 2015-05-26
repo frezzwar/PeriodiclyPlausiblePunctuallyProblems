@@ -14,21 +14,21 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		this.symbolTable = symTable;
 	}
 
-
+	/*
 	@Override
 	public void outAVariableDecl(AVariableDecl node)
 	{
 		TIdentifier ident = node.getIdentifier();
 		Type type = null;
 		String key = ident.toString().toUpperCase().trim();
-		if (node.getVariables().getClass() != AListVariables.class)
+		if (node.getVariable().getClass() != AListVariable.class)
 		{
-			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables().toString());
-			type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables().toString());
+			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariable().toString());
+			type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariable().toString());
 		}
 		else
 		{
-			AListVariables listVariables = (AListVariables) node.getVariables();
+			AListVariable listVariables = (AListVariable) node.getVariable();
 			String[] temp = listVariables.getValue().toString().split(",");
 			for (int i = 0; i < temp.length; i++)
 			{
@@ -58,7 +58,8 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			symbolTable.AddVariable(key, type);
 		}
 	}
-
+	*/
+	/*
 	public void outAAssignExpr(AAssignExpr node)
 	{
 		PValue ident = node.getValue();
@@ -84,6 +85,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			//TODO figur typecheck
 		}
 	}
+	*/
 
 	@Override
 	public void outAParams(AParams node)
@@ -178,7 +180,9 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	public void inAFuncCall(AFuncCall node){
 		TIdentifier ident = node.getIdentifier();
 		String key = ident.toString().toUpperCase().trim();
-		if (!symbolTable.FuncPrevDeclared(key)){
+		if (node.parent().getClass() == AGridPosValue.class){}
+
+		else if (!symbolTable.FuncPrevDeclared(key)){
 			System.out.println("Function not declared: " + ident.toString());
 			System.exit(0);
 		}

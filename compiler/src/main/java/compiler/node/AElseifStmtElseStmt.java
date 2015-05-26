@@ -9,9 +9,7 @@ public final class AElseifStmtElseStmt extends PElseStmt
 {
     private TElse _else_;
     private TIf _if_;
-    private TParL _parL_;
-    private PExpr _expr_;
-    private TParR _parR_;
+    private PCondition _condition_;
     private PBody _body_;
     private PElseStmt _elseStmt_;
 
@@ -23,9 +21,7 @@ public final class AElseifStmtElseStmt extends PElseStmt
     public AElseifStmtElseStmt(
         @SuppressWarnings("hiding") TElse _else_,
         @SuppressWarnings("hiding") TIf _if_,
-        @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PExpr _expr_,
-        @SuppressWarnings("hiding") TParR _parR_,
+        @SuppressWarnings("hiding") PCondition _condition_,
         @SuppressWarnings("hiding") PBody _body_,
         @SuppressWarnings("hiding") PElseStmt _elseStmt_)
     {
@@ -34,11 +30,7 @@ public final class AElseifStmtElseStmt extends PElseStmt
 
         setIf(_if_);
 
-        setParL(_parL_);
-
-        setExpr(_expr_);
-
-        setParR(_parR_);
+        setCondition(_condition_);
 
         setBody(_body_);
 
@@ -52,9 +44,7 @@ public final class AElseifStmtElseStmt extends PElseStmt
         return new AElseifStmtElseStmt(
             cloneNode(this._else_),
             cloneNode(this._if_),
-            cloneNode(this._parL_),
-            cloneNode(this._expr_),
-            cloneNode(this._parR_),
+            cloneNode(this._condition_),
             cloneNode(this._body_),
             cloneNode(this._elseStmt_));
     }
@@ -115,16 +105,16 @@ public final class AElseifStmtElseStmt extends PElseStmt
         this._if_ = node;
     }
 
-    public TParL getParL()
+    public PCondition getCondition()
     {
-        return this._parL_;
+        return this._condition_;
     }
 
-    public void setParL(TParL node)
+    public void setCondition(PCondition node)
     {
-        if(this._parL_ != null)
+        if(this._condition_ != null)
         {
-            this._parL_.parent(null);
+            this._condition_.parent(null);
         }
 
         if(node != null)
@@ -137,57 +127,7 @@ public final class AElseifStmtElseStmt extends PElseStmt
             node.parent(this);
         }
 
-        this._parL_ = node;
-    }
-
-    public PExpr getExpr()
-    {
-        return this._expr_;
-    }
-
-    public void setExpr(PExpr node)
-    {
-        if(this._expr_ != null)
-        {
-            this._expr_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._expr_ = node;
-    }
-
-    public TParR getParR()
-    {
-        return this._parR_;
-    }
-
-    public void setParR(TParR node)
-    {
-        if(this._parR_ != null)
-        {
-            this._parR_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._parR_ = node;
+        this._condition_ = node;
     }
 
     public PBody getBody()
@@ -246,9 +186,7 @@ public final class AElseifStmtElseStmt extends PElseStmt
         return ""
             + toString(this._else_)
             + toString(this._if_)
-            + toString(this._parL_)
-            + toString(this._expr_)
-            + toString(this._parR_)
+            + toString(this._condition_)
             + toString(this._body_)
             + toString(this._elseStmt_);
     }
@@ -269,21 +207,9 @@ public final class AElseifStmtElseStmt extends PElseStmt
             return;
         }
 
-        if(this._parL_ == child)
+        if(this._condition_ == child)
         {
-            this._parL_ = null;
-            return;
-        }
-
-        if(this._expr_ == child)
-        {
-            this._expr_ = null;
-            return;
-        }
-
-        if(this._parR_ == child)
-        {
-            this._parR_ = null;
+            this._condition_ = null;
             return;
         }
 
@@ -318,21 +244,9 @@ public final class AElseifStmtElseStmt extends PElseStmt
             return;
         }
 
-        if(this._parL_ == oldChild)
+        if(this._condition_ == oldChild)
         {
-            setParL((TParL) newChild);
-            return;
-        }
-
-        if(this._expr_ == oldChild)
-        {
-            setExpr((PExpr) newChild);
-            return;
-        }
-
-        if(this._parR_ == oldChild)
-        {
-            setParR((TParR) newChild);
+            setCondition((PCondition) newChild);
             return;
         }
 

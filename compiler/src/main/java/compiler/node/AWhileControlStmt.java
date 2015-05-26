@@ -9,9 +9,7 @@ public final class AWhileControlStmt extends PControlStmt
 {
     private TRepeat _repeat_;
     private TWhile _while_;
-    private TParL _parL_;
-    private PExpr _expr_;
-    private TParR _parR_;
+    private PCondition _condition_;
     private PBody _body_;
 
     public AWhileControlStmt()
@@ -22,9 +20,7 @@ public final class AWhileControlStmt extends PControlStmt
     public AWhileControlStmt(
         @SuppressWarnings("hiding") TRepeat _repeat_,
         @SuppressWarnings("hiding") TWhile _while_,
-        @SuppressWarnings("hiding") TParL _parL_,
-        @SuppressWarnings("hiding") PExpr _expr_,
-        @SuppressWarnings("hiding") TParR _parR_,
+        @SuppressWarnings("hiding") PCondition _condition_,
         @SuppressWarnings("hiding") PBody _body_)
     {
         // Constructor
@@ -32,11 +28,7 @@ public final class AWhileControlStmt extends PControlStmt
 
         setWhile(_while_);
 
-        setParL(_parL_);
-
-        setExpr(_expr_);
-
-        setParR(_parR_);
+        setCondition(_condition_);
 
         setBody(_body_);
 
@@ -48,9 +40,7 @@ public final class AWhileControlStmt extends PControlStmt
         return new AWhileControlStmt(
             cloneNode(this._repeat_),
             cloneNode(this._while_),
-            cloneNode(this._parL_),
-            cloneNode(this._expr_),
-            cloneNode(this._parR_),
+            cloneNode(this._condition_),
             cloneNode(this._body_));
     }
 
@@ -110,16 +100,16 @@ public final class AWhileControlStmt extends PControlStmt
         this._while_ = node;
     }
 
-    public TParL getParL()
+    public PCondition getCondition()
     {
-        return this._parL_;
+        return this._condition_;
     }
 
-    public void setParL(TParL node)
+    public void setCondition(PCondition node)
     {
-        if(this._parL_ != null)
+        if(this._condition_ != null)
         {
-            this._parL_.parent(null);
+            this._condition_.parent(null);
         }
 
         if(node != null)
@@ -132,57 +122,7 @@ public final class AWhileControlStmt extends PControlStmt
             node.parent(this);
         }
 
-        this._parL_ = node;
-    }
-
-    public PExpr getExpr()
-    {
-        return this._expr_;
-    }
-
-    public void setExpr(PExpr node)
-    {
-        if(this._expr_ != null)
-        {
-            this._expr_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._expr_ = node;
-    }
-
-    public TParR getParR()
-    {
-        return this._parR_;
-    }
-
-    public void setParR(TParR node)
-    {
-        if(this._parR_ != null)
-        {
-            this._parR_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._parR_ = node;
+        this._condition_ = node;
     }
 
     public PBody getBody()
@@ -216,9 +156,7 @@ public final class AWhileControlStmt extends PControlStmt
         return ""
             + toString(this._repeat_)
             + toString(this._while_)
-            + toString(this._parL_)
-            + toString(this._expr_)
-            + toString(this._parR_)
+            + toString(this._condition_)
             + toString(this._body_);
     }
 
@@ -238,21 +176,9 @@ public final class AWhileControlStmt extends PControlStmt
             return;
         }
 
-        if(this._parL_ == child)
+        if(this._condition_ == child)
         {
-            this._parL_ = null;
-            return;
-        }
-
-        if(this._expr_ == child)
-        {
-            this._expr_ = null;
-            return;
-        }
-
-        if(this._parR_ == child)
-        {
-            this._parR_ = null;
+            this._condition_ = null;
             return;
         }
 
@@ -281,21 +207,9 @@ public final class AWhileControlStmt extends PControlStmt
             return;
         }
 
-        if(this._parL_ == oldChild)
+        if(this._condition_ == oldChild)
         {
-            setParL((TParL) newChild);
-            return;
-        }
-
-        if(this._expr_ == oldChild)
-        {
-            setExpr((PExpr) newChild);
-            return;
-        }
-
-        if(this._parR_ == oldChild)
-        {
-            setParR((TParR) newChild);
+            setCondition((PCondition) newChild);
             return;
         }
 

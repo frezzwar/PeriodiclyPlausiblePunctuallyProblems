@@ -9,12 +9,12 @@ public final class TNegate extends Token
 {
     public TNegate()
     {
-        super.setText("!=");
+        super.setText("!");
     }
 
     public TNegate(int line, int pos)
     {
-        super.setText("!=");
+        super.setText("!");
         setLine(line);
         setPos(pos);
     }

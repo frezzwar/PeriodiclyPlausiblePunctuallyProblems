@@ -7,9 +7,7 @@ import compiler.analysis.*;
 @SuppressWarnings("nls")
 public final class AAssignExpr extends PExpr
 {
-    private PValue _value_;
-    private TAssign _assign_;
-    private PExpr _expr_;
+    private PAssignExpr _assignExpr_;
 
     public AAssignExpr()
     {
@@ -17,16 +15,10 @@ public final class AAssignExpr extends PExpr
     }
 
     public AAssignExpr(
-        @SuppressWarnings("hiding") PValue _value_,
-        @SuppressWarnings("hiding") TAssign _assign_,
-        @SuppressWarnings("hiding") PExpr _expr_)
+        @SuppressWarnings("hiding") PAssignExpr _assignExpr_)
     {
         // Constructor
-        setValue(_value_);
-
-        setAssign(_assign_);
-
-        setExpr(_expr_);
+        setAssignExpr(_assignExpr_);
 
     }
 
@@ -34,9 +26,7 @@ public final class AAssignExpr extends PExpr
     public Object clone()
     {
         return new AAssignExpr(
-            cloneNode(this._value_),
-            cloneNode(this._assign_),
-            cloneNode(this._expr_));
+            cloneNode(this._assignExpr_));
     }
 
     @Override
@@ -45,16 +35,16 @@ public final class AAssignExpr extends PExpr
         ((Analysis) sw).caseAAssignExpr(this);
     }
 
-    public PValue getValue()
+    public PAssignExpr getAssignExpr()
     {
-        return this._value_;
+        return this._assignExpr_;
     }
 
-    public void setValue(PValue node)
+    public void setAssignExpr(PAssignExpr node)
     {
-        if(this._value_ != null)
+        if(this._assignExpr_ != null)
         {
-            this._value_.parent(null);
+            this._assignExpr_.parent(null);
         }
 
         if(node != null)
@@ -67,87 +57,23 @@ public final class AAssignExpr extends PExpr
             node.parent(this);
         }
 
-        this._value_ = node;
-    }
-
-    public TAssign getAssign()
-    {
-        return this._assign_;
-    }
-
-    public void setAssign(TAssign node)
-    {
-        if(this._assign_ != null)
-        {
-            this._assign_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._assign_ = node;
-    }
-
-    public PExpr getExpr()
-    {
-        return this._expr_;
-    }
-
-    public void setExpr(PExpr node)
-    {
-        if(this._expr_ != null)
-        {
-            this._expr_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._expr_ = node;
+        this._assignExpr_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._value_)
-            + toString(this._assign_)
-            + toString(this._expr_);
+            + toString(this._assignExpr_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._value_ == child)
+        if(this._assignExpr_ == child)
         {
-            this._value_ = null;
-            return;
-        }
-
-        if(this._assign_ == child)
-        {
-            this._assign_ = null;
-            return;
-        }
-
-        if(this._expr_ == child)
-        {
-            this._expr_ = null;
+            this._assignExpr_ = null;
             return;
         }
 
@@ -158,21 +84,9 @@ public final class AAssignExpr extends PExpr
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._value_ == oldChild)
+        if(this._assignExpr_ == oldChild)
         {
-            setValue((PValue) newChild);
-            return;
-        }
-
-        if(this._assign_ == oldChild)
-        {
-            setAssign((TAssign) newChild);
-            return;
-        }
-
-        if(this._expr_ == oldChild)
-        {
-            setExpr((PExpr) newChild);
+            setAssignExpr((PAssignExpr) newChild);
             return;
         }
 

@@ -9,7 +9,7 @@ import compiler.analysis.*;
 public final class AObjBody extends PObjBody
 {
     private TCurlyL _curlyL_;
-    private final LinkedList<PObjDecls> _objDecls_ = new LinkedList<PObjDecls>();
+    private final LinkedList<PInObjDecl> _inObjDecl_ = new LinkedList<PInObjDecl>();
     private TCurlyR _curlyR_;
 
     public AObjBody()
@@ -19,13 +19,13 @@ public final class AObjBody extends PObjBody
 
     public AObjBody(
         @SuppressWarnings("hiding") TCurlyL _curlyL_,
-        @SuppressWarnings("hiding") List<?> _objDecls_,
+        @SuppressWarnings("hiding") List<?> _inObjDecl_,
         @SuppressWarnings("hiding") TCurlyR _curlyR_)
     {
         // Constructor
         setCurlyL(_curlyL_);
 
-        setObjDecls(_objDecls_);
+        setInObjDecl(_inObjDecl_);
 
         setCurlyR(_curlyR_);
 
@@ -36,7 +36,7 @@ public final class AObjBody extends PObjBody
     {
         return new AObjBody(
             cloneNode(this._curlyL_),
-            cloneList(this._objDecls_),
+            cloneList(this._inObjDecl_),
             cloneNode(this._curlyR_));
     }
 
@@ -71,29 +71,29 @@ public final class AObjBody extends PObjBody
         this._curlyL_ = node;
     }
 
-    public LinkedList<PObjDecls> getObjDecls()
+    public LinkedList<PInObjDecl> getInObjDecl()
     {
-        return this._objDecls_;
+        return this._inObjDecl_;
     }
 
-    public void setObjDecls(List<?> list)
+    public void setInObjDecl(List<?> list)
     {
-        for(PObjDecls e : this._objDecls_)
+        for(PInObjDecl e : this._inObjDecl_)
         {
             e.parent(null);
         }
-        this._objDecls_.clear();
+        this._inObjDecl_.clear();
 
         for(Object obj_e : list)
         {
-            PObjDecls e = (PObjDecls) obj_e;
+            PInObjDecl e = (PInObjDecl) obj_e;
             if(e.parent() != null)
             {
                 e.parent().removeChild(e);
             }
 
             e.parent(this);
-            this._objDecls_.add(e);
+            this._inObjDecl_.add(e);
         }
     }
 
@@ -127,7 +127,7 @@ public final class AObjBody extends PObjBody
     {
         return ""
             + toString(this._curlyL_)
-            + toString(this._objDecls_)
+            + toString(this._inObjDecl_)
             + toString(this._curlyR_);
     }
 
@@ -141,7 +141,7 @@ public final class AObjBody extends PObjBody
             return;
         }
 
-        if(this._objDecls_.remove(child))
+        if(this._inObjDecl_.remove(child))
         {
             return;
         }
@@ -165,13 +165,13 @@ public final class AObjBody extends PObjBody
             return;
         }
 
-        for(ListIterator<PObjDecls> i = this._objDecls_.listIterator(); i.hasNext();)
+        for(ListIterator<PInObjDecl> i = this._inObjDecl_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PObjDecls) newChild);
+                    i.set((PInObjDecl) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

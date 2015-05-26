@@ -7,9 +7,8 @@ import compiler.analysis.*;
 @SuppressWarnings("nls")
 public final class ABooleanExpr extends PExpr
 {
-    private PValue _value_;
-    private PBoolOperator _boolOperator_;
-    private PExpr _expr_;
+    private PNegationOperator _negationOperator_;
+    private PBoolExpr _boolExpr_;
 
     public ABooleanExpr()
     {
@@ -17,16 +16,13 @@ public final class ABooleanExpr extends PExpr
     }
 
     public ABooleanExpr(
-        @SuppressWarnings("hiding") PValue _value_,
-        @SuppressWarnings("hiding") PBoolOperator _boolOperator_,
-        @SuppressWarnings("hiding") PExpr _expr_)
+        @SuppressWarnings("hiding") PNegationOperator _negationOperator_,
+        @SuppressWarnings("hiding") PBoolExpr _boolExpr_)
     {
         // Constructor
-        setValue(_value_);
+        setNegationOperator(_negationOperator_);
 
-        setBoolOperator(_boolOperator_);
-
-        setExpr(_expr_);
+        setBoolExpr(_boolExpr_);
 
     }
 
@@ -34,9 +30,8 @@ public final class ABooleanExpr extends PExpr
     public Object clone()
     {
         return new ABooleanExpr(
-            cloneNode(this._value_),
-            cloneNode(this._boolOperator_),
-            cloneNode(this._expr_));
+            cloneNode(this._negationOperator_),
+            cloneNode(this._boolExpr_));
     }
 
     @Override
@@ -45,16 +40,16 @@ public final class ABooleanExpr extends PExpr
         ((Analysis) sw).caseABooleanExpr(this);
     }
 
-    public PValue getValue()
+    public PNegationOperator getNegationOperator()
     {
-        return this._value_;
+        return this._negationOperator_;
     }
 
-    public void setValue(PValue node)
+    public void setNegationOperator(PNegationOperator node)
     {
-        if(this._value_ != null)
+        if(this._negationOperator_ != null)
         {
-            this._value_.parent(null);
+            this._negationOperator_.parent(null);
         }
 
         if(node != null)
@@ -67,19 +62,19 @@ public final class ABooleanExpr extends PExpr
             node.parent(this);
         }
 
-        this._value_ = node;
+        this._negationOperator_ = node;
     }
 
-    public PBoolOperator getBoolOperator()
+    public PBoolExpr getBoolExpr()
     {
-        return this._boolOperator_;
+        return this._boolExpr_;
     }
 
-    public void setBoolOperator(PBoolOperator node)
+    public void setBoolExpr(PBoolExpr node)
     {
-        if(this._boolOperator_ != null)
+        if(this._boolExpr_ != null)
         {
-            this._boolOperator_.parent(null);
+            this._boolExpr_.parent(null);
         }
 
         if(node != null)
@@ -92,62 +87,30 @@ public final class ABooleanExpr extends PExpr
             node.parent(this);
         }
 
-        this._boolOperator_ = node;
-    }
-
-    public PExpr getExpr()
-    {
-        return this._expr_;
-    }
-
-    public void setExpr(PExpr node)
-    {
-        if(this._expr_ != null)
-        {
-            this._expr_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._expr_ = node;
+        this._boolExpr_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._value_)
-            + toString(this._boolOperator_)
-            + toString(this._expr_);
+            + toString(this._negationOperator_)
+            + toString(this._boolExpr_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._value_ == child)
+        if(this._negationOperator_ == child)
         {
-            this._value_ = null;
+            this._negationOperator_ = null;
             return;
         }
 
-        if(this._boolOperator_ == child)
+        if(this._boolExpr_ == child)
         {
-            this._boolOperator_ = null;
-            return;
-        }
-
-        if(this._expr_ == child)
-        {
-            this._expr_ = null;
+            this._boolExpr_ = null;
             return;
         }
 
@@ -158,21 +121,15 @@ public final class ABooleanExpr extends PExpr
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._value_ == oldChild)
+        if(this._negationOperator_ == oldChild)
         {
-            setValue((PValue) newChild);
+            setNegationOperator((PNegationOperator) newChild);
             return;
         }
 
-        if(this._boolOperator_ == oldChild)
+        if(this._boolExpr_ == oldChild)
         {
-            setBoolOperator((PBoolOperator) newChild);
-            return;
-        }
-
-        if(this._expr_ == oldChild)
-        {
-            setExpr((PExpr) newChild);
+            setBoolExpr((PBoolExpr) newChild);
             return;
         }
 

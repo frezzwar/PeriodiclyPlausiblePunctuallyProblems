@@ -89,7 +89,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	}
 
 	private String createRenderer(HashMap<String, String[]> figList){
-		String temp = "function render(){\n";
+		String temp = "var render = function(){\n";
 		temp += "ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);\n";
 		for (String item : figList.keySet()){
 			temp += "ctx.drawImage(" + item + "Image, " + item + ".x, " + item + ".y, " +
@@ -119,7 +119,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	}
 
 	private String placeFigures(HashMap<String, String[]> figList){
-		String temp = "function start(){\n";
+		String temp = "var start = function(){\n";
 
 		for (Map.Entry<String, String[]> entry : figList.entrySet()){
 			String name = entry.getKey();
@@ -129,22 +129,19 @@ public class ClassGenerator extends DepthFirstAdapter
 			temp += name + ".x = " + x + " * " + cellSize + ";\n" +
 					name + ".x = " + y + " * " + cellSize + ";\n";
 		}
-
 		temp += "}\n\n";
 		return temp;
 	}
 
 	@Override
 	public void inAProgram(AProgram node){
-		// Nothing here yet...
-
 	}
 
 	@Override
 	public void outAProgram(AProgram node){
 		code = placeFigures(figures) +
 				createRenderer(figures) +
-				"function main(){\nupdate()\nrender()\nrequestAnimationFrame(main);\n\n" +
+				"var main = function(){\nupdate()\nrender()\nrequestAnimationFrame(main);\n}\n" +
 				"var w = window;\nrequestAnimationFrame = w.requestAnimationFrame ||\n" +
 				"w.webkitRequestAnimationFrame ||\nw.msRequestAnimationFrame ||\n" +
 				"w.mozRequestAnimationFrame;\n\n" +
@@ -531,7 +528,6 @@ public class ClassGenerator extends DepthFirstAdapter
 			String x = tempParams.getExpr().toString().toLowerCase().trim();
 			String y = tempTail.getExpr().toString().toLowerCase().trim();
 			addFigureCoords(name, x, y);
-
 		}
 	}
 

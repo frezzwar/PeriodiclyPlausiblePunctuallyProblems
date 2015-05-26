@@ -4,6 +4,7 @@ import compiler.analysis.*;
 import compiler.interpret.Typecheck;
 import org.sablecc.sablecc.node.TId;
 
+import java.io.File;
 import java.util.*;
 
 public class SemanticAnalyzer extends DepthFirstAdapter {
@@ -197,4 +198,72 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		}
 		symbolTable.AddVariable(key, Type.grid);
 	}
+
+	private String currObj;
+	private boolean inObjDecl = false;
+	@Override
+	public void inAObjectDecl(AObjectDecl node){
+		String key = node.getId1().toString().toUpperCase().trim();
+
+		if (symbolTable.FigureDeclared(key) || symbolTable.VarDeclaredInCurrentScope(key)){
+			System.out.println("Variable with name already declared: " + key);
+			System.exit(0);
+		}
+		symbolTable.AddFigure(key);
+
+		/* Checks if specified figure file exists */
+		String filePath = "\"" + node.getId2().toString().trim() + "\"";
+		if (!new File(filePath).isFile()) {
+			System.out.println("File does not exist: " + filePath);
+			System.exit(0);
+		}
+
+		currObj = key;
+		inObjDecl = true;
+	}
+
+	@Override
+	public void outAObjectDecl(AObjectDecl node){
+		currObj = "";
+		inObjDecl = false;
+	}
+
+	@Override
+	public void inAMemberInObjDecl(AMemberInObjDecl node){
+
+	}
+
+	@Override
+	public void inAVariableDecl(AVariableDecl node){
+		String memName =  node.getIdentifier().toString().toUpperCase().trim();
+		List<TypeExpression> typeExpressions = Typecheck.TypeExpressions(node.getVariable().toString());
+		Type type = Typecheck.typeChecker(typeExpressions, symbolTable, node.getVariable().toString());
+
+		if(inObjDecl){
+			if(symbolTable.MemberDeclaredInFigure(currObj, memName)){
+				System.out.println("Member already defined: " + "memName");
+				System.exit(0);
+			}
+			symbolTable.AddMember(currObj, memName, type);
+		}
+	}
+
+	@Override
+	public void inAFuncDecl(AFuncDecl node){
+		String methodName =  node.getIdentifier().toString().toUpperCase().trim();
+		node.apply(new FunctionChecker(symbolTable));
+
+		List<TypeExpression> typeExpressions = Typecheck.TypeExpressions(node.).toString());
+		Type type = Typecheck.typeChecker(typeExpressions, symbolTable, node.getVariable().toString());
+
+		if(inObjDecl){
+			if(symbolTable.MemberDeclaredInFigure(currObj, memName)){
+				System.out.println("Member already defined: " + "memName");
+				System.exit(0);
+			}
+			symbolTable.AddMember(currObj, memName, type);
+		}
+	}
+
+
 }

@@ -10,7 +10,7 @@ public class Figure {
     private HashMap<String, TypeExpression> methods = new HashMap<>();
 
     public void AddMember(String key, Type type){
-        members.put(key, type)
+        members.put(key, type);
     }
 
     public void AddMethod(String key, TypeExpression types){

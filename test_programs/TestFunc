@@ -1,6 +1,16 @@
+new cat = figure(car)
+    {
+        new number = 0;
+        new funci(number1)
+        {
+            return number * 9000;
+        }
+    }
+
 program
 {
     new temp = func(3, 4, 5);
+    cat.funci(1);
 }
 
 new func(par1, par2, par3)

@@ -60,10 +60,21 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		}
 	}
 
-	public void ooutAVarAssignExpr(AVarAssignExpr node)
+	public void outAVarAssignExpr(AVarAssignExpr node)
 	{
-
-		if (null != node.getMember())
+		AValueExpr expr = (AValueExpr) node.getExpr();
+		if(expr.getValue().getClass() == AFuncCallValue.class)
+		{
+			AFuncCall call = (AFuncCall)((AFuncCallValue) expr.getValue()).getFuncCall();
+			List<TypeExpression> typeExpressions = symbolTable.GetFunction(call.getIdentifier().toString().toUpperCase().trim());
+			Type type = Typecheck.typeChecker(typeExpressions, symbolTable, call.getCallParams().toString());
+			if (type != symbolTable.GetVariable(call.getIdentifier().toString().toUpperCase().trim()))
+			{
+				System.out.println("TypeError " + call.getIdentifier() + "is of type " + symbolTable.GetVariable(call.getIdentifier().toString().toUpperCase().trim()) + " and you are trying to assign it a " + type);
+				System.exit(0);
+			}
+		}
+		else if (null == node.getMember())
 		{
 			String key = node.getIdentifier().toString().toUpperCase().trim();
 			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getExpr().toString());
@@ -80,7 +91,13 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		}
 		else
 		{
-			//TODO typecheck figur
+			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getExpr().toString());
+			Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getExpr().toString());
+			if (type != symbolTable.GetMember(node.getIdentifier().toString().toUpperCase().trim(), ((AMember) node.getMember()).getIdentifier().toString().toUpperCase().trim()))
+			{
+				System.out.println(((AMember)node.getMember()).getIdentifier() + "is of type" + symbolTable.GetMember(node.getIdentifier().toString().toUpperCase().trim(), node.getMember().toString().toUpperCase().trim()) + " and you are trying to assign it a expresion of type" + type);
+				System.exit(0);
+			}
 		}
 	}
 
@@ -180,11 +197,6 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		if (!symbolTable.FuncPrevDeclared(key)){
 			System.out.println("Function not declared: " + ident.toString());
 			System.exit(0);
-		}
-		else
-		{
-			List<TypeExpression> typeExpressions = symbolTable.GetFunction(key);
-			//Typecheck.typeChecker()
 		}
 	}
 

@@ -17,8 +17,7 @@ public class SymbolTable {
 	}
 
 	public Type GetMember(String figure, String member){
-		if (this.GetFigure(figure) == null)
-			return null;
+		if (this.GetFigure(figure) == null) return null;
 		return this.GetFigure(figure).GetMember(member);
 	}
 
@@ -32,12 +31,6 @@ public class SymbolTable {
 
 	public void AddFigure(String key){
 		figures.put(key, new Figure());
-	}
-
-	public boolean MemberDeclaredInFigure(String figure, String mem){
-		if (figures.isEmpty())
-			return false;
-		return figures.get(figure).HasMember(mem);
 	}
 
 	public void AddMember(String figure, String name, Type type){
@@ -113,18 +106,7 @@ public class SymbolTable {
 	}
 
 	public boolean VarDeclaredInCurrentScope(String name){
-		if (CurrentScope().Parent() == null){
-			return VarGloballyDeclared(name);
-		}
 		return CurrentScope().VarDeclaredInScope(name);
-	}
-
-	public boolean VarGloballyDeclared(String key){
-		if (scopes.empty())
-			return false;
-		return scopes.firstElement().VarDeclaredInScope(key) ||
-				this.FigureDeclared(key) ||
-				this.FuncPrevDeclared(key);
 	}
 
 	public boolean VarPrevDeclared(String name){
@@ -142,6 +124,7 @@ public class SymbolTable {
 		else if (scope.Parent() != null){
 			return getVariable(scope.Parent(), name);
 		}
+
 		return null;
 	}
 

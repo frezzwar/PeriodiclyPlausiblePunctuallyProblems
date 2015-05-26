@@ -14,12 +14,11 @@ public class FunctionChecker extends DepthFirstAdapter
 {
     private List<TypeExpression> TypeExpression = new LinkedList<>();
     private List<Type> parameters = new LinkedList<>();
-    private SymbolTable symbolTable;
-    private SymbolTable FunctionSymbolTable = new SymbolTable();
+    private SymbolTable SymbolTable = new SymbolTable();
 
-    public FunctionChecker(SymbolTable symTable)
+    public FunctionChecker(SymbolTable symTable, List<TypeExpression> typeExpressions)
     {
-        this.symbolTable = symTable;
+        this.TypeExpression = typeExpressions;
     }
 
     public void outAVariableDecl(AVariableDecl node)
@@ -29,37 +28,37 @@ public class FunctionChecker extends DepthFirstAdapter
         String key = ident.toString().toUpperCase().trim();
 
         List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariable().toString());
-        Type type = Typecheck.typeChecker(TypeExpression, FunctionSymbolTable, node.getVariable().toString());
+        Type type = Typecheck.typeChecker(TypeExpression, SymbolTable, node.getVariable().toString());
 
-        if(FunctionSymbolTable.VarDeclaredInCurrentScope(key))
+        if(SymbolTable.VarDeclaredInCurrentScope(key))
         {
             System.out.println("Identifier already defined: " + ident);
             System.exit(0);
         }
         else
         {
-            FunctionSymbolTable.AddVariable(key, type);
+            SymbolTable.AddVariable(key, type);
         }
     }
 
     public void inAIfStmtControlStmt(AIfStmtControlStmt node){
 
-        FunctionSymbolTable.OpenScope();
+        SymbolTable.OpenScope();
     }
 
     @Override
     public void outAIfStmtControlStmt(AIfStmtControlStmt node){
-        FunctionSymbolTable.CloseScope();
+        SymbolTable.CloseScope();
     }
 
     @Override
     public void inAElseStmtElseStmt(AElseStmtElseStmt node){
-        FunctionSymbolTable.OpenScope();
+        SymbolTable.OpenScope();
     }
 
     @Override
     public void outAElseStmtElseStmt(AElseStmtElseStmt node){
-        FunctionSymbolTable.CloseScope();
+        SymbolTable.CloseScope();
     }
 
     @Override
@@ -68,33 +67,33 @@ public class FunctionChecker extends DepthFirstAdapter
         String key = ident.toString().toUpperCase().trim();
         String listKey = node.getList().toString().toUpperCase().trim();
 
-        FunctionSymbolTable.OpenScope();
-        FunctionSymbolTable.AddVariable(key, FunctionSymbolTable.GetVariable(listKey));
+        SymbolTable.OpenScope();
+        SymbolTable.AddVariable(key, SymbolTable.GetVariable(listKey));
     }
 
     @Override
     public void outAForeachControlStmt(AForeachControlStmt node){
-        FunctionSymbolTable.CloseScope();
+        SymbolTable.CloseScope();
     }
 
     @Override
     public void inARepeatControlStmt(ARepeatControlStmt node){
-        FunctionSymbolTable.OpenScope();
+        SymbolTable.OpenScope();
     }
 
     @Override
     public void outARepeatControlStmt(ARepeatControlStmt node){
-        FunctionSymbolTable.CloseScope();
+        SymbolTable.CloseScope();
     }
 
     @Override
     public void inAWhileControlStmt(AWhileControlStmt node){
-        FunctionSymbolTable.OpenScope();
+        SymbolTable.OpenScope();
     }
 
     @Override
     public void outAWhileControlStmt(AWhileControlStmt node){
-        FunctionSymbolTable.CloseScope();
+        SymbolTable.CloseScope();
     }
 
     @Override
@@ -102,7 +101,7 @@ public class FunctionChecker extends DepthFirstAdapter
         TIdentifier ident = node.getIdentifier();
         String key = ident.toString().toUpperCase().trim();
 
-        if (!FunctionSymbolTable.FuncPrevDeclared(key)){
+        if (!SymbolTable.FuncPrevDeclared(key)){
             System.out.println("Function not declared: " + ident.toString());
             System.exit(0);
         }
@@ -112,41 +111,12 @@ public class FunctionChecker extends DepthFirstAdapter
     public void inAGridDecl(AGridDecl node){
         String ident = node.getIdentifier().toString();
         String key = ident.toUpperCase().trim();
-        if (FunctionSymbolTable.CurrentScope().VarDeclaredInScope(key)){
+        if (SymbolTable.CurrentScope().VarDeclaredInScope(key)){
             System.out.println("Identifier already declared: " + ident);
             System.exit(0);
         }
-        FunctionSymbolTable.AddVariable(key, Type.grid);
+        SymbolTable.AddVariable(key, Type.grid);
     }
-    /*
-    public void outAAssignExpr(AAssignExpr node)
-    {
-        PValue ident = node.getValue();
-        if (ident.getClass() != AValueMemberValue.class)
-        {
-            String key = ident.toString().toUpperCase().trim();
-            List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getExpr().toString());
-            Type type = Typecheck.typeChecker(TypeExpression, FunctionSymbolTable, node.getExpr().toString());
-
-            if (FunctionSymbolTable.VarPrevDeclared(key))
-            {
-                if (FunctionSymbolTable.GetVariable(key) != type)
-                {
-                    System.out.println(ident + "is of type " + FunctionSymbolTable.GetVariable(key) + ", but you are trying to assign it a " + type);
-                    System.exit(0);
-                }
-            }
-        }
-        else
-        {
-            AValueMemberValue member = (AValueMemberValue)ident;
-            String key = member.getIdentifier().toString();
-            //TODO figur typecheck
-
-        }
-    }
-    */
-
 
     public void inAReturnValue(AReturnValue node)
     {
@@ -159,7 +129,7 @@ public class FunctionChecker extends DepthFirstAdapter
         else if(expresion.getClass() == AValueExpr.class)
         {
             AValueExpr expr = (AValueExpr) expresion;
-            TypeExpression.add(new TypeExpression(parameters, Typecheck.typeChecker(Typecheck.TypeExpressions(((AValueExpr) expresion).getValue().toString()), FunctionSymbolTable, ((AValueExpr) expresion).getValue().toString())));
+            TypeExpression.add(new TypeExpression(parameters, Typecheck.typeChecker(Typecheck.TypeExpressions(((AValueExpr) expresion).getValue().toString()), SymbolTable, ((AValueExpr) expresion).getValue().toString())));
         }
         else if(expresion.getClass() == ANumericExpr.class)
         {
@@ -172,7 +142,7 @@ public class FunctionChecker extends DepthFirstAdapter
             for (int i = 0; i < variables.length; i++)
             {
                 Type type = null;
-                if (FunctionSymbolTable.VarPrevDeclared(variables[i].toUpperCase().trim()) && FunctionSymbolTable.GetVariable(variables[i].toUpperCase().trim()) == Type.parameter)
+                if (SymbolTable.VarPrevDeclared(variables[i].toUpperCase().trim()) && SymbolTable.GetVariable(variables[i].toUpperCase().trim()) == Type.parameter)
                 {
                     for (int j = 0; j < TypeExpr.size(); j++)
                     {
@@ -196,7 +166,7 @@ public class FunctionChecker extends DepthFirstAdapter
                 }
                 if (null != type)
                 {
-                    FunctionSymbolTable.ChangeType(variables[i].toUpperCase().trim(), type);
+                    SymbolTable.ChangeType(variables[i].toUpperCase().trim(), type);
                 }
             }
 
@@ -218,23 +188,14 @@ public class FunctionChecker extends DepthFirstAdapter
 
     @Override
     public void inAFuncDecl(AFuncDecl node){
-        TIdentifier ident = node.getIdentifier();
-
-        String key = ident.toString().toUpperCase().trim();
-
         PParams params = node.getParams();
         String[] StringParams = params.toString().split(",");
 
-        if (symbolTable.FuncPrevDeclared(key))
-        {
-            System.out.println("Function already defined: " + ident);
-            System.exit(0);
-        }
-        FunctionSymbolTable.OpenScope();
+        SymbolTable.OpenScope();
         for (int i = 0; i < StringParams.length; i++)
         {
-            FunctionSymbolTable.AddVariable(StringParams[i].toUpperCase().trim(), Type.parameter);
-            parameters.add(FunctionSymbolTable.GetVariable(StringParams[i].toUpperCase().trim()));
+            SymbolTable.AddVariable(StringParams[i].toUpperCase().trim(), Type.parameter);
+            parameters.add(SymbolTable.GetVariable(StringParams[i].toUpperCase().trim()));
         }
     }
 
@@ -244,9 +205,9 @@ public class FunctionChecker extends DepthFirstAdapter
         parameters.clear();
         for (int i = 0; i < StringParams.length; i++)
         {
-            parameters.add(FunctionSymbolTable.GetVariable(StringParams[i].toUpperCase().trim()));
+            parameters.add(SymbolTable.GetVariable(StringParams[i].toUpperCase().trim()));
         }
-        FunctionSymbolTable.CloseScope();
+        SymbolTable.CloseScope();
         Type type = null;
 
         for (int i = 0; i < TypeExpression.size(); i++)
@@ -275,6 +236,5 @@ public class FunctionChecker extends DepthFirstAdapter
         }
         TypeExpression.clear();
         TypeExpression.addAll(tempTypeExpression);
-        symbolTable.AddFunction(node.getIdentifier().toString().toUpperCase().trim(), TypeExpression);
     }
 }

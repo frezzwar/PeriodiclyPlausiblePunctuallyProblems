@@ -8,11 +8,37 @@ import java.util.Stack;
 
 public class SymbolTable {
 	private HashMap<String, List<TypeExpression>> functions = new HashMap<>();
+	private HashMap<String, Figure> figures = new HashMap<>();
 	private Stack<Scope> scopes = new Stack<>();
 	private Scope currentScope = null;
 
 	public SymbolTable(){
 		this.OpenScope();
+	}
+
+	public Type GetMember(String figure, String member){
+		if (this.GetFigure(figure) == null) return null;
+		return this.GetFigure(figure).GetMember(member);
+	}
+
+	public boolean FigureDeclared(String key){
+		return figures.containsKey(key);
+	}
+
+	public Figure GetFigure(String key){
+		return figures.get(key);
+	}
+
+	public void AddFigure(String key){
+		figures.put(key, new Figure());
+	}
+
+	public void AddMember(String figure, String name, Type type){
+		this.GetFigure(figure).AddMember(name, type);
+	}
+
+	public void AddMethod(String figure, String name, TypeExpression types){
+		this.GetFigure(figure).AddMethod(name, types);
 	}
 
 	public void ChangeType(String key, Type type)
@@ -115,10 +141,4 @@ public class SymbolTable {
 		}
 		return st;
 	}
-
-	/* OBSOLETE
-	public void AddGlobalVar(String name, Type type){
-		globalVariables.put(name, type);
-	}
-	*/
 }

@@ -28,21 +28,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		Type type = null;
 		String key = ident.toString().toUpperCase().trim();
 
-		if (node.getVariable().getClass() != AListVariable.class)
-		{
-			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariable().toString());
-			type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariable().toString());
-			if(symbolTable.VarDeclaredInCurrentScope(key))
-			{
-				System.out.println("Identifier already defined: " + ident);
-				System.exit(0);
-			}
-			else
-			{
-				symbolTable.AddVariable(key, type);
-			}
-		}
-		else
+		if (node.getVariable().getClass() == AListVariable.class)
 		{
 			AListVariable listVariables = (AListVariable) node.getVariable();
 			String[] temp = listVariables.getListVar().toString().split(",");
@@ -147,59 +133,29 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	}
 
 	@Override
-	public void inAIfStmtControlStmt(AIfStmtControlStmt node){
-
-		symbolTable.OpenScope();
-	}
-
-	@Override
-	public void outAIfStmtControlStmt(AIfStmtControlStmt node){
-		symbolTable.CloseScope();
-	}
-
-	@Override
-	public void inAElseStmtElseStmt(AElseStmtElseStmt node){
-		symbolTable.OpenScope();
-	}
-
-	@Override
-	public void outAElseStmtElseStmt(AElseStmtElseStmt node){
-		symbolTable.CloseScope();
-	}
-
-
-
-	@Override
-	public void inARepeatControlStmt(ARepeatControlStmt node){
-		symbolTable.OpenScope();
-	}
-
-	@Override
-	public void outARepeatControlStmt(ARepeatControlStmt node){
-		symbolTable.CloseScope();
-	}
-
-	@Override
-	public void inAWhileControlStmt(AWhileControlStmt node){
-		symbolTable.OpenScope();
-	}
-
-	@Override
-	public void outAWhileControlStmt(AWhileControlStmt node){
-		symbolTable.CloseScope();
-	}
-
-	@Override
 	public void inAFuncCall(AFuncCall node){
-		TIdentifier ident = node.getIdentifier();
-		String key = ident.toString().toUpperCase().trim();
-		if (!symbolTable.FuncPrevDeclared(key)){
-			System.out.println("Function not declared: " + ident.toString());
-			System.exit(0);
+		if (node.parent().getClass() != AMethodCallValue.class){
+			TIdentifier ident = node.getIdentifier();
+			String key = ident.toString().toUpperCase().trim();
+			if (!symbolTable.FuncPrevDeclared(key)){
+				System.out.println("Function not declared: " + ident.toString());
+				System.exit(0);
+			}
 		}
 	}
 
+	@Override
+	public void inAMethodCallValue(AMethodCallValue node){
+		String figure = node.getIdentifier().toString().toUpperCase().trim();
+		AFuncCall temp = (AFuncCall) node.getFuncCall();
+		String meth = temp.getIdentifier().toString().toUpperCase().trim();
 
+		if (!symbolTable.MethodDeclaredInFigure(figure, meth)){
+			System.out.println("Method not declared: " + temp.getIdentifier().toString().trim());
+			System.exit(0);
+		}
+
+	}
 
 	@Override
 	public void inAGridDecl(AGridDecl node){
@@ -260,12 +216,11 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			}
 			symbolTable.AddMember(currObj, name, type);
 		}
-		if(symbolTable.VarDeclaredInCurrentScope(name)){
+		if(symbolTable.IdentifierUsedInCurrentScope(name)){
 			System.out.println("Variable already defined: " + "memName");
 			System.exit(0);
 		}
 		symbolTable.AddVariable(name, type);
-
 	}
 
 	@Override
@@ -318,31 +273,37 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		symbolTable.OpenScope();
 
 		if (inEventDecl){
-			AEventDecl event = (AEventDecl) node.parent();
-			symbolTable.AddVariable(event.getIdentifier().toString().toUpperCase().trim(), Type.keypress);
+			if (node.parent().getClass() == AEventDecl.class) {
+				AEventDecl event = (AEventDecl) node.parent();
+				symbolTable.AddVariable(event.getIdentifier().toString().toUpperCase().trim(), Type.keypress);
+			}
 		}
 
 		if (inForeach){
-			AForeachControlStmt stmt = (AForeachControlStmt) node.parent();
+			if (node.parent().getClass() == AForeachControlStmt.class) {
+				AForeachControlStmt stmt = (AForeachControlStmt) node.parent();
 
-			String item = stmt.getIdentifier().toString().toUpperCase().trim();
-			String list = stmt.getList().toString().toUpperCase().trim();
+				String item = stmt.getIdentifier().toString().toUpperCase().trim();
+				String list = stmt.getList().toString().toUpperCase().trim();
 
-			symbolTable.AddVariable(item, symbolTable.GetList(list));
+				symbolTable.AddVariable(item, symbolTable.GetList(list));
+			}
 		}
 
 		if(inFuncDecl){
-			AFuncDecl func = (AFuncDecl) node.parent();
-			String[] params = func.getParams().toString().split(",");
-			for (String item : params){
-				if (symbolTable.IdentifierUsedInCurrentScope(item.toUpperCase().trim())){
-					System.out.println("Identifier already used" + item);
-					System.exit(0);
+			if (node.parent().getClass() == AFuncDecl.class){
+				AFuncDecl func = (AFuncDecl) node.parent();
+				String[] params = func.getParams().toString().split(",");
+				for (String item : params){
+					if (symbolTable.IdentifierUsedInCurrentScope(item.toUpperCase().trim())){
+						System.out.println("Identifier already used" + item);
+						System.exit(0);
+					}
+					if (item.trim().endsWith("[]")){
+						symbolTable.AddList(item, Type.parameter);
+					}
+					symbolTable.AddVariable(item, Type.parameter);
 				}
-				if (item.trim().endsWith("[]")){
-					symbolTable.AddList(item, Type.parameter);
-				}
-				symbolTable.AddVariable(item, Type.parameter);
 			}
 		}
 	}
@@ -350,6 +311,39 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	@Override
 	public void outABody(ABody node){
 		symbolTable.CloseScope();
+	}
+
+	@Override
+	public void inAVarAssignExpr(AVarAssignExpr node){
+		Type lhsType;
+		List<TypeExpression> typeExpressions = Typecheck.TypeExpressions(node.getExpr().toString());
+		Type exprType = Typecheck.typeChecker(typeExpressions, symbolTable, node.getExpr().toString());
+
+		if (node.getMember() != null){
+			String figure = node.getIdentifier().toString().trim();
+			AMember temp = (AMember) node.getMember();
+			String member = temp.getIdentifier().toString().toUpperCase().trim();
+
+			if(!symbolTable.MemberDeclaredInFigure(figure, member)){
+				System.out.println(figure + "does not have a variable called" + member);
+				System.exit(0);
+			}
+			lhsType = symbolTable.GetMember(figure, member);
+		}
+
+		String lhs = node.getIdentifier().toString().toUpperCase().trim();
+
+		if (!symbolTable.VarPrevDeclared(lhs)){
+			System.out.println("Variable node declared: " + lhs);
+			System.exit(0);
+		}
+		lhsType = symbolTable.GetVariable(lhs);
+
+		if (lhsType != exprType){
+			System.out.println("Type error. Expected " + lhsType + " but got " + exprType);
+			System.exit(0);
+		}
+
 	}
 
 }

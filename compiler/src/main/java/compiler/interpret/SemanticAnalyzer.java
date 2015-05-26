@@ -11,6 +11,12 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 
 	private SymbolTable symbolTable;
 
+	private String currObj;
+	private boolean inEventDecl = false;
+	private boolean inObjDecl = false;
+	private boolean inForeach = false;
+	private boolean inFuncDecl = false;
+
 	public SemanticAnalyzer(SymbolTable symTable){
 		this.symbolTable = symTable;
 	}
@@ -26,6 +32,15 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		{
 			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariable().toString());
 			type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariable().toString());
+			if(symbolTable.VarDeclaredInCurrentScope(key))
+			{
+				System.out.println("Identifier already defined: " + ident);
+				System.exit(0);
+			}
+			else
+			{
+				symbolTable.AddVariable(key, type);
+			}
 		}
 		else
 		{
@@ -47,17 +62,14 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 					}
 				}
 			}
+			if (symbolTable.IdentifierUsedInCurrentScope(key)){
+				System.out.println("Identifier already used: " + key);
+				System.exit(0);
+			}
+			symbolTable.AddList(key, type);
 		}
 
-		if(symbolTable.VarDeclaredInCurrentScope(key))
-		{
-			System.out.println("Identifier already defined: " + ident);
-			System.exit(0);
-		}
-		else
-		{
-			symbolTable.AddVariable(key, type);
-		}
+
 	}
 
 	public void outAVarAssignExpr(AVarAssignExpr node)
@@ -155,20 +167,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		symbolTable.CloseScope();
 	}
 
-	@Override
-	public void inAForeachControlStmt(AForeachControlStmt node){
-		TIdentifier ident = node.getIdentifier();
-		String key = ident.toString().toUpperCase().trim();
-		String listKey = node.getList().toString().toUpperCase().trim();
 
-		symbolTable.OpenScope();
-		symbolTable.AddVariable(key, symbolTable.GetVariable(listKey));
-	}
-
-	@Override
-	public void outAForeachControlStmt(AForeachControlStmt node){
-		symbolTable.CloseScope();
-	}
 
 	@Override
 	public void inARepeatControlStmt(ARepeatControlStmt node){
@@ -200,6 +199,8 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		}
 	}
 
+
+
 	@Override
 	public void inAGridDecl(AGridDecl node){
 		String ident = node.getIdentifier().toString();
@@ -211,8 +212,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		symbolTable.AddVariable(key, Type.grid);
 	}
 
-	private String currObj;
-	private boolean inObjDecl = false;
+
 	@Override
 	public void inAObjectDecl(AObjectDecl node){
 		String key = node.getId1().toString().toUpperCase().trim();
@@ -223,12 +223,14 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		}
 		symbolTable.AddFigure(key);
 
-		/* Checks if specified figure file exists */
+		/*
+			Checks if specified figure file exists
 		String filePath = "\"" + node.getId2().toString().trim() + "\"";
 		if (!new File(filePath).isFile()) {
 			System.out.println("File does not exist: " + filePath);
 			System.exit(0);
 		}
+		*/
 
 		currObj = key;
 		inObjDecl = true;
@@ -247,43 +249,107 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 
 	@Override
 	public void inAVariableDecl(AVariableDecl node){
-		String memName =  node.getIdentifier().toString().toUpperCase().trim();
+		String name =  node.getIdentifier().toString().toUpperCase().trim();
 		List<TypeExpression> typeExpressions = Typecheck.TypeExpressions(node.getVariable().toString());
 		Type type = Typecheck.typeChecker(typeExpressions, symbolTable, node.getVariable().toString());
 
-		if(inObjDecl){
-			if(symbolTable.MemberDeclaredInFigure(currObj, memName)){
+		if (inObjDecl){
+			if(symbolTable.MemberDeclaredInFigure(currObj, name)){
 				System.out.println("Member already defined: " + "memName");
 				System.exit(0);
 			}
-			symbolTable.AddMember(currObj, memName, type);
+			symbolTable.AddMember(currObj, name, type);
 		}
+		if(symbolTable.VarDeclaredInCurrentScope(name)){
+			System.out.println("Variable already defined: " + "memName");
+			System.exit(0);
+		}
+		symbolTable.AddVariable(name, type);
+
 	}
 
 	@Override
 	public void inAFuncDecl(AFuncDecl node){
+		inFuncDecl = true;
 		String methodName =  node.getIdentifier().toString().toUpperCase().trim();
-
-
 		List<TypeExpression> typeExpressions = new LinkedList<>();
-
 		node.apply(new FunctionChecker(typeExpressions));
 
-
-		Type type = Typecheck.typeChecker(typeExpressions, symbolTable, node.getParams().toString());
-
 		if(inObjDecl){
-			if(symbolTable.MemberDeclaredInFigure(currObj, memName)){
-				System.out.println("Member already defined: " + "memName");
+			if(symbolTable.MethodDeclaredInFigure(currObj, methodName)){
+				System.out.println("Method already defined: " + "memName");
 				System.exit(0);
 			}
-			symbolTable.AddMember(currObj, memName, type);
+			symbolTable.AddMethod(currObj, methodName, typeExpressions);
 		}
 	}
 
-	public void AAA(AssignExpr node){
-		node.g
+	@Override
+	public void outAFuncDecl(AFuncDecl node){
+		inFuncDecl = false;
 	}
 
+	@Override
+	public void inAEventDecl(AEventDecl node){
+		inEventDecl = true;
+	}
+
+	@Override
+	public void outAEventDecl(AEventDecl node){
+		inEventDecl = false;
+	}
+
+	@Override
+	public void inAForeachControlStmt(AForeachControlStmt node){
+		inForeach = true;
+		String key = node.getList().toString().toUpperCase().trim();
+		if (!symbolTable.ListDeclared(key)){
+			System.out.println("List not previously declared: " + key);
+		}
+	}
+
+	@Override
+	public void outAForeachControlStmt(AForeachControlStmt node){
+		inForeach = false;
+	}
+
+	@Override
+	public void inABody(ABody node){
+		symbolTable.OpenScope();
+
+		if (inEventDecl){
+			AEventDecl event = (AEventDecl) node.parent();
+			symbolTable.AddVariable(event.getIdentifier().toString().toUpperCase().trim(), Type.keypress);
+		}
+
+		if (inForeach){
+			AForeachControlStmt stmt = (AForeachControlStmt) node.parent();
+
+			String item = stmt.getIdentifier().toString().toUpperCase().trim();
+			String list = stmt.getList().toString().toUpperCase().trim();
+
+			symbolTable.AddVariable(item, symbolTable.GetList(list));
+		}
+
+		if(inFuncDecl){
+			AFuncDecl func = (AFuncDecl) node.parent();
+			String[] params = func.getParams().toString().split(",");
+			for (String item : params){
+				if (symbolTable.IdentifierUsedInCurrentScope(item.toUpperCase().trim())){
+					System.out.println("Identifier already used" + item);
+					System.exit(0);
+				}
+				if (item.trim().endsWith("[]")){
+					symbolTable.AddList(item, Type.parameter);
+				}
+				symbolTable.AddVariable(item, Type.parameter);
+			}
+		}
+	}
+
+	@Override
+	public void outABody(ABody node){
+		symbolTable.CloseScope();
+	}
 
 }

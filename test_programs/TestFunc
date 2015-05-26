@@ -1,9 +1,9 @@
 new cat = figure(car)
     {
-        new number = 0;
-        new funci(number1)
+        new ertyu = 0;
+        new funci(asd)
         {
-            return number * 9000;
+            return asd * 9000;
         }
     }
 

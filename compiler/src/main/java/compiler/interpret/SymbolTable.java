@@ -16,9 +16,52 @@ public class SymbolTable {
 		this.OpenScope();
 	}
 
+	public boolean IdentifierUsedInCurrentScope(String key){
+		return CurrentScope().IdentifierUsedInScope(key);
+	}
+
+	public Type GetList(String key){
+		return getList(key, CurrentScope());
+	}
+
+	private Type getList(String key, Scope scope){
+		if (scope.GetList(key) != null){
+			return scope.GetList(key);
+		}
+		else if (scope.Parent() != null){
+			return getList(key, scope.Parent());
+		}
+		return null;
+	}
+
+	public void AddList(String key, Type type){
+		CurrentScope().AddList(key, type);
+	}
+
+	public boolean ListDeclared(String key){
+		return listDeclared(key, CurrentScope());
+	}
+
+	private boolean listDeclared(String key, Scope scope){
+		if (scope.ListDeclared(key)){
+			return true;
+		}
+		else if (scope.Parent() != null){
+			return listDeclared(key, scope.Parent());
+		}
+		return false;
+	}
+
 	public Type GetMember(String figure, String member){
-		if (this.GetFigure(figure) == null) return null;
+		if (this.GetFigure(figure) == null)
+			return null;
 		return this.GetFigure(figure).GetMember(member);
+	}
+
+	public List<TypeExpression> GetMethod(String figure, String method){
+		if (this.GetFigure(figure) == null)
+			return null;
+		return this.GetFigure(figure).GetMethod(method);
 	}
 
 	public boolean FigureDeclared(String key){
@@ -37,11 +80,21 @@ public class SymbolTable {
 		this.GetFigure(figure).AddMember(name, type);
 	}
 
-	public void AddMethod(String figure, String name, TypeExpression types){
-		this.GetFigure(figure).AddMethod(name, types);
+	public boolean MemberDeclaredInFigure(String figure, String mem){
+		if (figures.isEmpty())
+			return false;
+		return figures.get(figure).HasMember(mem);
 	}
 
-	public boolean 
+	public boolean MethodDeclaredInFigure(String figure, String method){
+		if (figures.isEmpty())
+			return false;
+		return  figures.get(figure).HasMethod(method);
+	}
+
+	public void AddMethod(String figure, String name, List<TypeExpression> types){
+		this.GetFigure(figure).AddMethod(name, types);
+	}
 
 	public void ChangeType(String key, Type type)
 	{
@@ -84,7 +137,9 @@ public class SymbolTable {
 	}
 
 	public Scope CurrentScope(){
-		return currentScope;
+		if (scopes.empty())
+			return null;
+		return scopes.peek();
 	}
 	
 	public void OpenScope(){
@@ -108,11 +163,32 @@ public class SymbolTable {
 	}
 
 	public boolean VarDeclaredInCurrentScope(String name){
+		if (CurrentScope().Parent() == null){
+			return VarGloballyDeclared(name);
+		}
 		return CurrentScope().VarDeclaredInScope(name);
 	}
 
-	public boolean VarPrevDeclared(String name){
-		return CurrentScope().VarPrevDeclared(name);
+	private boolean VarGloballyDeclared(String key){
+		if (scopes.empty())
+			return false;
+		return scopes.firstElement().VarDeclaredInScope(key) ||
+				this.FigureDeclared(key) ||
+				this.FuncPrevDeclared(key);
+	}
+
+	public boolean VarPrevDeclared(String key){
+		return varPrevDeclared(key, CurrentScope());
+	}
+
+	private boolean varPrevDeclared(String key, Scope scope){
+		if (scope.GetVariable(key) != null){
+			return scope.VarDeclaredInScope(key);
+		}
+		else if (scope.Parent() != null){
+			return varPrevDeclared(key, scope.Parent());
+		}
+		return false;
 	}
 
 	public Type GetVariable(String name){

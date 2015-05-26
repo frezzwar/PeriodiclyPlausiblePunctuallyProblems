@@ -1,19 +1,20 @@
 package compiler.interpret;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Lasse on 26-05-2015.
  */
 public class Figure {
     private HashMap<String, Type> members = new HashMap<>();
-    private HashMap<String, TypeExpression> methods = new HashMap<>();
+    private HashMap<String, List<TypeExpression>> methods = new HashMap<>();
 
     public void AddMember(String key, Type type){
         members.put(key, type);
     }
 
-    public void AddMethod(String key, TypeExpression types){
+    public void AddMethod(String key, List<TypeExpression> types){
         methods.put(key, types);
     }
 
@@ -25,7 +26,7 @@ public class Figure {
         return methods.containsKey(key);
     }
 
-    public TypeExpression GetMethod(String key){
+    public List<TypeExpression> GetMethod(String key){
         return methods.get(key);
     }
 

@@ -10,6 +10,7 @@ public class Scope {
 	private int scopeNumber;
 	private Scope parent;
 	private HashMap<String, Type> variables = new HashMap<>();
+	private HashMap<String, Type> lists = new HashMap<>();
 	private boolean opened;
 
 	public Scope(){
@@ -30,6 +31,18 @@ public class Scope {
 		}
 	}
 
+	public void AddList(String key, Type type){
+		lists.put(key, type);
+	}
+
+	public Type GetList(String key){
+		return lists.get(key);
+	}
+
+	public boolean ListDeclared(String key){
+		return lists.containsKey(key);
+	}
+
 	public void CloseScope(){
 		this.opened = false;
 	}
@@ -42,18 +55,12 @@ public class Scope {
 		variables.putAll(varCollection);
 	}
 
-	public boolean VarDeclaredInScope(String name){
-		return variables.containsKey(name);
+	public boolean IdentifierUsedInScope(String key){
+		return VarDeclaredInScope(key) || ListDeclared(key);
 	}
 
-	public boolean VarPrevDeclared(String name){
-		if (this.VarDeclaredInScope(name)){
-			return true;
-		}
-		else if (parent != null){
-			return parent.VarPrevDeclared(name);
-		}
-		return false;
+	public boolean VarDeclaredInScope(String name){
+		return variables.containsKey(name);
 	}
 
 	public Type GetVariable(String name){

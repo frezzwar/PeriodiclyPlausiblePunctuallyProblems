@@ -3,13 +3,13 @@ new grid1 = grid(10, 12);
 
 program
 {
+    new hej = ["hej", "hej"];
+
     grid1.background = "test_img.png";
 
     new func = bongo(7,8);
 
     new tempbool = true;
-
-    new hej = ["hej", "hej"];
 
     new thisPar = 5 + ( 5 + 4) / 4;
 

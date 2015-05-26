@@ -17,9 +17,10 @@ public class FunctionChecker extends DepthFirstAdapter
     private SymbolTable symbolTable;
     private SymbolTable FunctionSymbolTable = new SymbolTable();
 
-    public FunctionChecker(SymbolTable symTable)
+    public FunctionChecker(SymbolTable symTable, List<TypeExpression> typeExpressions)
     {
         this.symbolTable = symTable;
+        this.TypeExpression = typeExpressions;
     }
 
     public void outAVariableDecl(AVariableDecl node)
@@ -246,6 +247,5 @@ public class FunctionChecker extends DepthFirstAdapter
         }
         TypeExpression.clear();
         TypeExpression.addAll(tempTypeExpression);
-        symbolTable.AddFunction(node.getIdentifier().toString().toUpperCase().trim(), TypeExpression);
     }
 }

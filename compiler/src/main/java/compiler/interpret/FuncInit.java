@@ -2,6 +2,10 @@ package compiler.interpret;
 
 import compiler.analysis.DepthFirstAdapter;
 import compiler.node.AFuncDecl;
+import compiler.node.AObjectDecl;
+
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -13,8 +17,26 @@ public class FuncInit extends DepthFirstAdapter {
     {
         symTable = symbolTable;
     }
+
+    private boolean InObj = false;
+
+    public void inAObjectDecl (AObjectDecl node)
+    {
+        InObj = true;
+    }
+
+    public void outAObjectDecl (AObjectDecl node)
+    {
+        InObj = false;
+    }
+
     public void inAFuncDecl(AFuncDecl node)
     {
-        node.apply(new FunctionChecker(symTable));
+        if (!InObj)
+        {
+            List<TypeExpression> typeExpressions = new LinkedList<>();
+            node.apply(new FunctionChecker(symTable, typeExpressions));
+            symTable.AddFunction(node.getIdentifier().toString().toUpperCase().trim(), typeExpressions);
+        }
     }
 }

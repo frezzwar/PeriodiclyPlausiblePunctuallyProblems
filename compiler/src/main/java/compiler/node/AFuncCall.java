@@ -11,7 +11,6 @@ public final class AFuncCall extends PFuncCall
     private TParL _parL_;
     private PCallParams _callParams_;
     private TParR _parR_;
-    private PBody _body_;
 
     public AFuncCall()
     {
@@ -22,8 +21,7 @@ public final class AFuncCall extends PFuncCall
         @SuppressWarnings("hiding") TIdentifier _identifier_,
         @SuppressWarnings("hiding") TParL _parL_,
         @SuppressWarnings("hiding") PCallParams _callParams_,
-        @SuppressWarnings("hiding") TParR _parR_,
-        @SuppressWarnings("hiding") PBody _body_)
+        @SuppressWarnings("hiding") TParR _parR_)
     {
         // Constructor
         setIdentifier(_identifier_);
@@ -34,8 +32,6 @@ public final class AFuncCall extends PFuncCall
 
         setParR(_parR_);
 
-        setBody(_body_);
-
     }
 
     @Override
@@ -45,8 +41,7 @@ public final class AFuncCall extends PFuncCall
             cloneNode(this._identifier_),
             cloneNode(this._parL_),
             cloneNode(this._callParams_),
-            cloneNode(this._parR_),
-            cloneNode(this._body_));
+            cloneNode(this._parR_));
     }
 
     @Override
@@ -155,31 +150,6 @@ public final class AFuncCall extends PFuncCall
         this._parR_ = node;
     }
 
-    public PBody getBody()
-    {
-        return this._body_;
-    }
-
-    public void setBody(PBody node)
-    {
-        if(this._body_ != null)
-        {
-            this._body_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._body_ = node;
-    }
-
     @Override
     public String toString()
     {
@@ -187,8 +157,7 @@ public final class AFuncCall extends PFuncCall
             + toString(this._identifier_)
             + toString(this._parL_)
             + toString(this._callParams_)
-            + toString(this._parR_)
-            + toString(this._body_);
+            + toString(this._parR_);
     }
 
     @Override
@@ -216,12 +185,6 @@ public final class AFuncCall extends PFuncCall
         if(this._parR_ == child)
         {
             this._parR_ = null;
-            return;
-        }
-
-        if(this._body_ == child)
-        {
-            this._body_ = null;
             return;
         }
 
@@ -253,12 +216,6 @@ public final class AFuncCall extends PFuncCall
         if(this._parR_ == oldChild)
         {
             setParR((TParR) newChild);
-            return;
-        }
-
-        if(this._body_ == oldChild)
-        {
-            setBody((PBody) newChild);
             return;
         }
 

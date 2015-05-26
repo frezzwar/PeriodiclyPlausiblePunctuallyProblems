@@ -1,0 +1,73 @@
+// SPROGET SYNTAKS
+
+new myGrid = grid(10,9);
+new myPlayer = figure(spaceman){
+	new moves = 10;
+}
+new myDog = figure(dog) {
+	new moves = 20;
+	new interact(obj){
+		myDog.moves = myDog.moves - 1;
+		obj.moves = obj.moves + 1;
+	}
+}
+
+program{
+	myGrid(2,2).addobj(myPlayer);
+	myGrid(5,7).addobj(myDog);
+}
+
+new checksides (target, source){
+	if (target.x != source.x || target.y != source.y){
+		if (target.x > source.x){
+			if (target.x != source.x+1){
+				source.move(right);
+				return false;
+			}
+		}
+		else if (target.x > source.x){
+			if (target.x != source.x-1){
+				source.move(left);
+				return false;
+			}
+		}
+		if (target.y > source.y){
+			if (target.y != source.y+1){
+				source.move(up);
+				return false;
+			}
+		}
+		else if (target.y > source.y){
+			if (target.y != source-1){
+				source.move(down);
+				return false;
+			}
+	}
+	return true;
+}}
+
+event(keypress){
+	if (myPlayer.moves>0 && keypress == up){
+		myPlayer.move(up);
+		myPlayer.moves = myPlayer.moves - 1;
+	}
+	if (myPlayer.moves>0 && keypress == down){
+		myPlayer.move(down);
+		myPlayer.moves = myPlayer.moves - 1;
+	}
+	if (myPlayer.moves>0 && keypress == right){
+		myPlayer.move(right);
+		myPlayer.moves = myPlayer.moves - 1;
+	}
+	if (myPlayer.moves>0 && keypress == left){
+		myPlayer.move(left);
+		myPlayer.moves = myPlayer.moves - 1;
+	}
+	if (keypress == a){
+		new near = true;
+		near = checksides(myPlayer, myDog);
+		if(near == true){
+			myDog.interact(myPlayer);
+		}
+	}
+}

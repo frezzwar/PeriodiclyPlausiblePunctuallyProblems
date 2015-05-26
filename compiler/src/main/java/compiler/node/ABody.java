@@ -9,7 +9,7 @@ import compiler.analysis.*;
 public final class ABody extends PBody
 {
     private TCurlyL _curlyL_;
-    private final LinkedList<PDecl> _decl_ = new LinkedList<PDecl>();
+    private final LinkedList<PStmt> _stmt_ = new LinkedList<PStmt>();
     private PReturnValue _returnValue_;
     private TCurlyR _curlyR_;
 
@@ -20,14 +20,14 @@ public final class ABody extends PBody
 
     public ABody(
         @SuppressWarnings("hiding") TCurlyL _curlyL_,
-        @SuppressWarnings("hiding") List<?> _decl_,
+        @SuppressWarnings("hiding") List<?> _stmt_,
         @SuppressWarnings("hiding") PReturnValue _returnValue_,
         @SuppressWarnings("hiding") TCurlyR _curlyR_)
     {
         // Constructor
         setCurlyL(_curlyL_);
 
-        setDecl(_decl_);
+        setStmt(_stmt_);
 
         setReturnValue(_returnValue_);
 
@@ -40,7 +40,7 @@ public final class ABody extends PBody
     {
         return new ABody(
             cloneNode(this._curlyL_),
-            cloneList(this._decl_),
+            cloneList(this._stmt_),
             cloneNode(this._returnValue_),
             cloneNode(this._curlyR_));
     }
@@ -76,29 +76,29 @@ public final class ABody extends PBody
         this._curlyL_ = node;
     }
 
-    public LinkedList<PDecl> getDecl()
+    public LinkedList<PStmt> getStmt()
     {
-        return this._decl_;
+        return this._stmt_;
     }
 
-    public void setDecl(List<?> list)
+    public void setStmt(List<?> list)
     {
-        for(PDecl e : this._decl_)
+        for(PStmt e : this._stmt_)
         {
             e.parent(null);
         }
-        this._decl_.clear();
+        this._stmt_.clear();
 
         for(Object obj_e : list)
         {
-            PDecl e = (PDecl) obj_e;
+            PStmt e = (PStmt) obj_e;
             if(e.parent() != null)
             {
                 e.parent().removeChild(e);
             }
 
             e.parent(this);
-            this._decl_.add(e);
+            this._stmt_.add(e);
         }
     }
 
@@ -157,7 +157,7 @@ public final class ABody extends PBody
     {
         return ""
             + toString(this._curlyL_)
-            + toString(this._decl_)
+            + toString(this._stmt_)
             + toString(this._returnValue_)
             + toString(this._curlyR_);
     }
@@ -172,7 +172,7 @@ public final class ABody extends PBody
             return;
         }
 
-        if(this._decl_.remove(child))
+        if(this._stmt_.remove(child))
         {
             return;
         }
@@ -202,13 +202,13 @@ public final class ABody extends PBody
             return;
         }
 
-        for(ListIterator<PDecl> i = this._decl_.listIterator(); i.hasNext();)
+        for(ListIterator<PStmt> i = this._stmt_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PDecl) newChild);
+                    i.set((PStmt) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

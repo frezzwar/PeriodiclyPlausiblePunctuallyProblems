@@ -1,0 +1,21 @@
+// SPROGET SYNTAKS
+
+new myGrid = grid(10,9);
+new myPlayer = figure(Spaceman){
+	new moves = 10;
+}
+
+program{
+	myGrid(2,2).addobj(myPlayer);
+}
+
+event(keypress){
+	if (keypress == paisjdpaisjd){
+		if(myPlayer.moves>0){
+		myPlayer.move(prop);
+		}
+	}
+	if (myPlayer.moves>0 && keypress == down){
+		myPlayer.move(down);
+	}
+}

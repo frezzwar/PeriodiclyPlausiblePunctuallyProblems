@@ -8,7 +8,7 @@ import compiler.analysis.*;
 @SuppressWarnings("nls")
 public final class AProgram extends PProgram
 {
-    private final LinkedList<PGlobalDecls> _globalDecls_ = new LinkedList<PGlobalDecls>();
+    private final LinkedList<PGlobalDecl> _globalDecl_ = new LinkedList<PGlobalDecl>();
     private TMain _main_;
     private PBody _body_;
     private final LinkedList<PFuncDecl> _funcDecl_ = new LinkedList<PFuncDecl>();
@@ -20,14 +20,14 @@ public final class AProgram extends PProgram
     }
 
     public AProgram(
-        @SuppressWarnings("hiding") List<?> _globalDecls_,
+        @SuppressWarnings("hiding") List<?> _globalDecl_,
         @SuppressWarnings("hiding") TMain _main_,
         @SuppressWarnings("hiding") PBody _body_,
         @SuppressWarnings("hiding") List<?> _funcDecl_,
         @SuppressWarnings("hiding") PEventDecl _eventDecl_)
     {
         // Constructor
-        setGlobalDecls(_globalDecls_);
+        setGlobalDecl(_globalDecl_);
 
         setMain(_main_);
 
@@ -43,7 +43,7 @@ public final class AProgram extends PProgram
     public Object clone()
     {
         return new AProgram(
-            cloneList(this._globalDecls_),
+            cloneList(this._globalDecl_),
             cloneNode(this._main_),
             cloneNode(this._body_),
             cloneList(this._funcDecl_),
@@ -56,29 +56,29 @@ public final class AProgram extends PProgram
         ((Analysis) sw).caseAProgram(this);
     }
 
-    public LinkedList<PGlobalDecls> getGlobalDecls()
+    public LinkedList<PGlobalDecl> getGlobalDecl()
     {
-        return this._globalDecls_;
+        return this._globalDecl_;
     }
 
-    public void setGlobalDecls(List<?> list)
+    public void setGlobalDecl(List<?> list)
     {
-        for(PGlobalDecls e : this._globalDecls_)
+        for(PGlobalDecl e : this._globalDecl_)
         {
             e.parent(null);
         }
-        this._globalDecls_.clear();
+        this._globalDecl_.clear();
 
         for(Object obj_e : list)
         {
-            PGlobalDecls e = (PGlobalDecls) obj_e;
+            PGlobalDecl e = (PGlobalDecl) obj_e;
             if(e.parent() != null)
             {
                 e.parent().removeChild(e);
             }
 
             e.parent(this);
-            this._globalDecls_.add(e);
+            this._globalDecl_.add(e);
         }
     }
 
@@ -187,7 +187,7 @@ public final class AProgram extends PProgram
     public String toString()
     {
         return ""
-            + toString(this._globalDecls_)
+            + toString(this._globalDecl_)
             + toString(this._main_)
             + toString(this._body_)
             + toString(this._funcDecl_)
@@ -198,7 +198,7 @@ public final class AProgram extends PProgram
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._globalDecls_.remove(child))
+        if(this._globalDecl_.remove(child))
         {
             return;
         }
@@ -233,13 +233,13 @@ public final class AProgram extends PProgram
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        for(ListIterator<PGlobalDecls> i = this._globalDecls_.listIterator(); i.hasNext();)
+        for(ListIterator<PGlobalDecl> i = this._globalDecl_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PGlobalDecls) newChild);
+                    i.set((PGlobalDecl) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

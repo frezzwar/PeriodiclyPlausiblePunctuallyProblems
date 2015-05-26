@@ -9,8 +9,8 @@ public final class AVariableDecl extends PVariableDecl
 {
     private TNew _new_;
     private TIdentifier _identifier_;
-    private TAssign _assign_;
-    private PVariables _variables_;
+    private PAssignOperator _assignOperator_;
+    private PVariable _variable_;
     private TSemiC _semiC_;
 
     public AVariableDecl()
@@ -21,8 +21,8 @@ public final class AVariableDecl extends PVariableDecl
     public AVariableDecl(
         @SuppressWarnings("hiding") TNew _new_,
         @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") TAssign _assign_,
-        @SuppressWarnings("hiding") PVariables _variables_,
+        @SuppressWarnings("hiding") PAssignOperator _assignOperator_,
+        @SuppressWarnings("hiding") PVariable _variable_,
         @SuppressWarnings("hiding") TSemiC _semiC_)
     {
         // Constructor
@@ -30,9 +30,9 @@ public final class AVariableDecl extends PVariableDecl
 
         setIdentifier(_identifier_);
 
-        setAssign(_assign_);
+        setAssignOperator(_assignOperator_);
 
-        setVariables(_variables_);
+        setVariable(_variable_);
 
         setSemiC(_semiC_);
 
@@ -44,8 +44,8 @@ public final class AVariableDecl extends PVariableDecl
         return new AVariableDecl(
             cloneNode(this._new_),
             cloneNode(this._identifier_),
-            cloneNode(this._assign_),
-            cloneNode(this._variables_),
+            cloneNode(this._assignOperator_),
+            cloneNode(this._variable_),
             cloneNode(this._semiC_));
     }
 
@@ -105,16 +105,16 @@ public final class AVariableDecl extends PVariableDecl
         this._identifier_ = node;
     }
 
-    public TAssign getAssign()
+    public PAssignOperator getAssignOperator()
     {
-        return this._assign_;
+        return this._assignOperator_;
     }
 
-    public void setAssign(TAssign node)
+    public void setAssignOperator(PAssignOperator node)
     {
-        if(this._assign_ != null)
+        if(this._assignOperator_ != null)
         {
-            this._assign_.parent(null);
+            this._assignOperator_.parent(null);
         }
 
         if(node != null)
@@ -127,19 +127,19 @@ public final class AVariableDecl extends PVariableDecl
             node.parent(this);
         }
 
-        this._assign_ = node;
+        this._assignOperator_ = node;
     }
 
-    public PVariables getVariables()
+    public PVariable getVariable()
     {
-        return this._variables_;
+        return this._variable_;
     }
 
-    public void setVariables(PVariables node)
+    public void setVariable(PVariable node)
     {
-        if(this._variables_ != null)
+        if(this._variable_ != null)
         {
-            this._variables_.parent(null);
+            this._variable_.parent(null);
         }
 
         if(node != null)
@@ -152,7 +152,7 @@ public final class AVariableDecl extends PVariableDecl
             node.parent(this);
         }
 
-        this._variables_ = node;
+        this._variable_ = node;
     }
 
     public TSemiC getSemiC()
@@ -186,8 +186,8 @@ public final class AVariableDecl extends PVariableDecl
         return ""
             + toString(this._new_)
             + toString(this._identifier_)
-            + toString(this._assign_)
-            + toString(this._variables_)
+            + toString(this._assignOperator_)
+            + toString(this._variable_)
             + toString(this._semiC_);
     }
 
@@ -207,15 +207,15 @@ public final class AVariableDecl extends PVariableDecl
             return;
         }
 
-        if(this._assign_ == child)
+        if(this._assignOperator_ == child)
         {
-            this._assign_ = null;
+            this._assignOperator_ = null;
             return;
         }
 
-        if(this._variables_ == child)
+        if(this._variable_ == child)
         {
-            this._variables_ = null;
+            this._variable_ = null;
             return;
         }
 
@@ -244,15 +244,15 @@ public final class AVariableDecl extends PVariableDecl
             return;
         }
 
-        if(this._assign_ == oldChild)
+        if(this._assignOperator_ == oldChild)
         {
-            setAssign((TAssign) newChild);
+            setAssignOperator((PAssignOperator) newChild);
             return;
         }
 
-        if(this._variables_ == oldChild)
+        if(this._variable_ == oldChild)
         {
-            setVariables((PVariables) newChild);
+            setVariable((PVariable) newChild);
             return;
         }
 

@@ -28,8 +28,8 @@ public class FunctionChecker extends DepthFirstAdapter
 
         String key = ident.toString().toUpperCase().trim();
 
-        List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables().toString());
-        Type type = Typecheck.typeChecker(TypeExpression, FunctionSymbolTable, node.getVariables().toString());
+        List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariable().toString());
+        Type type = Typecheck.typeChecker(TypeExpression, FunctionSymbolTable, node.getVariable().toString());
 
         if(FunctionSymbolTable.VarDeclaredInCurrentScope(key))
         {
@@ -118,7 +118,7 @@ public class FunctionChecker extends DepthFirstAdapter
         }
         FunctionSymbolTable.AddVariable(key, Type.grid);
     }
-
+    /*
     public void outAAssignExpr(AAssignExpr node)
     {
         PValue ident = node.getValue();
@@ -145,6 +145,7 @@ public class FunctionChecker extends DepthFirstAdapter
 
         }
     }
+    */
 
 
     public void inAReturnValue(AReturnValue node)
@@ -205,11 +206,12 @@ public class FunctionChecker extends DepthFirstAdapter
                 TypeExpression.add(new TypeExpression(parameters, TypeExpr.get(i).getOutput()));
             }
         }
+        /*
         else if(expresion.getClass() == AMinusvalueExpr.class)
         {
             AMinusvalueExpr expr = (AMinusvalueExpr) expresion;
             TypeExpression.add(new TypeExpression(parameters, FunctionSymbolTable.GetVariable(expr.getExpr().toString().toUpperCase().trim())));
-        }
+        }*/
 
 
     }

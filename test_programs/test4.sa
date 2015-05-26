@@ -15,17 +15,17 @@ list.add(variable1);
 variable1 = 50;
 func(variable1);
 objekt.method(1, 2);
-grid1(2, 2).addobj(objekt);
-if (true) {
+grid1[2, 2].addobj(objekt);
+if (11 == 11 && 12 == 12) {
 
 }
-else if (false) {
+else if (Funk() == true) {
 
 }
 else {
 
 }
-repeat while (true) {
+repeat while (true == true) {
 
 }
 }

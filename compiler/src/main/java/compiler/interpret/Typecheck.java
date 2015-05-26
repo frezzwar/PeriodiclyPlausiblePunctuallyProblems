@@ -304,6 +304,10 @@ public class Typecheck{
 					{
 						expression--;
 					}
+					else if (Expression.getInput().get(expression) == Type.parameter)
+					{
+						typesafe = true;
+					}
 					else
 					{
 						typesafe = false;
@@ -329,7 +333,7 @@ public class Typecheck{
 				Expression.add(InputList.get(i));
 				TypeList.add(typeChecker(Expression, table, Variables));
 			}
-			System.out.println(TypeList);
+			//System.out.println(TypeList);
 			TypeList.removeAll(Collections.singleton(null));
 			if(TypeList.size() == 1)
 			{
@@ -350,6 +354,7 @@ public class Typecheck{
 						System.exit(0);
 					}
 				}
+				return type;
 			}
 		}
 		return null;

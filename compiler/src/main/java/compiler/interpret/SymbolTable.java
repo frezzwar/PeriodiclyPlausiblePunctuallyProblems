@@ -17,6 +17,7 @@ public class SymbolTable {
 	}
 
 	public Type GetMember(String figure, String member){
+		if (this.GetFigure(figure) == null) return null;
 		return this.GetFigure(figure).GetMember(member);
 	}
 

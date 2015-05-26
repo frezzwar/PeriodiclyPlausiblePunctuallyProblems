@@ -118,35 +118,6 @@ public class FunctionChecker extends DepthFirstAdapter
         }
         FunctionSymbolTable.AddVariable(key, Type.grid);
     }
-    /*
-    public void outAAssignExpr(AAssignExpr node)
-    {
-        PValue ident = node.getValue();
-        if (ident.getClass() != AValueMemberValue.class)
-        {
-            String key = ident.toString().toUpperCase().trim();
-            List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getExpr().toString());
-            Type type = Typecheck.typeChecker(TypeExpression, FunctionSymbolTable, node.getExpr().toString());
-
-            if (FunctionSymbolTable.VarPrevDeclared(key))
-            {
-                if (FunctionSymbolTable.GetVariable(key) != type)
-                {
-                    System.out.println(ident + "is of type " + FunctionSymbolTable.GetVariable(key) + ", but you are trying to assign it a " + type);
-                    System.exit(0);
-                }
-            }
-        }
-        else
-        {
-            AValueMemberValue member = (AValueMemberValue)ident;
-            String key = member.getIdentifier().toString();
-            //TODO figur typecheck
-
-        }
-    }
-    */
-
 
     public void inAReturnValue(AReturnValue node)
     {

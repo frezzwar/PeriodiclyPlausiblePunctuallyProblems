@@ -7,6 +7,7 @@ import compiler.node.*;
 
 public class DepthFirstAdapter extends AnalysisAdapter
 {
+    boolean DontPrint = false;
     public void inStart(Start node)
     {
         defaultIn(node);

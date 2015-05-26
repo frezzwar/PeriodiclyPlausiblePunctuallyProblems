@@ -12,6 +12,7 @@ import java.util.Map;
 public class ClassGenerator extends DepthFirstAdapter
 {
 	private static int cellSize;
+	private boolean dontPrint = false;
 	private boolean inObject;
 	private boolean inEvent;
 	private HashMap<String, String[]> figures;
@@ -114,7 +115,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	}
 
 	private void addFigureCoords(String name, String x, String y){
-		figures.replace(name, new String[]{x,y});
+		figures.replace(name, new String[]{x, y});
 	}
 
 	private String placeFigures(HashMap<String, String[]> figList){
@@ -148,20 +149,26 @@ public class ClassGenerator extends DepthFirstAdapter
 				"w.webkitRequestAnimationFrame ||\nw.msRequestAnimationFrame ||\n" +
 				"w.mozRequestAnimationFrame;\n\n" +
 				"start();\nmain();";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void outAExprStmt(AExprStmt node){
 		code = ";\n";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAEventDecl(AEventDecl node){
 		code = createEventListeners();
 		code += "var update = function()";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 		inEvent = true;
 		eventParam = node.getIdentifier().toString().toLowerCase().trim();
 
@@ -173,20 +180,43 @@ public class ClassGenerator extends DepthFirstAdapter
 		eventParam = "";
 	}
 
+	public void outABoolExpr(ABoolExpr node)
+	{
+		if (inEvent && dontPrint)
+		{
+			dontPrint = false;
+		}
+	}
 	@Override
 	public void inABoolExpr(ABoolExpr node){
-		if (inEvent){
-			String lhs = node.getValue().toString().toLowerCase().trim();
-			String rhs = node.getExpr().toString().toLowerCase().trim();
-			if (lhs.equals(eventParam)){
-				int keyCode = translateKey(node.getExpr().toString().toLowerCase().trim());
-				code = keyCode + " in keysDown && OneKeyPress == true";
-			}
-			else if(rhs.equals(eventParam)){
-				int keyCode = translateKey(node.getValue().toString().toLowerCase().trim());
-				code = keyCode + " in keysDown && OneKeyPress == true";
+		if (inEvent && !dontPrint)
+		{
+			String[] temp = node.toString().split(" ");
+			code = "";
+			for (int i = 0; i < temp.length; i++)
+			{
+				if (temp[i].equals(eventParam))
+				{
+					if (temp[i + 1].equals("==") || temp[i + 1].equals("!="))
+					{
+						int keyCode=translateKey(temp[i + 2].toLowerCase().trim());
+						code += keyCode + " in keysDown && OneKeyPress == true";
+						i += 2;
+					}
+					else if (temp[i - 1].equals( "==") || temp[i - 1].equals("!="))
+					{
+						int keyCode=translateKey(temp[i-2].toLowerCase().trim());
+						code += keyCode + " in keysDown && OneKeyPress == true";
+						i += 2;
+					}
+				}
+				else
+				{
+					code += temp[i];
+				}
 			}
 			write(code);
+			dontPrint = true;
 		}
 	}
 
@@ -196,7 +226,9 @@ public class ClassGenerator extends DepthFirstAdapter
 		int height = Integer.parseInt(node.getInt2().toString().trim());
 		code = createHtmlCanvas(width, height);
 		code += createBackground();
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
@@ -204,14 +236,18 @@ public class ClassGenerator extends DepthFirstAdapter
 		code = loadImage(node.getId1().toString().trim(), node.getId2().toString().trim());
 		code += "/*Object*/\nfunction " + node.getId1().toString().trim() + "()";
 		functionName = node.getId1().toString().trim();
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 		inObject = true;
 	}
 
 	@Override
 	public void outAObjectDecl(AObjectDecl node){
 		inObject = false;
-		write("var " + functionName + " = new " + functionName + "();\n\n");
+		if(!dontPrint) {
+			write("var " + functionName + " = new " + functionName + "();\n\n");
+		}
 	}
 
 	@Override
@@ -223,7 +259,9 @@ public class ClassGenerator extends DepthFirstAdapter
 			code = "function " + node.getIdentifier().toString().trim() ;
 		}
 		code += (node.getParams() == null ? "()" : "");
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
@@ -234,7 +272,9 @@ public class ClassGenerator extends DepthFirstAdapter
 		else {
 			code = "/*Variable*/\nvar " + node.getIdentifier().toString().trim();
 		}
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
@@ -245,37 +285,49 @@ public class ClassGenerator extends DepthFirstAdapter
 		else{
 			code =";\n";
 		}
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAListVariable(AListVariable node){
 		code = "[";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void outAListVariable(AListVariable node){
 		code = "]";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAListVarTail(AListVarTail node){
 		code = ", ";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inACallParams(ACallParams node){
 		code = "(";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void outACallParams(ACallParams node){
 		code = ")";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
@@ -286,37 +338,49 @@ public class ClassGenerator extends DepthFirstAdapter
 	@Override
 	public void inAReturnValue(AReturnValue node){
 		code = "return ";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void outAReturnValue(AReturnValue node){
 		code = ";";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAParams(AParams node){
 		code = "(" + node.getIdentifier().toString().trim();
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void outAParams(AParams node){
 		code = ")";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAParamsTail(AParamsTail node){
 		code = ", " + node.getIdentifier().toString().trim();
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAWhileControlStmt(AWhileControlStmt node){
 		code = "while ";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	private static int counter = 0;
@@ -325,103 +389,135 @@ public class ClassGenerator extends DepthFirstAdapter
 		String id = "i" + counter;
 		code = "for (" + id + " = 1; id <= ";
 
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAIfStmtControlStmt(AIfStmtControlStmt node){
 		code = "if ";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAElseStmtElseStmt(AElseStmtElseStmt node){
 		code = "else";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAElseifStmtElseStmt(AElseifStmtElseStmt node){
 		code = "else if ";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inACondition(ACondition node){
 		code = "(";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void outACondition(ACondition node){
 		code = ")";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void outARepeatCount(ARepeatCount node){
 		String id = "i" + counter;
 		code = "; " + id + "++)";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 		counter++;
 	}
 
 	@Override
 	public void inABody(ABody node){
 		code = "\n//BodyBegins\n{\n";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 		increaseIndentation();
 	}
 
 	@Override
 	public void outABody(ABody node){
 		code = "\n}\n//BodyEnds\n";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 		decreaseIndentation();
 	}
 
 	@Override
 	public void inAObjBody(AObjBody node){
 		code = "{\n";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 		increaseIndentation();
 	}
 
 	@Override
 	public void outAObjBody(AObjBody node){
 		code = "}\n";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 		decreaseIndentation();
 	}
 
 	@Override
 	public void inAParenthesizedExpr(AParenthesizedExpr node){
 		code = "(";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void outAParenthesizedExpr(AParenthesizedExpr node){
 		code = ")";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAVarAssignExpr(AVarAssignExpr node){
 		code = node.getIdentifier().toString().trim();
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAIdValue(AIdValue node){
 		code = node.getIdentifier().toString().trim();
-		write(code);
+		if (!dontPrint) {
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAMethodCallValue(AMethodCallValue node){
 		code = node.getIdentifier().toString().trim() + ".";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
@@ -442,37 +538,49 @@ public class ClassGenerator extends DepthFirstAdapter
 	@Override
 	public void inAFuncCall(AFuncCall node){
 		code = node.getIdentifier().toString().trim();
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAMember(AMember node){
 		code = "." + node.getIdentifier().toString().trim();
-		write(code);
+		if (!dontPrint) {
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAMinusOperator(AMinusOperator node){
 		code = "-";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAPlusOperator(APlusOperator node){
 		code = "+";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAMultOperator(AMultOperator node){
 		code = "*";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inADivOperator(ADivOperator node){
 		code = "/";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
@@ -483,61 +591,82 @@ public class ClassGenerator extends DepthFirstAdapter
 		else{
 			code = "";
 		}
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAEqualBoolOperator(AEqualBoolOperator node){
 		code = "==";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inANotEqualBoolOperator(ANotEqualBoolOperator node){
 		code = "!=";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inALessEqualBoolOperator(ALessEqualBoolOperator node){
 		code = "<=";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAGreaterEqualBoolOperator(AGreaterEqualBoolOperator node){
 		code = ">=";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAAndBoolOperator(AAndBoolOperator node){
 		code = "&&";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAOrBoolOperator(AOrBoolOperator node){
 		code = "||";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inALessBoolOperator(ALessBoolOperator node){
 		code = "<";
-		write(code);
+
+		if (!dontPrint){
+			write(code);
+		};
 	}
 
 	@Override
 	public void inAGreaterBoolOperator(AGreaterBoolOperator node){
 		code = ">";
+		if (!dontPrint){
 		write(code);
+		}
 	}
 
 	@Override
 	public void inANegationOperator(ANegationOperator node){
 		code = "!";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
@@ -550,25 +679,33 @@ public class ClassGenerator extends DepthFirstAdapter
 		}
 //		code += node.parent().getClass().toString() + " ";
 //		code += node.parent().parent().getClass().toString() + " ";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAStringLiteral(AStringLiteral node){
 		code = node.getStringLiteral().toString().trim();
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inATrueBooleanLiteral(ATrueBooleanLiteral node){
 		code = "true";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 
 	@Override
 	public void inAFalseBooleanLiteral(AFalseBooleanLiteral node){
 		code = "false";
-		write(code);
+		if (!dontPrint){
+			write(code);
+		}
 	}
 /*
 	@Override

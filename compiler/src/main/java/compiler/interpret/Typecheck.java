@@ -12,7 +12,8 @@ import compiler.node.*;
 
 
 public class Typecheck{
-	
+
+	static boolean boolExpr = false;
 	public static List<TypeExpression> TypeExpressions(String check)
 	{
 		List<TypeExpression> retType = new LinkedList<TypeExpression>();
@@ -131,9 +132,57 @@ public class Typecheck{
 									  priority = 1;
 									  break;
 
+							case "==":TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.bool, Type.bool), Type.number));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+									  priority = 2;
+									  break;
+
+							case "!=":TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.bool, Type.bool),Type.number));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+									  priority = 2;
+									  break;
+
+							case "<": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+									  priority = 2;
+									  break;
+
+							case ">": TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+									  priority = 2;
+									  break;
+
+							case "<=":TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+									  priority = 2;
+									  break;
+
+							case ">=":TempExpression.add(new TypeExpression(Arrays.asList(Type.number, Type.number),Type.bool));
+									  TempExpression.add(new TypeExpression(Arrays.asList(Type.string, Type.string),Type.number));
+									  priority = 2;
+									  break;
+
+							case "&&":TempExpression.add(new TypeExpression(Arrays.asList(Type.bool, Type.bool),Type.bool));
+									  priority = 2;
+									  break;
+
+							case "||":TempExpression.add(new TypeExpression(Arrays.asList(Type.bool, Type.bool),Type.bool));
+									  priority = 2;
+									  break;
+
 							default:  break;
 						}
 						MultivariableList(retType, TempExpression, priority);
+					}
+					if (boolExpr)
+					{
+						for (int i = 0; i < retType.size(); i++)
+						{
+							retType.get(i).Output(Type.bool);
+						}
+						boolExpr = false;
 					}
 				}
 		return retType;
@@ -157,6 +206,8 @@ public class Typecheck{
 		List<TypeExpression> TempList = new LinkedList<>();
 		List<Integer> RemoveList = new LinkedList<>();
 		TempList.addAll(ToList);
+
+
 		if(ToList.size() == 0 && InputList.size() != 0)
 		{
 			for(int i = 0; i < InputList.size(); i++)
@@ -203,6 +254,19 @@ public class Typecheck{
 						RemoveList.add(i);
 					}
 				}
+				else if (priority == 2)
+				{
+					if(TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						boolExpr = true;
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(0));
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getInput().get(1));
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
 			}
 		}
 		else if (InputList.size() != 0)
@@ -236,6 +300,19 @@ public class Typecheck{
 						RemoveList.add(i);
 					}
 				}
+				else if (priority == 2)
+				{
+					if(TempList.get(i).getOutput() == InputList.get(i % InputList.size()).getInput().get(0))
+					{
+						boolExpr = true;
+						TempList.get(i).Input(InputList.get(i % InputList.size()).getInput().get(0));
+						TempList.get(i).Output(InputList.get(i % InputList.size()).getInput().get(1));
+					}
+					else
+					{
+						RemoveList.add(i);
+					}
+				}
 			}
 		}
 		for (int i = RemoveList.size()-1; i >= 0; i--)
@@ -243,9 +320,10 @@ public class Typecheck{
 			int Remove = RemoveList.get(i);
 			TempList.remove(Remove);
 		}
+
 		ToList.clear();
 		ToList.addAll(TempList);
-		System.out.println(ToList);
+		//System.out.println(ToList);
 	}
 	
 	public static Type typeChecker(List<TypeExpression> InputList, SymbolTable table, String Variables)

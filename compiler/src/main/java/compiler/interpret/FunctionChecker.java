@@ -16,7 +16,7 @@ public class FunctionChecker extends DepthFirstAdapter
     private List<Type> parameters = new LinkedList<>();
     private SymbolTable SymbolTable = new SymbolTable();
 
-    public FunctionChecker(SymbolTable symTable, List<TypeExpression> typeExpressions)
+    public FunctionChecker(List<TypeExpression> typeExpressions)
     {
         this.TypeExpression = typeExpressions;
     }

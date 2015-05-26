@@ -263,10 +263,14 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	@Override
 	public void inAFuncDecl(AFuncDecl node){
 		String methodName =  node.getIdentifier().toString().toUpperCase().trim();
-		node.apply(new FunctionChecker(symbolTable));
 
-		List<TypeExpression> typeExpressions = Typecheck.TypeExpressions(node.).toString());
-		Type type = Typecheck.typeChecker(typeExpressions, symbolTable, node.getVariable().toString());
+
+		List<TypeExpression> typeExpressions = new LinkedList<>();
+
+		node.apply(new FunctionChecker(typeExpressions));
+
+
+		Type type = Typecheck.typeChecker(typeExpressions, symbolTable, node.getParams().toString());
 
 		if(inObjDecl){
 			if(symbolTable.MemberDeclaredInFigure(currObj, memName)){
@@ -275,6 +279,10 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			}
 			symbolTable.AddMember(currObj, memName, type);
 		}
+	}
+
+	public void AAA(AssignExpr node){
+		node.g
 	}
 
 

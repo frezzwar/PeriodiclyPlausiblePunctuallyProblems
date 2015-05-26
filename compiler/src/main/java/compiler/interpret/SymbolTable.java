@@ -41,6 +41,8 @@ public class SymbolTable {
 		this.GetFigure(figure).AddMethod(name, types);
 	}
 
+	public boolean 
+
 	public void ChangeType(String key, Type type)
 	{
 		changeType(currentScope, key, type);

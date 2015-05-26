@@ -43,7 +43,7 @@ public class FuncInit extends DepthFirstAdapter {
                 System.exit(0);
             }
             List<TypeExpression> typeExpressions = new LinkedList<>();
-            node.apply(new FunctionChecker(symTable, typeExpressions));
+            node.apply(new FunctionChecker(typeExpressions));
             symTable.AddFunction(node.getIdentifier().toString().toUpperCase().trim(), typeExpressions);
         }
     }

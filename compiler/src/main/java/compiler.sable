@@ -51,15 +51,12 @@ Tokens
     to              = 'to';
     repeat          = 'repeat';
     while           = 'while';
-    random          = 'random';
     if              = 'if';
     else            = 'else';
     foreach         = 'foreach';
     in              = 'in';
     return          = 'return';
     main            = 'program';
-
-
 
     figure          = 'figure';
     grid            = 'grid';

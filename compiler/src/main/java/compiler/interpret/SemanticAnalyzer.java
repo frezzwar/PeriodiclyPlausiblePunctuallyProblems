@@ -20,15 +20,16 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		TIdentifier ident = node.getIdentifier();
 		Type type = null;
 		String key = ident.toString().toUpperCase().trim();
-		if (node.getVariables().getClass() != AListVariables.class)
+
+		if (node.getVariable().getClass() != AListVariable.class)
 		{
-			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariables().toString());
-			type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariables().toString());
+			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getVariable().toString());
+			type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getVariable().toString());
 		}
 		else
 		{
-			AListVariables listVariables = (AListVariables) node.getVariables();
-			String[] temp = listVariables.getValue().toString().split(",");
+			AListVariable listVariables = (AListVariable) node.getVariable();
+			String[] temp = listVariables.getListVar().toString().split(",");
 			for (int i = 0; i < temp.length; i++)
 			{
 				if (type == null)
@@ -58,12 +59,12 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		}
 	}
 
-	public void outAAssignExpr(AAssignExpr node)
+	public void ooutAVarAssignExpr(AVarAssignExpr node)
 	{
-		PValue ident = node.getValue();
-		if (ident.getClass() != AValueMemberValue.class)
+
+		if (null != node.getMember())
 		{
-			String key = ident.toString().toUpperCase().trim();
+			String key = node.getIdentifier().toString().toUpperCase().trim();
 			List<TypeExpression> TypeExpression = Typecheck.TypeExpressions(node.getExpr().toString());
 			Type type = Typecheck.typeChecker(TypeExpression, symbolTable, node.getExpr().toString());
 
@@ -71,16 +72,14 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			{
 				if (symbolTable.GetVariable(key) != type)
 				{
-					System.out.println(ident + "is of type " + symbolTable.GetVariable(key) + ", but you are trying to assign it a " + type);
+					System.out.println(node.getIdentifier() + "is of type " + symbolTable.GetVariable(key) + ", but you are trying to assign it a " + type);
 					System.exit(0);
 				}
 			}
 		}
 		else
 		{
-			AValueMemberValue member = (AValueMemberValue)ident;
-			String key = member.getIdentifier().toString();
-			//TODO figur typecheck
+			//TODO typecheck figur
 		}
 	}
 

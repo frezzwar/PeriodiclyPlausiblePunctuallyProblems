@@ -18,6 +18,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	private HashMap<String, String[]> figures;
 	private String indent;
 	private String eventParam;
+	private String ObjectName;
 
 	public ClassGenerator() {
 		this(50);
@@ -29,6 +30,18 @@ public class ClassGenerator extends DepthFirstAdapter
 		inEvent = false;
 		figures = new HashMap<>();
 		indent = "";
+		ObjectName = "";
+	}
+
+	private void MoveFunctions()
+	{
+		String temp = "var move = function (figur, key) \n{\n " +
+				"if(key == \"up\")\n{\n figur.y =figur.y - " + cellSize + "; \n}\n" +
+				"if(key == \"down\")\n{\n figur.y =figur.y + " + cellSize + "; \n}\n" +
+				"if(key == \"left\")\n{\n figur.x = figur.x - " + cellSize + "; \n}\n" +
+				"if(key == \"right\")\n{\n figur.x = figur.x + " + cellSize + "; \n}\n" +
+				"\n}\n";
+		write(temp);
 	}
 
 	private void write(String output)
@@ -101,17 +114,17 @@ public class ClassGenerator extends DepthFirstAdapter
 
 	private String createEventListeners(){
 		return "var OneKeyPress = true;\n\nvar keysDown = [];\n\n" +
-				"addEventListener(\"keydown\", function(e){\nkeysDown[e.keyCode] = true;\n})\n" +
-				"addEventListener(\"keyup\", function(e){\ndelete keysDown[e.keyCode];\n" +
+				"addEventListener(\"keydown\", function (e){\nkeysDown[e.keyCode] = true;\n})\n" +
+				"addEventListener(\"keyup\", function (e){\ndelete keysDown[e.keyCode];\n" +
 				"OneKeyPress = true;\n})\n";
 	}
 
 	private String loadImage(String name, String src){
 		figures.put(name, new String[2]);
 		String tempName = name + "Image";
-		String path = "\"" + src + "\"";
+		String path = "" + src + "";
 		return "var " + tempName + " = new Image();\n" +
-				tempName + ".src = " + path + "\n\n";
+				tempName + ".src = \"images/" + path + ".png\"\n\n";
 	}
 
 	private void addFigureCoords(String name, String x, String y){
@@ -127,7 +140,7 @@ public class ClassGenerator extends DepthFirstAdapter
 			String x = coords[0];
 			String y = coords[1];
 			temp += name + ".x = " + x + " * " + cellSize + ";\n" +
-					name + ".x = " + y + " * " + cellSize + ";\n";
+					name + ".y = " + y + " * " + cellSize + ";\n";
 		}
 		temp += "}\n\n";
 		return temp;
@@ -145,10 +158,12 @@ public class ClassGenerator extends DepthFirstAdapter
 				"var w = window;\nrequestAnimationFrame = w.requestAnimationFrame ||\n" +
 				"w.webkitRequestAnimationFrame ||\nw.msRequestAnimationFrame ||\n" +
 				"w.mozRequestAnimationFrame;\n\n" +
-				"start();\nmain();";
+				"start();\nmain();\n";
 		if (!dontPrint){
+			MoveFunctions();
 			write(code);
 		}
+
 	}
 
 	@Override
@@ -161,8 +176,9 @@ public class ClassGenerator extends DepthFirstAdapter
 
 	@Override
 	public void inAEventDecl(AEventDecl node){
+		dontPrint = false;
 		code = createEventListeners();
-		code += "var update = function()";
+		code += "var update = function ()";
 		if (!dontPrint){
 			write(code);
 		}
@@ -237,11 +253,13 @@ public class ClassGenerator extends DepthFirstAdapter
 			write(code);
 		}
 		inObject = true;
+		ObjectName = node.getId1().toString().trim();
 	}
 
 	@Override
 	public void outAObjectDecl(AObjectDecl node){
 		inObject = false;
+		ObjectName = "";
 		if(!dontPrint) {
 			write("var " + functionName + " = new " + functionName + "();\n\n");
 		}
@@ -249,16 +267,37 @@ public class ClassGenerator extends DepthFirstAdapter
 
 	@Override
 	public void inAFuncDecl(AFuncDecl node){
-		if (inObject){
-			code = "this." + node.getIdentifier().toString().trim() + " = function";
-		}
-		else{
+		if (!inObject){
 			code = "function " + node.getIdentifier().toString().trim() ;
+			dontPrint = false;
 		}
 		code += (node.getParams() == null ? "()" : "");
 		if (!dontPrint){
 			write(code);
 		}
+	}
+
+
+	public void inAMethodInObjDecl (AMethodInObjDecl node)
+	{
+		dontPrint = true;
+	}
+
+
+	public void outAFuncDecl(AFuncDecl node)
+	{
+		if (inObject)
+		{
+			if (node.parent().getClass() == AMethodInObjDecl.class)
+			{
+				write("}\n");
+				code = "var " + ObjectName + "_" + node.getIdentifier() + " = function(" + node.getParams().toString() + ")\n";
+				write(code);
+				node.getBody().apply(new ClassGenerator());
+				dontPrint = true;
+			}
+		}
+
 	}
 
 	@Override
@@ -456,6 +495,7 @@ public class ClassGenerator extends DepthFirstAdapter
 		if (!dontPrint){
 			write(code);
 		}
+
 		decreaseIndentation();
 	}
 
@@ -474,6 +514,7 @@ public class ClassGenerator extends DepthFirstAdapter
 		if (!dontPrint){
 			write(code);
 		}
+		dontPrint = false;
 		decreaseIndentation();
 	}
 
@@ -509,10 +550,28 @@ public class ClassGenerator extends DepthFirstAdapter
 		}
 	}
 
+	public void outAMethodCallValue(AMethodCallValue node)
+	{
+		dontPrint = false;
+	}
+
 	@Override
 	public void inAMethodCallValue(AMethodCallValue node){
-		code = node.getIdentifier().toString().trim() + ".";
-		if (!dontPrint){
+		if(node.getFuncCall().getClass() == AFuncCall.class)
+		{
+			AFuncCall funcCall = (AFuncCall) node.getFuncCall();
+			if(funcCall.getIdentifier().toString().trim().equals("move"))
+			{
+				code = "move(" + node.getIdentifier().toString() + ", \"" + funcCall.getCallParams().toString() + "\")";
+			}
+			write(code);
+			dontPrint = true;
+		}
+		else {
+			code = node.getIdentifier().toString().trim() + ".";
+		}
+
+		if (!dontPrint) {
 			write(code);
 		}
 	}
@@ -524,20 +583,30 @@ public class ClassGenerator extends DepthFirstAdapter
 			ACallParams tempParams = (ACallParams) tempFunc.getCallParams();
 			ACallParamsTail tempTail = (ACallParamsTail) tempParams.getCallParamsTail().getFirst();
 			AGridParams tempGrPar = (AGridParams) node.getGridParams();
-			String name = tempGrPar.getIdentifier().toString().toLowerCase().trim();
+			String name = tempGrPar.getIdentifier().toString().trim();
 			String x = tempParams.getExpr().toString().toLowerCase().trim();
 			String y = tempTail.getExpr().toString().toLowerCase().trim();
 			addFigureCoords(name, x, y);
 		}
 	}
 
+	public void outAObjGlobalDecl(AObjGlobalDecl node)
+	{
+		dontPrint = false;
+	}
+
 	@Override
-	public void inAFuncCall(AFuncCall node){
+	public void inAFuncCall(AFuncCall node) {
 		code = node.getIdentifier().toString().trim();
-		if (!dontPrint){
+		if (node.parent().getClass() == AGridPosValue.class) {
+			dontPrint = true;
+		}
+		if (!dontPrint) {
 			write(code);
 		}
 	}
+
+
 
 	@Override
 	public void inAMember(AMember node){

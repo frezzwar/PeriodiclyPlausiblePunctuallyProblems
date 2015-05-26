@@ -272,6 +272,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	@Override
 	public void inACallParamsTail(ACallParamsTail node){
 		code = ", ";
+		write(code);
 	}
 
 	@Override

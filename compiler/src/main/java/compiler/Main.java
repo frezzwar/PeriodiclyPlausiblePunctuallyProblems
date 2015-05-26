@@ -30,8 +30,8 @@ public class Main {
 
             SymbolTable symTable = new SymbolTable();
 
-            ast.apply(new FuncInit(symTable));
-            ast.apply(new SemanticAnalyzer(symTable));
+            //ast.apply(new FuncInit(symTable));
+            //ast.apply(new SemanticAnalyzer(symTable));
 
             FileSetup.Setup();
             ast.apply(new ClassGenerator());

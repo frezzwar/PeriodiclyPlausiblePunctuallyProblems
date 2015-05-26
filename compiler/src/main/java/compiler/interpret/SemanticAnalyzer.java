@@ -220,7 +220,13 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			System.out.println("Variable already defined: " + "memName");
 			System.exit(0);
 		}
-		symbolTable.AddVariable(name, type);
+		if (type != null) {
+			symbolTable.AddVariable(name, type);
+		}
+		else {
+			System.out.println(node.getIdentifier() + "is not typesafe");
+			System.exit(0);
+		}
 	}
 
 	@Override

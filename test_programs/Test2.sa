@@ -3,6 +3,8 @@ new grid1 = grid(10, 12);
 
 program
 {
+    new var = "kage" * 58;
+
     grid1.background = "test_img.png";
 
     new func = bongo(7,8);

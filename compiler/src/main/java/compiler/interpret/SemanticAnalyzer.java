@@ -170,12 +170,6 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	public void inAObjectDecl(AObjectDecl node){
 		String key = node.getId1().toString().toUpperCase().trim();
 
-		if (symbolTable.FigureDeclared(key) || symbolTable.VarDeclaredInCurrentScope(key)){
-			System.out.println("Variable with name already declared: " + key);
-			System.exit(0);
-		}
-		symbolTable.AddFigure(key);
-
 		/*
 			Checks if specified figure file exists
 		String filePath = "\"" + node.getId2().toString().trim() + "\"";

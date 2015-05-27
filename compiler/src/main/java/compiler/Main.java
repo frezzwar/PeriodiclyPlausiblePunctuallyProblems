@@ -19,14 +19,6 @@ public class Main {
                new FileReader(args[0]), 1024));
             Parser parser = new Parser(lexer);
             Start ast = parser.parse() ;
-            
-            
-            
-            // Get our Interpreter going.
-            Interpreter interp = new Interpreter () ;
-            //System.out.println();
-            //ast.apply(interp) ;
-            //System.out.println("Ok");
 
             SymbolTable symTable = new SymbolTable();
 
@@ -34,7 +26,7 @@ public class Main {
             ast.apply(new SemanticAnalyzer(symTable));
 
             FileSetup.Setup();
-            ast.apply(new ClassGenerator());
+            ast.apply(new CodeGenerator());
             System.out.println("Done");
 
          }

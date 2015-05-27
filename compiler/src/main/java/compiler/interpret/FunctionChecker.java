@@ -98,11 +98,26 @@ public class FunctionChecker extends DepthFirstAdapter
 
     @Override
     public void inAFuncCall(AFuncCall node){
-        TIdentifier ident = node.getIdentifier();
-        String key = ident.toString().toUpperCase().trim();
 
-        if (!SymbolTable.FuncPrevDeclared(key)){
-            System.out.println("Function not declared: " + ident.toString());
+        if (node.parent().getClass() != AMethodCallValue.class){
+            TIdentifier ident = node.getIdentifier();
+            String key = ident.toString().toUpperCase().trim();
+
+            if (!SymbolTable.FuncPrevDeclared(key)){
+                System.out.println("Function not declared: " + ident.toString());
+                System.exit(0);
+            }
+        }
+    }
+
+    @Override
+    public void inAMethodCallValue(AMethodCallValue node){
+        String figure = node.getIdentifier().toString().toUpperCase().trim();
+        AFuncCall temp = (AFuncCall) node.getFuncCall();
+        String meth = temp.getIdentifier().toString().toUpperCase().trim();
+
+        if (!SymbolTable.MethodDeclaredInFigure(figure, meth)){
+            System.out.println("Method not declared: " + temp.getIdentifier().toString().trim());
             System.exit(0);
         }
     }

@@ -4,7 +4,7 @@ new myGrid = grid(10,11);
 new myPlayer = figure(spaceman){
 	new moves = 10;
 	new moaaa = "test";
-	new test = [];
+	//new test = [];
 }
 new myDog = figure(dog) {
 	new moves = 20;

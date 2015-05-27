@@ -13,6 +13,8 @@ program
     cat.funci(1);
     new hej = 5;
     hej = func(3, 4, 5);
+
+    cat.move(uo);
 }
 
 new func(par1, par2, par3)

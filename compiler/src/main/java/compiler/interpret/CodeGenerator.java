@@ -479,8 +479,6 @@ public class CodeGenerator extends DepthFirstAdapter
 		code = "\n//BodyBegins\n{\n";
 
 		if (node.parent().getClass() != AProgram.class) {
-			//AProgram p = (AProgram) node.parent();
-
 			code = "\n//BodyBegins\n{\n";
 			if (!dontPrint) {
 				write(code);
@@ -546,7 +544,7 @@ public class CodeGenerator extends DepthFirstAdapter
 	@Override
 	public void inAIdValue(AIdValue node){
 		if (node.parent().parent().getClass() == ACallParamsTail.class){
-			code = "," + node.getIdentifier().toString().trim();
+			code = ", " + node.getIdentifier().toString().trim();
 		}
 		else
 			code = node.getIdentifier().toString().trim();

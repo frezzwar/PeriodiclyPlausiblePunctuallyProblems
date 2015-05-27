@@ -114,7 +114,6 @@ public interface Analysis extends Switch
     void caseTTo(TTo node);
     void caseTRepeat(TRepeat node);
     void caseTWhile(TWhile node);
-    void caseTRandom(TRandom node);
     void caseTIf(TIf node);
     void caseTElse(TElse node);
     void caseTForeach(TForeach node);

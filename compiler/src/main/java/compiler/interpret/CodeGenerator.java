@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClassGenerator extends DepthFirstAdapter
+public class CodeGenerator extends DepthFirstAdapter
 {
 	private static int cellSize;
 	private boolean dontPrint = false;
@@ -20,11 +20,11 @@ public class ClassGenerator extends DepthFirstAdapter
 	private String eventParam;
 	private String ObjectName;
 
-	public ClassGenerator() {
+	public CodeGenerator() {
 		this(50);
 	}
 
-	public ClassGenerator(int gridCellSize){
+	public CodeGenerator(int gridCellSize){
 		cellSize = gridCellSize;
 		inObject = false;
 		inEvent = false;
@@ -294,7 +294,7 @@ public class ClassGenerator extends DepthFirstAdapter
 				write("}\n");
 				code = "var " + ObjectName + "_" + node.getIdentifier() + " = function(" + node.getParams().toString() + ")\n";
 				write(code);
-				node.getBody().apply(new ClassGenerator());
+				node.getBody().apply(new CodeGenerator());
 				dontPrint = true;
 			}
 		}
@@ -478,10 +478,14 @@ public class ClassGenerator extends DepthFirstAdapter
 	public void inABody(ABody node){
 		code = "\n//BodyBegins\n{\n";
 
-		if (!dontPrint){
-			write(code);
+		if (node.parent().getClass() != AProgram.class) {
+			//AProgram p = (AProgram) node.parent();
+
+			code = "\n//BodyBegins\n{\n";
+			if (!dontPrint) {
+				write(code);
+			}
 		}
-		increaseIndentation();
 	}
 
 	@Override
@@ -494,8 +498,6 @@ public class ClassGenerator extends DepthFirstAdapter
 		if (!dontPrint){
 			write(code);
 		}
-
-		decreaseIndentation();
 	}
 
 	@Override
@@ -543,7 +545,11 @@ public class ClassGenerator extends DepthFirstAdapter
 
 	@Override
 	public void inAIdValue(AIdValue node){
-		code = node.getIdentifier().toString().trim();
+		if (node.parent().parent().getClass() == ACallParamsTail.class){
+			code = "," + node.getIdentifier().toString().trim();
+		}
+		else
+			code = node.getIdentifier().toString().trim();
 		if (!dontPrint) {
 			write(code);
 		}

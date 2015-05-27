@@ -223,13 +223,13 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 
 		if (inObjDecl){
 			if(symbolTable.MemberDeclaredInFigure(currObj, name)){
-				System.out.println("Member already defined: " + "memName");
+				System.out.println("Member already defined: " + name);
 				System.exit(0);
 			}
 			symbolTable.AddMember(currObj, name, type);
 		}
 		if(symbolTable.IdentifierUsedInCurrentScope(name)){
-			System.out.println("Variable already defined: " + "memName");
+			System.out.println("Variable already defined: " + name);
 			System.exit(0);
 		}
 		if (type != null) {
@@ -250,7 +250,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 
 		if(inObjDecl){
 			if(symbolTable.MethodDeclaredInFigure(currObj, methodName)){
-				System.out.println("Method already defined: " + "memName");
+				System.out.println("Method already defined: " + methodName);
 				System.exit(0);
 			}
 			symbolTable.AddMethod(currObj, methodName, typeExpressions);

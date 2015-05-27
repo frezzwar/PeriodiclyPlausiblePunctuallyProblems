@@ -1,11 +1,13 @@
-new grid1 = grid(10, 12);
+new myGrid = grid(10,11);
+new myPlayer = figure(spaceman){
+	new moves = 10;
+	new moaaa = "test";
+}
 
 
 program
 {
-    new var = "kage" * 58;
-
-    grid1.background = "test_img.png";
+    myGrid(2,2).addobj(myPlayer);
 
     new func = bongo(7,8);
 

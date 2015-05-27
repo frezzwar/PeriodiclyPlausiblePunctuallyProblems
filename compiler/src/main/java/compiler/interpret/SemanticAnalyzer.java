@@ -131,7 +131,11 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 
 	@Override
 	public void inAFuncCall(AFuncCall node){
-		if (node.parent().getClass() != AMethodCallValue.class){
+		if(symbolTable.VarPrevDeclared(node.getIdentifier().toString().toUpperCase().trim()) && symbolTable.GetVariable(node.getIdentifier().toString().toUpperCase().trim()) == Type.grid)
+		{
+
+		}
+		else if (node.parent().getClass() != AMethodCallValue.class){
 			TIdentifier ident = node.getIdentifier();
 			String key = ident.toString().toUpperCase().trim();
 			if (!symbolTable.FuncPrevDeclared(key)){

@@ -13,8 +13,6 @@ program
 
     new tempbool = true;
 
-    new hej = ["hej", "hej"];
-
     new thisPar = 5 + ( 5 + 4) / 4;
 
     thisPar = bongo(8, 8);
@@ -43,38 +41,10 @@ program
         new tempoKempo = 11;
     	number1 = 10;
     }
-    //number2 = func(number1);
+    temp = bongo(4, 7);
 }
 
 new bongo(ding, dong){
-    new pongo = 5;
-    if(pongo == 5){
-      new qwert = 10;
-    }
-    else{
-      new pelseElse = 15;
-      return pelseElse * 12;
-    }
 
-    new liste = [1, 2];
-    repeat foreach (thing in liste){
-        new inside_foreach_number = 10;
-    }
-    new testHest = 10;
-    new minHest = 15;
-    repeat while (testHest < minHest){
-        new a = testHest * 2;
-        testHest = a;
-        new b = testHest * 3;
-
-        repeat (10){
-            new pongo = true;
-
-            repeat (2){
-                pongo = false;
-            }
-        }
-    }
-
-    return pongo;
+    return ding + 9 * dong;
 }

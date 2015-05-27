@@ -402,9 +402,7 @@ public class ClassGenerator extends DepthFirstAdapter
 	@Override
 	public void inAParamsTail(AParamsTail node){
 		code = ", " + node.getIdentifier().toString().trim();
-		if (!dontPrint){
 			write(code);
-		}
 	}
 
 	@Override

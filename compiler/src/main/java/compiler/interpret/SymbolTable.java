@@ -152,10 +152,10 @@ public class SymbolTable {
 	}
 
 	public void CloseScope(){
-		//TODO		Keeping old scopes for overview, update later
-		currentScope.CloseScope();
-		currentScope = currentScope.Parent();
-		//scopes.pop();
+
+		//currentScope.CloseScope();
+		//currentScope = currentScope.Parent();
+		scopes.pop();
 	}
 
 	public void AddVariable(String name, Type type){

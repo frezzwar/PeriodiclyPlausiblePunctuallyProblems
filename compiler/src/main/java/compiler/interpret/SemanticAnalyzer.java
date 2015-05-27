@@ -1,10 +1,7 @@
 package compiler.interpret;
 import compiler.node.*;
 import compiler.analysis.*;
-import compiler.interpret.Typecheck;
-import org.sablecc.sablecc.node.TId;
 
-import java.io.File;
 import java.util.*;
 
 public class SemanticAnalyzer extends DepthFirstAdapter {
@@ -66,7 +63,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 			AFuncCall call = (AFuncCall)((AFuncCallValue) expr.getValue()).getFuncCall();
 			List<TypeExpression> typeExpressions = symbolTable.GetFunction(call.getIdentifier().toString().toUpperCase().trim());
 			Type type = Typecheck.typeChecker(typeExpressions, symbolTable, call.getCallParams().toString());
-			if (type != symbolTable.GetVariable(call.getIdentifier().toString().toUpperCase().trim()))
+			if (type != symbolTable.GetVariable(node.getIdentifier().toString().toUpperCase().trim()))
 			{
 				System.out.println("TypeError " + call.getIdentifier() + "is of type " + symbolTable.GetVariable(call.getIdentifier().toString().toUpperCase().trim()) + " and you are trying to assign it a " + type);
 				System.exit(0);
@@ -129,7 +126,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	public void outAProgram(AProgram node)
 	{
 		//Temp: Printer symboltable for at se om det virker
-		System.out.println(symbolTable.toString());
+		//System.out.println(symbolTable.toString());
 	}
 
 	@Override
@@ -206,8 +203,29 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	@Override
 	public void inAVariableDecl(AVariableDecl node){
 		String name =  node.getIdentifier().toString().toUpperCase().trim();
-		List<TypeExpression> typeExpressions = Typecheck.TypeExpressions(node.getVariable().toString());
-		Type type = Typecheck.typeChecker(typeExpressions, symbolTable, node.getVariable().toString());
+		List<TypeExpression> typeExpressions;
+		Type type;
+		if (symbolTable.FuncPrevDeclared(node.getVariable().toString().split(" ")[0].toUpperCase().trim()))
+		{
+			String[] temp = node.getVariable().toString().split(" ");
+			String params = "";
+			for (int i = 0; i < temp.length; i++)
+			{
+				if (i != 0 && i != 1 && temp.length-1 != i && temp.length != i)
+				{
+					params += temp[i] + " ";
+				}
+			}
+
+			typeExpressions = symbolTable.GetFunction(node.getVariable().toString().split(" ")[0].toUpperCase().trim());
+			type = Typecheck.typeChecker(typeExpressions, symbolTable, params);
+		}
+		else {
+			typeExpressions = Typecheck.TypeExpressions(node.getVariable().toString());
+			type = Typecheck.typeChecker(typeExpressions, symbolTable, node.getVariable().toString());
+		}
+
+
 
 		if (inObjDecl){
 			if(symbolTable.MemberDeclaredInFigure(currObj, name)){
@@ -322,8 +340,28 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 	@Override
 	public void inAVarAssignExpr(AVarAssignExpr node){
 		Type lhsType;
-		List<TypeExpression> typeExpressions = Typecheck.TypeExpressions(node.getExpr().toString());
-		Type exprType = Typecheck.typeChecker(typeExpressions, symbolTable, node.getExpr().toString());
+
+		List<TypeExpression> typeExpressions;
+		Type exprType;
+		if (symbolTable.FuncPrevDeclared(node.getExpr().toString().split(" ")[0].toUpperCase().trim()))
+		{
+			String[] temp = node.getExpr().toString().split(" ");
+			String params = "";
+			for (int i = 0; i < temp.length; i++)
+			{
+				if (i != 0 && i != 1 && temp.length-1 != i && temp.length != i)
+				{
+					params += temp[i] + " ";
+				}
+			}
+
+			typeExpressions = symbolTable.GetFunction(node.getExpr().toString().split(" ")[0].toUpperCase().trim());
+			exprType = Typecheck.typeChecker(typeExpressions, symbolTable, params);
+		}
+		else {
+			typeExpressions = Typecheck.TypeExpressions(node.getExpr().toString());
+			exprType = Typecheck.typeChecker(typeExpressions, symbolTable, node.getExpr().toString());
+		}
 
 		if (node.getMember() != null){
 			String figure = node.getIdentifier().toString().trim();
@@ -346,7 +384,7 @@ public class SemanticAnalyzer extends DepthFirstAdapter {
 		lhsType = symbolTable.GetVariable(lhs);
 
 		if (lhsType != exprType){
-			System.out.println("Type error. Expected " + lhsType + " but got " + exprType);
+			System.out.println("Type error: " + node.getIdentifier() + ". Expected " + lhsType + " but got " + exprType);
 			System.exit(0);
 		}
 

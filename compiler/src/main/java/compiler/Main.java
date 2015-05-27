@@ -24,18 +24,18 @@ public class Main {
             
             // Get our Interpreter going.
             Interpreter interp = new Interpreter () ;
-            System.out.println();
-            ast.apply(interp) ;
-            System.out.println("Ok");
+            //System.out.println();
+            //ast.apply(interp) ;
+            //System.out.println("Ok");
 
             SymbolTable symTable = new SymbolTable();
 
-            //ast.apply(new FuncInit(symTable));
-            //ast.apply(new SemanticAnalyzer(symTable));
+            ast.apply(new FuncInit(symTable));
+            ast.apply(new SemanticAnalyzer(symTable));
 
             FileSetup.Setup();
             ast.apply(new ClassGenerator());
-            System.out.println("FINISHED");
+            System.out.println("Done");
 
          }
          catch (Exception e) {

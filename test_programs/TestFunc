@@ -11,6 +11,8 @@ program
 {
     new temp = func(3, 4, 5);
     cat.funci(1);
+    new hej = 5;
+    hej = func(3, 4, 5);
 }
 
 new func(par1, par2, par3)

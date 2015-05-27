@@ -34,7 +34,7 @@ public class Main {
             //ast.apply(new SemanticAnalyzer(symTable));
 
             FileSetup.Setup();
-            ast.apply(new ClassGenerator());
+            ast.apply(new CodeGenerator());
             System.out.println("FINISHED");
 
          }

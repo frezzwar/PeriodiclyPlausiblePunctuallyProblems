@@ -1,0 +1,78 @@
+new grid1 = grid(10, 12);
+
+
+program
+{
+    new var = "kage" * 58;
+
+    grid1.background = "test_img.png";
+
+    new func = bongo(7,8);
+
+    new tempbool = true;
+
+    new hej = ["hej", "hej"];
+
+    new thisPar = 5 + ( 5 + 4) / 4;
+
+    thisPar = bongo(8, 8);
+
+    new number1 = 5;
+    
+    new number = 5 + 5;
+    
+    new number2 = number1 + "hej";
+    
+    new number3 = number1;
+    
+    new number4 = 4 * 5;
+
+    new number5 = 5 + 5 + 5;
+    
+    number2 = "hest";
+
+    new bool_test = 10 < 12;
+
+    new temp = 7 + 9 * 7;
+
+
+    if(number2 <= number1)
+    {
+        new tempoKempo = 11;
+    	number1 = 10;
+    }
+    //number2 = func(number1);
+}
+
+new bongo(ding, dong){
+    new pongo = 5;
+    if(pongo == 5){
+      new qwert = 10;
+    }
+    else{
+      new pelseElse = 15;
+      return pelseElse * 12;
+    }
+
+    new liste = [1, 2];
+    repeat foreach (thing in liste){
+        new inside_foreach_number = 10;
+    }
+    new testHest = 10;
+    new minHest = 15;
+    repeat while (testHest < minHest){
+        new a = testHest * 2;
+        testHest = a;
+        new b = testHest * 3;
+
+        repeat (10){
+            new pongo = true;
+
+            repeat (2){
+                pongo = false;
+            }
+        }
+    }
+
+    return pongo;
+}

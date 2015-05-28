@@ -154,7 +154,7 @@ public class CodeGenerator extends DepthFirstAdapter
 	public void outAProgram(AProgram node){
 		code = placeFigures(figures) +
 				createRenderer(figures) +
-				"var main = function(){\nrender()\nrequestAnimationFrame(main);\n}\n" +
+				"var main = function(){\nupdate()\nrender()\nrequestAnimationFrame(main);\n}\n" +
 				"var w = window;\nrequestAnimationFrame = w.requestAnimationFrame ||\n" +
 				"w.webkitRequestAnimationFrame ||\nw.msRequestAnimationFrame ||\n" +
 				"w.mozRequestAnimationFrame;\n\n" +
